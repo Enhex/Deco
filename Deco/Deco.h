@@ -142,7 +142,7 @@ namespace deco
 	{
 		std::vector<Entry> entries;
 
-		size_t depth = 0;
+		size_t depth = 0;	//TODO can get rid off by changing the way set entries are parsed?
 		while (current != last) {
 			entries.emplace_back(parse_entry(current, last, depth).second);
 		}

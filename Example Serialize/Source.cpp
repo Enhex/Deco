@@ -1,68 +1,9 @@
-#include <Deco.h>
+#include <Serialization.h>
 
 #include <fstream>
 #include <rang.hpp>
-#include <sstream>
-#include <string>
-#include <vector>
-#include <string_view>
 
 using namespace std;
-
-struct DecoDocument
-{
-	stringstream stream;
-
-	template<typename T>
-	void entry(const T& content)
-	{
-		indent();
-		stream << content << '\n';
-	}
-
-	void begin_set(string&& content)
-	{
-		entry(content += ':');
-		++indent_level;
-	}
-
-	void end_set()
-	{
-		--indent_level;
-		entry(string(":"));
-	}
-
-protected:
-	unsigned indent_level = 0;
-
-	void indent()
-	{
-		for (unsigned n = 0; n < indent_level; ++n)
-			stream << '\t';
-	}
-};
-
-
-void from_entry(char& value, const deco::Entry& entry)
-{
-	value = entry.content[0];
-}
-
-void from_entry(int& value, const deco::Entry& entry)
-{
-	value = stoi(string(entry.content)); // no string_view support
-}
-
-void from_entry(float& value, const deco::Entry& entry)
-{
-	value = stof(string(entry.content));
-}
-
-void from_entry(string& value, const deco::Entry& entry)
-{
-	value = entry.content;
-}
-
 
 int main()
 {
@@ -71,18 +12,22 @@ int main()
 	float y = 3.25;
 	string s = "an entry";
 
+	vector<int> v{0,1,2,3,4,10};
+
 	// write
 	{
-		DecoDocument doc;
+		deco::Document doc;
 
-		doc.entry(c);
+		deco::serialize(doc, c);
 		doc.begin_set("some set");
-			doc.entry(x);
-			doc.entry(y);
+			deco::serialize(doc, x);
+			deco::serialize(doc, y);
 			doc.begin_set("another set");
-				doc.entry(s);
+				deco::serialize(doc, s);
 			doc.end_set();
 		doc.end_set();
+
+		deco::serialize(doc, deco::make_NVP("vec", v));
 
 		ofstream os("out.deco", ios::binary);
 		os << doc.stream.str();
@@ -93,6 +38,7 @@ int main()
 	x = 0;
 	y = 0;
 	s = "";
+	v.clear();
 
 	// read
 	{
@@ -108,5 +54,6 @@ int main()
 		from_entry(x, entries[1].entries[0]);
 		from_entry(y, entries[1].entries[1]);
 		from_entry(s, entries[1].entries[2].entries[0]);
+		from_entry(v, entries[2]);
 	}
 }
