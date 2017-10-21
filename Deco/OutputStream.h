@@ -15,8 +15,11 @@ namespace deco
 	- file save/load
 	*/
 
-	// Used to construct deco document string
-	struct Document
+	// Used to construct deco document string on the fly
+	/*TODO
+	handle it like General Serialization write type - have a gs::read() specialization that takes a value and writes it as an entry
+	*/
+	struct OutputStream
 	{
 		std::stringstream stream;
 
@@ -52,6 +55,7 @@ namespace deco
 		}
 	};
 	
+
 	// name value pair
 	template<typename T>
 	struct NVP
@@ -68,13 +72,6 @@ namespace deco
 		};
 	}
 
-	template<typename T>
-	void serialize(Document& doc, const NVP<T>& nvp)
-	{
-		doc.begin_set(nvp.name);
-		serialize(doc, nvp.value);
-		doc.end_set();
-	}
 
 	// Content name value pair: NVP inside the entry content, using the structure delimiter to separate between name and value, which means it can't be inside the name
 	template<typename T>
@@ -90,66 +87,51 @@ namespace deco
 			value	// want to always use T member, so no forwarding
 		};
 	}
+}
 
-	template<typename T>
-	void serialize(Document& doc, const CNVP<T>& nvp)
-	{
-		std::stringstream ss;
-		ss << nvp.name << ": " << nvp.value;
-		serialize(doc, ss.str());
-	}
+
+namespace gs
+{
+	template<>
+	struct is_output<deco::OutputStream> : std::true_type {};
+
 
 	//automatically provide default serialization implementation for arithmetic & array of arithmetic types
 	template<typename T>
 	typename std::enable_if_t<std::is_arithmetic_v<T>>
-	serialize(Document& doc, const T& value) {
+		write(deco::OutputStream& stream, const T& value) {
 
 		std::stringstream ss;
 		ss << value;
-		doc.entry(ss.str());
+		stream.entry(ss.str());
 	}
 
-	void serialize(Document& doc, const std::string& value) {
-		doc.entry(value);
+	void write(deco::OutputStream& stream, const std::string& value) {
+		stream.entry(value);
 	}
 
 	template<typename T>
-	void serialize(Document& doc, const std::vector<T>& value)
+	void write(deco::OutputStream& stream, const std::vector<T>& value)
 	{
 		for (const auto& e : value)
-			serialize(doc, e);
+			serialize(stream, e);
 	}
 
 
-	void from_entry(char& value, const deco::EntryObject& entry)
+	template<typename T>
+	void write(deco::OutputStream& stream, const deco::NVP<T>& nvp)
 	{
-		value = entry.content[0];
-	}
-
-	void from_entry(int& value, const deco::EntryObject& entry)
-	{
-		value = stoi(std::string(entry.content)); // no string_view/iterators support
-	}
-
-	void from_entry(float& value, const deco::EntryObject& entry)
-	{
-		value = stof(std::string(entry.content)); // no string_view/iterators support
-	}
-
-	void from_entry(std::string& value, const deco::EntryObject& entry)
-	{
-		value = entry.content;
+		stream.begin_set(nvp.name);
+		serialize(stream, nvp.value);
+		stream.end_set();
 	}
 
 	template<typename T>
-	void from_entry(std::vector<T>& value, const deco::EntryObject& entry)
+	void write(deco::OutputStream& stream, const deco::CNVP<T>& nvp)
 	{
-		T temp;
-
-		for (const auto& child : entry.entries) {
-			from_entry(temp, child);
-			value.emplace_back(temp);
-		}
+		std::stringstream ss;
+		ss << nvp.name << ": " << nvp.value;
+		serialize(stream, ss.str());
 	}
 }
 

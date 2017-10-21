@@ -2,13 +2,13 @@
 #include <rang.hpp>
 #include <string>
 
-void print(const deco::Entry& entry, size_t& depth);
-void print(const deco::Entry& entry) {
+void print(const deco::EntryObject& entry, size_t& depth);
+void print(const deco::EntryObject& entry) {
 	size_t depth = 0;
 	print(entry, depth);
 }
 
-void print(const deco::Entry& entry, size_t& depth) {
+void print(const deco::EntryObject& entry, size_t& depth) {
 	using namespace std;
 
 	auto indent = [&depth]() {

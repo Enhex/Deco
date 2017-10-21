@@ -18,10 +18,11 @@ namespace deco
 	- set entry: has content and child entries
 	- anonymous set entry: only has child entries
 	*/
-	struct Entry {
+	struct EntryObject {
 		std::string_view content;
-		std::vector<Entry> entries;
+		std::vector<EntryObject> entries;
 	};
+
 
 	/*TODO
 	most likely to only be using tabs, or only be using spaces.
@@ -52,14 +53,24 @@ namespace deco
 			++current;
 	}
 
+	struct Entry
+	{
+		enum Type : uint_fast8_t {
+			entry,	// non-set entry
+			set,	// set entry
+			set_end
+		};
+
+		std::string_view content;
+		Type type;
+	};
 
 	// pair's bool is true if it's set end entry
 	//TODO use std::optional with C++17
 	template <typename Iterator>
-	std::pair<bool, Entry> parse_entry(Iterator& current, const Iterator last, size_t& depth)
+	Entry parse_entry(Iterator& current, const Iterator last)
 	{
-		std::pair<bool, Entry> setEnd_entry{ false, {} };
-		auto& entry = setEnd_entry.second;
+		Entry entry;
 
 		// expecting tabs for indentation
 		skip_whitespace_tab(current);
@@ -91,7 +102,7 @@ namespace deco
 		};
 
 		// the character before the entry delimiter
-		auto& one_before_last = *(current - 1);
+		const auto& one_before_last = *(current - 1);
 
 		// structure
 		if (one_before_last == structure_delimiter)
@@ -101,53 +112,84 @@ namespace deco
 			// check if set end entry
 			if (!content_begin_delimiter_found &&
 				content_end == content_begin/*check if content is empty*/)
-				setEnd_entry.first = true;
+				entry.type = Entry::set_end;
 
 			// begin set
 			else
 			{
+				entry.type = Entry::set;
 				end_entry();
-
-				// parse set entries
-				const auto current_depth = depth++;
-				while (depth != current_depth)
-				{
-					auto child_entry = parse_entry(current, last, depth);
-					if (child_entry.first)
-						--depth;
-					else
-						entry.entries.emplace_back(std::move(child_entry.second));
-				}
-
-				return setEnd_entry;
+				return entry;
 			}
 		}
+		else {
+			entry.type = Entry::entry;
 
-		// content end delimiter
-		else if(one_before_last == content_delimiter &&
+			// content end delimiter
+			if (one_before_last == content_delimiter &&
 				*(current - 2) == structure_delimiter)
-			content_end = current - 1;
+				content_end = current - 1;
 
-		// only entry delimiter
-		else
-			content_end = current;
+			// only entry delimiter
+			else
+				content_end = current;
+		}
 
 		end_entry();
 
-		return setEnd_entry;
+		return entry;
+	}
+
+
+	//EntryObject parse_object(std::vector<EntryObject>& set, const Entry& entry)
+
+	template <typename Iterator>
+	EntryObject parse_object(Iterator& current, const Iterator last)
+	{
+		//return parse_object(current, last, parse_entry(current, last));
+
+		auto test_entry = parse_entry(current, last);
+		auto test_object = parse_object(current, last, test_entry);
+		return test_object;
 	}
 
 	template <typename Iterator>
-	std::vector<Entry> parse(Iterator current, const Iterator last)
+	EntryObject parse_object(Iterator& current, const Iterator last, const Entry& entry)
 	{
-		std::vector<Entry> entries;
+		switch (entry.type)
+		{
+		case Entry::entry:
+			return { entry.content, {} };
 
-		size_t depth = 0;	//TODO can get rid off by changing the way set entries are parsed?
-		while (current != last) {
-			entries.emplace_back(parse_entry(current, last, depth).second);
+		case Entry::set:
+		{
+			auto object = EntryObject{ entry.content, {} };
+
+			// Keep consuming entries until reaching the set end. Child sets will consume their own ends, so current set won't run into their ends.
+			auto child_entry = parse_entry(current, last);
+			while (child_entry.type != Entry::set_end) {
+				object.entries.emplace_back(parse_object(current, last, child_entry));
+				child_entry = parse_entry(current, last);
+			}
+			
+			return object;
+		}
 		}
 
-		return entries;
+		throw std::invalid_argument("Unexpected set end");
+	}
+
+	template <typename Iterator>
+	auto parse(Iterator current, const Iterator last)
+	{
+		std::vector<EntryObject> objects;
+		//std::vector<EntryObject>* current_set = &objects;
+
+		while (current != last) {
+			objects.emplace_back(parse_object(current, last));
+		}
+
+		return objects;
 	}
 }
 

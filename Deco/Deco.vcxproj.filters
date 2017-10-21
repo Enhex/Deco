@@ -4,5 +4,7 @@
     <ClInclude Include="Serialization.h" />
     <ClInclude Include="Deco.h" />
     <ClInclude Include="vector.h" />
+    <ClInclude Include="InputStream.h" />
+    <ClInclude Include="OutputStream.h" />
   </ItemGroup>
 </Project>
