@@ -1,4 +1,6 @@
 #include <Serialization.h>
+#include <InputStream.h>
+#include <OutputStream.h>
 
 #include <cassert>
 #include <fstream>
@@ -50,19 +52,26 @@ int main()
 
 	// read
 	{
-		const string str(
+		deco::InputStream is({
 			istreambuf_iterator<char>(ifstream("out.deco", ios::binary)),
-			istreambuf_iterator<char>());
+			istreambuf_iterator<char>()
+		});
 
-		cout << str;
+		cout << is.str;
 
-		const auto entries = deco::parse(str.begin(), str.end());
+		std::string set_name;
 
-		from_entry(c, entries[0]);
-		from_entry(i, entries[1].entries[0]);
-		from_entry(f, entries[1].entries[1]);
-		from_entry(s, entries[1].entries[2].entries[0]);
-		from_entry(v, entries[2]);
+		//TODO use gs::serialize()
+		gs::read(is, c);
+			gs::read(is, set_name);
+			gs::read(is, i);
+			gs::read(is, f);
+				gs::read(is, set_name);
+					gs::read(is, s);
+				is.parse_entry();	// set end
+			is.parse_entry();	// set end
+		gs::read(is, set_name);	// NVP name
+		gs::read(is, v);
 
 		// verify reading the same values written
 		assert(c == c_val);

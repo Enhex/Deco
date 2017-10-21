@@ -166,11 +166,8 @@ namespace deco
 			auto object = EntryObject{ entry.content, {} };
 
 			// Keep consuming entries until reaching the set end. Child sets will consume their own ends, so current set won't run into their ends.
-			auto child_entry = parse_entry(current, last);
-			while (child_entry.type != Entry::set_end) {
+			for(auto child_entry = parse_entry(current, last); child_entry.type != Entry::set_end; child_entry = parse_entry(current, last))
 				object.entries.emplace_back(parse_object(current, last, child_entry));
-				child_entry = parse_entry(current, last);
-			}
 			
 			return object;
 		}

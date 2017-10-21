@@ -1,11 +1,10 @@
-#ifndef deco_Serialization_h
-#define deco_Serialization_h
+#ifndef deco_InputStream_h
+#define deco_InputStream_h
 
 #include "deco.h"
-#include <string>
-
-#include <vector>
 #include <Generic Serialization/Header.h>
+#include <string>
+#include <vector>
 
 namespace deco
 {
@@ -18,7 +17,18 @@ namespace deco
 	*/
 	struct InputStream
 	{
+		InputStream(std::string&& new_str) :
+			str(new_str),
+			position(str.begin())
+		{}
+
 		std::string str;
+		std::string::iterator position;
+
+
+		Entry parse_entry() {
+			return deco::parse_entry(position, str.end());
+		}
 	};
 }
 
@@ -28,36 +38,38 @@ namespace gs
 	struct is_input<deco::InputStream> : std::true_type {};
 
 
-	// parse next entry as a type
-	void read(const deco::InputStream& stream, char& value)
+	template<typename T>
+	void read(deco::InputStream& stream, T& value)
 	{
-		value = stream.content[0];
+		read(stream.parse_entry(), value);
 	}
 
-	void read(const deco::InputStream& stream, int& value)
+	void read(const deco::Entry& entry, char& value)
+	{
+		value = entry.content[0];
+	}
+
+	void read(const deco::Entry& entry, int& value)
 	{
 		value = stoi(std::string(entry.content)); // no string_view/iterators support
 	}
 
-	void read(const deco::InputStream& stream, float& value)
+	void read(const deco::Entry& entry, float& value)
 	{
 		value = stof(std::string(entry.content)); // no string_view/iterators support
 	}
 
-	void read(const deco::InputStream& stream, std::string& value)
+	void read(const deco::Entry& entry, std::string& value)
 	{
 		value = entry.content;
 	}
 
 	template<typename T>
-	void read(const deco::InputStream& stream, std::vector<T>& value)
+	void read(deco::InputStream& stream, std::vector<T>& value)
 	{
-		T temp;
-
-		for (const auto& child : entry.entries) {
-			from_entry(temp, child);
-			value.emplace_back(temp);
-		}
+		//NOTE: set entry content should've been read already, now reading children
+		for (auto entry = stream.parse_entry(); entry.type != deco::Entry::set_end; entry = stream.parse_entry())
+			read(entry, value.emplace_back());
 	}
 }
 

@@ -121,6 +121,7 @@
   <ItemGroup>
     <ClInclude Include="Deco.h" />
     <ClInclude Include="InputStream.h" />
+    <ClInclude Include="NVP.h" />
     <ClInclude Include="OutputStream.h" />
     <ClInclude Include="Serialization.h" />
     <ClInclude Include="vector.h" />

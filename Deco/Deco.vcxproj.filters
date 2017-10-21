@@ -6,5 +6,6 @@
     <ClInclude Include="vector.h" />
     <ClInclude Include="InputStream.h" />
     <ClInclude Include="OutputStream.h" />
+    <ClInclude Include="NVP.h" />
   </ItemGroup>
 </Project>
