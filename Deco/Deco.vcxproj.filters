@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClInclude Include="Serialization.h" />
     <ClInclude Include="Deco.h" />
     <ClInclude Include="vector.h" />
     <ClInclude Include="InputStream.h" />
     <ClInclude Include="OutputStream.h" />
     <ClInclude Include="NVP.h" />
+    <ClInclude Include="Traits.h" />
   </ItemGroup>
 </Project>

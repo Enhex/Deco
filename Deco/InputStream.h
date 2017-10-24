@@ -1,20 +1,14 @@
 #ifndef deco_InputStream_h
 #define deco_InputStream_h
 
+#include "Traits.h"
 #include "deco.h"
-#include <Generic Serialization/Header.h>
+#include <Generic Serialization/Core.h>
 #include <string>
 #include <vector>
 
 namespace deco
 {
-	// Used to construct deco document string on the fly
-	/*TODO
-	- use variadic template to read N root entries as types?
-	What if the number of root entries is dynamic?
-		- allow reading in a loop
-	- try reading into an Entry tree for a start/test.
-	*/
 	struct InputStream
 	{
 		InputStream(std::string&& new_str) :
@@ -25,9 +19,10 @@ namespace deco
 		std::string str;
 		std::string::iterator position;
 
+		Entry current_entry;
 
-		Entry parse_entry() {
-			return deco::parse_entry(position, str.end());
+		const Entry& parse_entry() {
+			return current_entry = deco::parse_entry(position, str.end());
 		}
 	};
 }
@@ -37,11 +32,40 @@ namespace gs
 	template<>
 	struct is_input<deco::InputStream> : std::true_type {};
 
+	template<>
+	struct is_deco<deco::InputStream> : std::true_type {};
+
+
+	// serialize input deco
+	template<typename Stream, typename T>
+	typename std::enable_if_t<
+		is_deco_v<Stream> &&
+		is_input_v<Stream>
+	>
+	serialize(Stream& stream, T& value)
+	{
+		read(stream, value);
+	}
 
 	template<typename T>
 	void read(deco::InputStream& stream, T& value)
 	{
 		read(stream.parse_entry(), value);
+	}
+
+	template<typename T>
+	void serialize(deco::Entry& entry, T& value)
+	{
+		read(entry, value);
+	}
+
+
+	template<typename T>
+	void read(deco::InputStream& stream, std::vector<T>& value)
+	{
+		//NOTE: set entry content should've been read already, now reading children
+		for (auto entry = stream.parse_entry(); entry.type != deco::Entry::set_end; entry = stream.parse_entry())
+			read(entry, value.emplace_back());
 	}
 
 	void read(const deco::Entry& entry, char& value)
@@ -62,14 +86,6 @@ namespace gs
 	void read(const deco::Entry& entry, std::string& value)
 	{
 		value = entry.content;
-	}
-
-	template<typename T>
-	void read(deco::InputStream& stream, std::vector<T>& value)
-	{
-		//NOTE: set entry content should've been read already, now reading children
-		for (auto entry = stream.parse_entry(); entry.type != deco::Entry::set_end; entry = stream.parse_entry())
-			read(entry, value.emplace_back());
 	}
 }
 

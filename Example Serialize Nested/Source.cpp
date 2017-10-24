@@ -1,4 +1,6 @@
-#include <Serialization.h>
+#include <InputStream.h>
+#include <NVP.h>
+#include <OutputStream.h>
 
 #include <fstream>
 #include <iostream>
@@ -10,12 +12,12 @@ struct A {
 	string s = "an entry";
 };
 
-namespace deco
+namespace gs
 {
 	template<typename Stream>
-	void serialize(Stream& doc, const A& value) {
-		serialize(doc, make_CNVP("i", value.i));
-		serialize(doc, make_CNVP("s", value.s));
+	void serialize(Stream& stream, A& value /* shouldn't be const to allow reading */) {
+		serialize(stream, deco::make_CNVP("i", value.i));
+		serialize(stream, deco::make_CNVP("s", value.s));
 	}
 }
 
@@ -26,13 +28,13 @@ struct B {
 	float f = 3.25;
 };
 
-namespace deco
+namespace gs
 {
 	template<typename Stream>
-	void serialize(Stream& doc, const B& value) {
-		serialize(doc, make_NVP("a", value.a));
-		serialize(doc, make_NVP("v", value.v));
-		serialize(doc, make_CNVP("f", value.f));
+	void serialize(Stream& stream, B& value) {
+		serialize(stream, deco::make_NVP("a", value.a));
+		serialize(stream, deco::make_NVP("v", value.v));
+		serialize(stream, deco::make_CNVP("f", value.f));
 	}
 }
 
@@ -42,12 +44,13 @@ int main()
 	// write
 	{
 		B b;
+		int i = 5;
 
-		deco::Document doc;
-		deco::serialize(doc, b);
+		deco::OutputStream stream;
+		gs::serialize(stream, b, i);
 
 		ofstream os("out.deco", ios::binary);
-		os << doc.stream.str();
+		os << stream.stream.str();
 	}
 
 	// read
@@ -58,22 +61,15 @@ int main()
 		b.a.i = 0;
 		b.a.s = '0';
 
-		const string str(
+		int i = 0;
+
+		deco::InputStream stream({
 			istreambuf_iterator<char>(ifstream("out.deco", ios::binary)),
-			istreambuf_iterator<char>());
+			istreambuf_iterator<char>()
+		});
 
-		cout << str;
+		cout << stream.str;
 
-		const auto entries = deco::parse(str.begin(), str.end());
-
-		/*TODO
-		provide "deco::parse_next", so entries can be converted into objects on the fly, instead of being saved into a temporary structure.
-		stream.
-		- need to be able to read set children until reaching the set end
-		*/
-
-		//deco::serialize(str, b);
-
-		//from_entry(b, entries[0]);
+		gs::serialize(stream, b, i);
 	}
 }

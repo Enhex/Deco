@@ -1,6 +1,6 @@
-#include <Serialization.h>
 #include <InputStream.h>
 #include <OutputStream.h>
+#include <NVP.h>
 
 #include <cassert>
 #include <fstream>
@@ -26,21 +26,21 @@ int main()
 
 	// write
 	{
-		deco::Document doc;
+		deco::OutputStream stream;
 
-		deco::serialize(doc, c);
-		doc.begin_set("some set");
-			deco::serialize(doc, i);
-			deco::serialize(doc, f);
-			doc.begin_set("another set");
-				deco::serialize(doc, s);
-			doc.end_set();
-		doc.end_set();
+		gs::serialize(stream, c);
+		stream.begin_set("some set");
+			gs::serialize(stream, i);
+			gs::serialize(stream, f);
+			stream.begin_set("another set");
+				gs::serialize(stream, s);
+			stream.end_set();
+		stream.end_set();
 
-		deco::serialize(doc, deco::make_NVP("vec", v));
+		gs::serialize(stream, deco::make_NVP("vec", v));
 
 		ofstream os("out.deco", ios::binary);
-		os << doc.stream.str();
+		os << stream.stream.str();
 	}
 
 	// reset
@@ -59,19 +59,18 @@ int main()
 
 		cout << is.str;
 
-		std::string set_name;
+		std::string set_name;	// dummy
 
-		//TODO use gs::serialize()
-		gs::read(is, c);
-			gs::read(is, set_name);
-			gs::read(is, i);
-			gs::read(is, f);
-				gs::read(is, set_name);
-					gs::read(is, s);
-				is.parse_entry();	// set end
-			is.parse_entry();	// set end
-		gs::read(is, set_name);	// NVP name
-		gs::read(is, v);
+		gs::serialize(is, c);
+			gs::serialize(is, set_name);
+			gs::serialize(is, i);
+			gs::serialize(is, f);
+				gs::serialize(is, set_name);
+					gs::serialize(is, s);
+				is.parse_entry();		// set end
+			is.parse_entry();			// set end
+		gs::serialize(is, set_name);	// NVP name
+		gs::serialize(is, v);
 
 		// verify reading the same values written
 		assert(c == c_val);

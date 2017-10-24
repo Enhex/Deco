@@ -1,23 +1,15 @@
 #ifndef deco_OutputStream_h
 #define deco_OutputStream_h
 
+#include "Traits.h"
 #include "deco.h"
-#include <Generic Serialization/Header.h>
+#include <Generic Serialization/Core.h>
 #include <sstream>
 #include <string>
 #include <vector>
 
 namespace deco
 {
-	/*TODO:
-	- generic type save(T to str) / load(str to T) / serialize(automatically choose based on input/output) functions (build on top of a separate library)
-	- file save/load
-	*/
-
-	// Used to construct deco document string on the fly
-	/*TODO
-	handle it like General Serialization write type - have a gs::read() specialization that takes a value and writes it as an entry
-	*/
 	struct OutputStream
 	{
 		std::stringstream stream;
@@ -33,7 +25,7 @@ namespace deco
 			entry(content += ':');
 			++indent_level;
 		}
-		void begin_set(const std::string& content)
+		void begin_set(const std::string_view& content)
 		{
 			begin_set(std::string(content));
 		}
@@ -61,6 +53,20 @@ namespace gs
 	template<>
 	struct is_output<deco::OutputStream> : std::true_type {};
 
+	template<>
+	struct is_deco<deco::OutputStream> : std::true_type {};
+
+
+	// serialize output deco
+	template<typename Stream, typename T>
+	typename std::enable_if_t<
+		is_deco_v<Stream> &&
+		is_output_v<Stream>
+	>
+	serialize(Stream& stream, T& value)
+	{
+		write(stream, value);
+	}
 
 	//automatically provide default serialization implementation for arithmetic & array of arithmetic types
 	template<typename T>
