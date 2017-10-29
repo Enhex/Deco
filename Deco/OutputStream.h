@@ -3,7 +3,7 @@
 
 #include "Traits.h"
 #include "deco.h"
-#include <Generic Serialization/Core.h>
+#include <gs/Core.h>
 #include <sstream>
 #include <string>
 #include <vector>
