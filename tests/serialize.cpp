@@ -4,7 +4,7 @@
 
 #include <cassert>
 #include <fstream>
-#include <rang.hpp>
+#include <iostream>
 
 using namespace std;
 

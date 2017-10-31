@@ -1,0 +1,5 @@
+[requires]
+Deco/master@enhex/stable
+
+[generators]
+cmake_multi
