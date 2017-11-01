@@ -8,18 +8,19 @@
 
 namespace deco
 {
-	// name value pair
+	// name value pair for serialization
 	template<typename T>
 	struct NVP
 	{
-		std::string name;
+		std::string_view name;
 		T& value;
 	};
 
+	//NOTE: class template argument deduction not supported yet
 	template<typename T>
-	auto make_NVP(std::string&& name, T& value) {
+	auto make_NVP(std::string_view&& name, T& value) {
 		return NVP<T>{
-			std::forward<std::string>(name),
+			std::forward<std::string_view>(name),
 				value	// want to always use T member, so no forwarding
 		};
 	}
@@ -44,6 +45,7 @@ namespace deco
 
 namespace gs
 {
+	// NVP
 	template<typename T>
 	void write(deco::OutputStream& stream, const deco::NVP<T>& nvp)
 	{
@@ -54,8 +56,8 @@ namespace gs
 
 	template<typename T>
 	void read(deco::InputStream& stream, deco::NVP<T>& nvp)
-	{		
-		serialize(stream, nvp.name);	// read set entry
+	{
+		serialize(stream, deco::skip);	// skip set entry name
 		serialize(stream, nvp.value);	// read child entry
 		if(stream.current_entry.type != deco::Entry::set_end)
 			stream.parse_entry();		// skip set end if child didn't
@@ -63,7 +65,7 @@ namespace gs
 	}
 
 
-
+	// CNVP
 	void write(deco::OutputStream& stream, const deco::CNVP<std::string>& nvp)
 	{
 		serialize(stream, (nvp.name + ": ") += nvp.value);
@@ -84,15 +86,13 @@ namespace gs
 	void read(deco::InputStream& stream, deco::CNVP<T>& nvp)
 	{	
 		auto entry = stream.parse_entry();
-		const auto original_content = entry.content;
-		const auto pos = original_content.find(':');
 
-		// parse name
-		entry.content = original_content.substr(0, pos);
-		serialize(entry, nvp.name);
+		// skip name
+		serialize(entry, deco::skip);
 
 		// parse value
-		entry.content = original_content.substr(pos+1, original_content.length() - pos);
+		const auto pos = entry.content.find(':');
+		entry.content = entry.content.substr(pos+1, entry.content.length() - pos);
 		serialize(entry, nvp.value);
 	}
 }

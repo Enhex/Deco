@@ -33,6 +33,10 @@ namespace deco
 			return peek_entry().type == Entry::Type::set_end;
 		}
 	};
+
+	// used to skip an entry without parsing it into a type
+	struct skip_t {};
+	constexpr skip_t skip;
 }
 
 namespace gs
@@ -65,6 +69,22 @@ namespace gs
 	void serialize(deco::Entry& entry, T& value)
 	{
 		read(entry, value);
+	}
+
+	// skip entry without parsing
+	template<typename Stream>
+	typename std::enable_if_t<
+		is_deco_v<Stream> &&
+		is_input_v<Stream>
+	>
+	serialize(Stream& stream, const deco::skip_t&)
+	{
+		stream.parse_entry();
+	}
+
+	template<>
+	void serialize(deco::Entry& entry, const deco::skip_t&)
+	{
 	}
 
 
