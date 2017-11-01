@@ -68,7 +68,17 @@ namespace gs
 	// CNVP
 	void write(deco::OutputStream& stream, const deco::CNVP<std::string>& nvp)
 	{
-		serialize(stream, (nvp.name + ": ") += nvp.value);
+		auto str = nvp.name + ": ";
+
+		// escape content starting with whitespace or content delimiter character
+		const auto first = nvp.value[0];
+		if (first == ' ' ||
+			first == '\t' ||
+			first == deco::content_delimiter)
+			str += deco::content_delimiter;
+		
+		str += nvp.value;
+		serialize(stream, str);
 	}
 
 	template<typename T>
@@ -87,12 +97,16 @@ namespace gs
 	{	
 		auto entry = stream.parse_entry();
 
-		// skip name
-		serialize(entry, deco::skip);
-
 		// parse value
-		const auto pos = entry.content.find(':');
-		entry.content = entry.content.substr(pos+1, entry.content.length() - pos);
+		auto value_start = entry.content.begin() + entry.content.find(':') + 1;
+		// skip whitespace
+		deco::skip_whitespace(value_start);
+		// allow escaping whitespace
+		if (*value_start == deco::content_delimiter)
+			++value_start;
+
+		// erase everything until the value start
+		entry.content.remove_prefix(std::distance(entry.content.begin(), value_start));
 		serialize(entry, nvp.value);
 	}
 }
