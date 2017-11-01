@@ -44,6 +44,13 @@ namespace deco
 				str += '\t';
 		}
 	};
+
+	// utility function for trimming trailing zeros and decimal point after using std::to_string
+	auto& trim_float(std::string& str) {
+		const auto pos = str.find_last_not_of('0');
+		str.erase(pos + (str[pos] != '.'));	// if last character isn't a decimal point, don't delete it
+		return str;
+	}
 }
 
 
@@ -69,9 +76,15 @@ namespace gs
 
 	//automatically provide default serialization implementation for arithmetic types
 	template<typename T>
-	typename std::enable_if_t<std::is_arithmetic_v<T>>
-		write(deco::OutputStream& stream, const T& value) {
+	typename std::enable_if_t<std::is_integral_v<T>>
+	write(deco::OutputStream& stream, const T& value) {
 		stream.entry(std::to_string(value));
+	}
+
+	template<typename T>
+	typename std::enable_if_t<std::is_floating_point_v<T>>
+	write(deco::OutputStream& stream, const T& value) {
+		stream.entry(deco::trim_float(std::to_string(value)));
 	}
 
 	void write(deco::OutputStream& stream, const std::string& value) {

@@ -72,7 +72,11 @@ namespace gs
 	template<typename T>
 	void write(deco::OutputStream& stream, const deco::CNVP<T>& nvp)
 	{
-		serialize(stream, (nvp.name + ": ") += std::to_string(nvp.value));
+		if constexpr(std::is_floating_point_v<T>) {
+			serialize(stream, (nvp.name + ": ") += deco::trim_float(std::to_string(nvp.value)));
+		}
+		else
+			serialize(stream, (nvp.name + ": ") += std::to_string(nvp.value));
 	}
 
 
