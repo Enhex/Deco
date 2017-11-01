@@ -1,6 +1,6 @@
-#include <InputStream.h>
-#include <NVP.h>
-#include <OutputStream.h>
+#include <deco/InputStream.h>
+#include <deco/NVP.h>
+#include <deco/OutputStream.h>
 
 #include <fstream>
 #include <iostream>

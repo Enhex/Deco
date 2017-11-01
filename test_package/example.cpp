@@ -1,4 +1,4 @@
-#include <Deco.h>
+#include <deco/Deco.h>
 #include <iostream>
 #include <string>
 
