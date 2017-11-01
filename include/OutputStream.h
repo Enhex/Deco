@@ -4,7 +4,6 @@
 #include "Traits.h"
 #include "deco.h"
 #include <gs/Core.h>
-#include <sstream>
 #include <string>
 #include <vector>
 
@@ -12,12 +11,12 @@ namespace deco
 {
 	struct OutputStream
 	{
-		std::stringstream stream;
+		std::string str;
 
 		void entry(const std::string& content)
 		{
 			indent();
-			stream << content << '\n';
+			(str += content) += '\n';
 		}
 
 		void begin_set(std::string&& content)
@@ -42,7 +41,7 @@ namespace deco
 		void indent()
 		{
 			for (unsigned n = 0; n < indent_level; ++n)
-				stream << '\t';
+				str += '\t';
 		}
 	};
 }
@@ -68,14 +67,11 @@ namespace gs
 		write(stream, value);
 	}
 
-	//automatically provide default serialization implementation for arithmetic & array of arithmetic types
+	//automatically provide default serialization implementation for arithmetic types
 	template<typename T>
 	typename std::enable_if_t<std::is_arithmetic_v<T>>
 		write(deco::OutputStream& stream, const T& value) {
-
-		std::stringstream ss;
-		ss << value;
-		stream.entry(ss.str());
+		stream.entry(std::to_string(value));
 	}
 
 	void write(deco::OutputStream& stream, const std::string& value) {

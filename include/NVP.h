@@ -63,12 +63,16 @@ namespace gs
 	}
 
 
+
+	void write(deco::OutputStream& stream, const deco::CNVP<std::string>& nvp)
+	{
+		serialize(stream, (nvp.name + ": ") += nvp.value);
+	}
+
 	template<typename T>
 	void write(deco::OutputStream& stream, const deco::CNVP<T>& nvp)
 	{
-		std::stringstream ss;
-		ss << nvp.name << ": " << nvp.value;
-		serialize(stream, ss.str());
+		serialize(stream, (nvp.name + ": ") += std::to_string(nvp.value));
 	}
 
 

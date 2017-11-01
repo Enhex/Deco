@@ -50,7 +50,7 @@ int main()
 		gs::serialize(stream, b, i);
 
 		ofstream os("out.deco", ios::binary);
-		os << stream.stream.str();
+		os << stream.str;
 	}
 
 	// read

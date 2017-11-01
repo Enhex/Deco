@@ -40,7 +40,7 @@ int main()
 		gs::serialize(stream, deco::make_NVP("vec", v));
 
 		ofstream os("out.deco", ios::binary);
-		os << stream.stream.str();
+		os << stream.str;
 	}
 
 	// reset
