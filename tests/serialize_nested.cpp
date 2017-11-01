@@ -25,6 +25,7 @@ namespace gs
 struct B {
 	A a;
 	vector<int> v{ 0,1,2,3,4,10 };
+	vector<A> va{ A(), A(), A() };
 	float f = 3.25;
 };
 
@@ -32,9 +33,12 @@ namespace gs
 {
 	template<typename Stream>
 	void serialize(Stream& stream, B& value) {
-		serialize(stream, deco::make_NVP("a", value.a));
-		serialize(stream, deco::make_NVP("v", value.v));
-		serialize(stream, deco::make_CNVP("f", value.f));
+		using namespace deco;
+		auto s = [&stream](auto& v) {serialize(stream, v); };
+		s(make_NVP("a", value.a));
+		s(make_NVP("v", value.v));
+		s(make_NVP("va", value.va));
+		s(make_CNVP("f", value.f));
 	}
 }
 

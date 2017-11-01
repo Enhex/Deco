@@ -92,9 +92,9 @@ namespace gs
 	}
 
 	template<typename T>
-	void write(deco::OutputStream& stream, const std::vector<T>& value)
+	void write(deco::OutputStream& stream, std::vector<T>& value)
 	{
-		for (const auto& e : value)
+		for (auto& e : value)
 			serialize(stream, e);
 	}
 }

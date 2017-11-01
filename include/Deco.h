@@ -66,7 +66,6 @@ namespace deco
 	};
 
 	// pair's bool is true if it's set end entry
-	//TODO use std::optional with C++17
 	template <typename Iterator>
 	Entry parse_entry(Iterator& current, const Iterator last)
 	{
@@ -187,6 +186,13 @@ namespace deco
 		}
 
 		return objects;
+	}
+
+
+	template <typename Iterator>
+	Entry peek_entry(Iterator current, const Iterator last)
+	{
+		return parse_entry(current, last);
 	}
 }
 

@@ -24,6 +24,14 @@ namespace deco
 		const Entry& parse_entry() {
 			return current_entry = deco::parse_entry(position, str.end());
 		}
+
+		Entry peek_entry() {
+			return deco::peek_entry(position, str.end());
+		}
+
+		bool peek_set_end() {
+			return peek_entry().type == Entry::Type::set_end;
+		}
 	};
 }
 
@@ -63,9 +71,9 @@ namespace gs
 	template<typename T>
 	void read(deco::InputStream& stream, std::vector<T>& value)
 	{
-		//NOTE: set entry content should've been read already, now reading children
-		for (auto entry = stream.parse_entry(); entry.type != deco::Entry::set_end; entry = stream.parse_entry())
-			read(entry, value.emplace_back());
+		//NOTE: set-entry content should've been read already, now reading children
+		while (!stream.peek_set_end())
+			serialize(stream, value.emplace_back());
 	}
 
 	void read(const deco::Entry& entry, char& value)
