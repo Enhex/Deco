@@ -94,6 +94,7 @@ namespace gs
 		//NOTE: set-entry content should've been read already, now reading children
 		while (!stream.peek_set_end())
 			serialize(stream, value.emplace_back());
+		stream.parse_entry();	// skip set end
 	}
 
 	void read(const deco::Entry& entry, char& value)
