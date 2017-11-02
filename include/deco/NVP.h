@@ -70,14 +70,20 @@ namespace gs
 	{
 		auto str = nvp.name + ": ";
 
-		// escape content starting with whitespace or content delimiter character
-		const auto first = nvp.value[0];
+		// escape content starting with whitespace or content delimiter
+		const auto first = nvp.value.front();
 		if (first == ' ' ||
 			first == '\t' ||
 			first == deco::content_delimiter)
 			str += deco::content_delimiter;
 		
 		str += nvp.value;
+
+		// escape content ending with structure delimiter
+		const auto last = nvp.value.back();
+		if (last == deco::structure_delimiter)
+			str += deco::content_delimiter;
+
 		serialize(stream, str);
 	}
 
