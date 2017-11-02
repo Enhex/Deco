@@ -79,9 +79,10 @@ namespace gs
 		
 		str += nvp.value;
 
-		// escape content ending with structure delimiter
+		// escape content ending with content delimiter or structure delimiter
 		const auto last = nvp.value.back();
-		if (last == deco::structure_delimiter)
+		if (last == deco::structure_delimiter ||
+			last == deco::content_delimiter)
 			str += deco::content_delimiter;
 
 		serialize(stream, str);
@@ -90,9 +91,9 @@ namespace gs
 	template<typename T>
 	void write(deco::OutputStream& stream, const deco::CNVP<T>& nvp)
 	{
-		if constexpr(std::is_floating_point_v<T>) {
-			serialize(stream, (nvp.name + ": ") += deco::trim_float(std::to_string(nvp.value)));
-		}
+		if constexpr(std::is_floating_point_v<T>)
+			serialize(stream, (nvp.name + ": ") += deco::to_string(nvp.value));
+			//serialize(stream, (nvp.name + ": ") += deco::trim_float(std::to_string(nvp.value)));
 		else
 			serialize(stream, (nvp.name + ": ") += std::to_string(nvp.value));
 	}
@@ -113,6 +114,10 @@ namespace gs
 
 		// erase everything until the value start
 		entry.content.remove_prefix(std::distance(entry.content.begin(), value_start));
+		// erase end content delimiter
+		if (entry.content.back() == deco::content_delimiter)
+			entry.content.remove_suffix(1);
+
 		serialize(entry, nvp.value);
 	}
 }
