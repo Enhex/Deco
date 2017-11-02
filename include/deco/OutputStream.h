@@ -51,6 +51,44 @@ namespace deco
 		str.erase(pos + (str[pos] != '.'));	// if last character isn't a decimal point, don't delete it
 		return str;
 	}
+
+	// escape content delimiters
+	auto escape_content(const std::string_view content)
+	{
+		std::string str;
+
+		if (content.empty())
+			return str;
+
+		// escape content starting with whitespace or content delimiter
+		const auto first = content.front();
+		if (first == ' ' ||
+			first == '\t' ||
+			first == deco::content_delimiter)
+			str += deco::content_delimiter;
+
+		str += content;
+
+		// escape content ending with content delimiter or structure delimiter
+		const auto last = content.back();
+		if (last == deco::structure_delimiter ||
+			last == deco::content_delimiter)
+			str += deco::content_delimiter;
+
+		return str;
+	}
+
+	// remove delimiters used to escape content
+	auto unescape_content(std::string_view& content)
+	{
+		// erase start content delimiter
+		if (content.front() == content_delimiter)
+			content.remove_prefix(1);
+
+		// erase end content delimiter
+		if (content.back() == content_delimiter)
+			content.remove_suffix(1);
+	}
 }
 
 

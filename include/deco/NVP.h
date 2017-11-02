@@ -68,24 +68,7 @@ namespace gs
 	// CNVP
 	void write(deco::OutputStream& stream, const deco::CNVP<std::string>& nvp)
 	{
-		auto str = nvp.name + ": ";
-
-		// escape content starting with whitespace or content delimiter
-		const auto first = nvp.value.front();
-		if (first == ' ' ||
-			first == '\t' ||
-			first == deco::content_delimiter)
-			str += deco::content_delimiter;
-		
-		str += nvp.value;
-
-		// escape content ending with content delimiter or structure delimiter
-		const auto last = nvp.value.back();
-		if (last == deco::structure_delimiter ||
-			last == deco::content_delimiter)
-			str += deco::content_delimiter;
-
-		serialize(stream, str);
+		serialize(stream, nvp.name + ": " + deco::escape_content(nvp.value));
 	}
 
 	template<typename T>
@@ -104,20 +87,15 @@ namespace gs
 	{	
 		auto entry = stream.parse_entry();
 
-		// parse value
-		auto value_start = entry.content.begin() + entry.content.find(':') + 1;
 		// skip whitespace
-		deco::skip_whitespace(value_start);
-		// allow escaping whitespace
-		if (*value_start == deco::content_delimiter)
-			++value_start;
+		auto whitespace_end = entry.content.begin() + entry.content.find(':') + 1;
+		deco::skip_whitespace(whitespace_end);
+		entry.content.remove_prefix(std::distance(entry.content.begin(), whitespace_end));
 
-		// erase everything until the value start
-		entry.content.remove_prefix(std::distance(entry.content.begin(), value_start));
-		// erase end content delimiter
-		if (entry.content.back() == deco::content_delimiter)
-			entry.content.remove_suffix(1);
+		// unescape delimiters chars
+		deco::unescape_content(entry.content);
 
+		// parse value
 		serialize(entry, nvp.value);
 	}
 }
