@@ -24,33 +24,31 @@ namespace deco
 	};
 
 
-	/*TODO
+	/* NOTE:
 	most likely to only be using tabs, or only be using spaces.
 	also likely to be using only tabs, then only spaces.
 	skip whitespace by switching between checking only for tabs and checking only for spaces
 	*/
-	// check if a character is whitespace
-	constexpr bool tab_space(const char& c) {
-		return (c == '\t' || c == ' ');
-	}
-	constexpr bool space_tab(const char& c) {
-		return (c == ' ' || c == '\t');
-	}
-
-	// skip space first
+	// skip whitespace
 	template <typename Iterator>
 	void skip_whitespace(Iterator& current)
 	{
-		while (space_tab(*current))
+		// looping back after skipping spaces, if current char isn't tab we skipped all spaces and tabs
+		while (*current == '\t') {
 			++current;
-	}
-
-	// Skip tab first
-	template <typename Iterator>
-	void skip_whitespace_tab(Iterator& current)
-	{
-		while (tab_space(*current))
+			while (*current == '\t')
+				++current;
+			while (*current == ' ')
+				++current;
+		}
+		// if starting with spaces
+		while (*current == ' ') {
 			++current;
+			while (*current == ' ')
+				++current;
+			while (*current == '\t')
+				++current;
+		}
 	}
 
 	struct Entry
@@ -72,7 +70,7 @@ namespace deco
 		Entry entry;
 
 		// expecting tabs for indentation
-		skip_whitespace_tab(current);
+		skip_whitespace(current);
 
 		// skip content begin delimiter
 		const bool content_begin_delimiter_found = [&]() {
