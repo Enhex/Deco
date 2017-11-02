@@ -185,6 +185,20 @@ namespace deco
 	{
 		return parse_entry(current);
 	}
+
+
+	template <typename Iterator>
+	bool peek_set_end(Iterator current)
+	{
+		skip_whitespace(current);
+
+		// must be structure delimiter followed by entry delimiter
+		if (*current == structure_delimiter &&
+			*(++current) == entry_delimiter)
+			return true;
+
+		return false;
+	}
 }
 
 #endif//guard

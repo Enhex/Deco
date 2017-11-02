@@ -30,7 +30,7 @@ namespace deco
 		}
 
 		bool peek_set_end() const {
-			return peek_entry().type == Entry::Type::set_end;
+			return deco::peek_set_end(position);
 		}
 	};
 
