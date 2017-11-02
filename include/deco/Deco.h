@@ -63,9 +63,9 @@ namespace deco
 		Type type;
 	};
 
-	// pair's bool is true if it's set end entry
+	// parse next entry
 	template <typename Iterator>
-	Entry parse_entry(Iterator& current, const Iterator last)
+	Entry parse_entry(Iterator& current)
 	{
 		Entry entry;
 
@@ -138,20 +138,14 @@ namespace deco
 	}
 
 
-	//EntryObject parse_object(std::vector<EntryObject>& set, const Entry& entry)
-
 	template <typename Iterator>
-	EntryObject parse_object(Iterator& current, const Iterator last)
+	EntryObject parse_object(Iterator& current)
 	{
-		//return parse_object(current, last, parse_entry(current, last));
-
-		auto test_entry = parse_entry(current, last);
-		auto test_object = parse_object(current, last, test_entry);
-		return test_object;
+		return parse_object(current, parse_entry(current));
 	}
 
 	template <typename Iterator>
-	EntryObject parse_object(Iterator& current, const Iterator last, const Entry& entry)
+	EntryObject parse_object(Iterator& current, const Entry& entry)
 	{
 		switch (entry.type)
 		{
@@ -163,8 +157,8 @@ namespace deco
 			auto object = EntryObject{ entry.content, {} };
 
 			// Keep consuming entries until reaching the set end. Child sets will consume their own ends, so current set won't run into their ends.
-			for(auto child_entry = parse_entry(current, last); child_entry.type != Entry::set_end; child_entry = parse_entry(current, last))
-				object.entries.emplace_back(parse_object(current, last, child_entry));
+			for(auto child_entry = parse_entry(current); child_entry.type != Entry::set_end; child_entry = parse_entry(current))
+				object.entries.emplace_back(parse_object(current, child_entry));
 			
 			return object;
 		}
@@ -177,10 +171,9 @@ namespace deco
 	auto parse(Iterator current, const Iterator last)
 	{
 		std::vector<EntryObject> objects;
-		//std::vector<EntryObject>* current_set = &objects;
 
 		while (current != last) {
-			objects.emplace_back(parse_object(current, last));
+			objects.emplace_back(parse_object(current));
 		}
 
 		return objects;
@@ -188,9 +181,9 @@ namespace deco
 
 
 	template <typename Iterator>
-	Entry peek_entry(Iterator current, const Iterator last)
+	Entry peek_entry(Iterator current)
 	{
-		return parse_entry(current, last);
+		return parse_entry(current);
 	}
 }
 

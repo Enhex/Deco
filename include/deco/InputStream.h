@@ -22,14 +22,14 @@ namespace deco
 		Entry current_entry;
 
 		const Entry& parse_entry() {
-			return current_entry = deco::parse_entry(position, str.end());
+			return current_entry = deco::parse_entry(position);
 		}
 
-		Entry peek_entry() {
-			return deco::peek_entry(position, str.end());
+		Entry peek_entry() const {
+			return deco::peek_entry(position);
 		}
 
-		bool peek_set_end() {
+		bool peek_set_end() const {
 			return peek_entry().type == Entry::Type::set_end;
 		}
 	};
