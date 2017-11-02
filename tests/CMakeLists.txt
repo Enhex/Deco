@@ -8,7 +8,6 @@ include(${CMAKE_CURRENT_BINARY_DIR}/conanbuildinfo_multi.cmake)
 
 project(deco)
 conan_basic_setup()
-include_directories(../include)
 
 add_executable(test_parse parse.cpp)
 conan_target_link_libraries(test_parse)
