@@ -19,7 +19,7 @@ namespace deco
 		{}
 
 		std::string str;
-		std::string::iterator position;
+		std::string::const_iterator position;
 
 		Entry current_entry;
 
