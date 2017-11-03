@@ -1,6 +1,8 @@
 #ifndef Deco_h
 #define Deco_h
 
+#include <array>
+#include <limits>
 #include <string_view>
 #include <vector>
 
@@ -24,31 +26,21 @@ namespace deco
 	};
 
 
-	/* NOTE:
-	most likely to only be using tabs, or only be using spaces.
-	also likely to be using only tabs, then only spaces.
-	skip whitespace by switching between checking only for tabs and checking only for spaces
-	*/
+	constexpr auto make_whitespace_jump_table()
+	{
+		std::array<unsigned char, std::numeric_limits<unsigned char>::max()> table{ 0 };
+		table['\t'] = 1;
+		table[' '] = 1;
+		return table;
+	}
+	constexpr auto whitespace_jump_table = make_whitespace_jump_table();
+
 	// skip whitespace
 	template <typename Iterator>
 	void skip_whitespace(Iterator& current)
 	{
-		// looping back after skipping spaces, if current char isn't tab we skipped all spaces and tabs
-		while (*current == '\t') {
+		while (whitespace_jump_table[*current])
 			++current;
-			while (*current == '\t')
-				++current;
-			while (*current == ' ')
-				++current;
-		}
-		// if starting with spaces
-		while (*current == ' ') {
-			++current;
-			while (*current == ' ')
-				++current;
-			while (*current == '\t')
-				++current;
-		}
 	}
 
 	struct Entry
