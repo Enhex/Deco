@@ -46,8 +46,9 @@ namespace deco
 namespace gs
 {
 	// NVP
-	template<typename T>
-	void write(deco::OutputStream& stream, const deco::NVP<T>& nvp)
+	template<typename Stream, typename T>
+	typename std::enable_if_t<std::is_base_of_v<deco::OutputStream, Stream>>
+	write(Stream& stream, const deco::NVP<T>& nvp)
 	{
 		stream.begin_set(nvp.name);
 		serialize(stream, nvp.value);
@@ -66,13 +67,16 @@ namespace gs
 
 
 	// CNVP
-	void write(deco::OutputStream& stream, const deco::CNVP<std::string>& nvp)
+	template<typename Stream>
+	typename std::enable_if_t<std::is_base_of_v<deco::OutputStream, Stream>>
+	write(Stream& stream, const deco::CNVP<std::string>& nvp)
 	{
 		serialize(stream, nvp.name + ": " + deco::escape_content(nvp.value));
 	}
 
-	template<typename T>
-	void write(deco::OutputStream& stream, const deco::CNVP<T>& nvp)
+	template<typename Stream, typename T>
+	typename std::enable_if_t<std::is_base_of_v<deco::OutputStream, Stream>>
+	write(Stream& stream, const deco::CNVP<T>& nvp)
 	{
 		if constexpr(std::is_floating_point_v<T>)
 			serialize(stream, (nvp.name + ": ") += deco::to_string(nvp.value));

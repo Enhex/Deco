@@ -14,7 +14,9 @@ namespace deco
 
 namespace gs
 {
-	void write(deco::OutputStream& stream, const deco::escaped_string& value)
+	template<typename Stream>
+	typename std::enable_if_t<std::is_base_of_v<deco::OutputStream, Stream>>
+	write(Stream& stream, const deco::escaped_string& value)
 	{
 		stream.entry(deco::escape_content(value));
 	}

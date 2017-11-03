@@ -14,6 +14,7 @@ namespace boost::spirit::detail {
 #include <gs/Core.h>
 #include <string>
 #include <vector>
+#include <string_view>
 
 namespace deco
 {
@@ -21,33 +22,48 @@ namespace deco
 	{
 		std::string str;
 
-		void entry(const std::string& content)
-		{
-			indent();
+		void entry(const std::string& content) {
 			(str += content) += '\n';
 		}
 
-		void begin_set(std::string&& content)
-		{
+		void begin_set(std::string&& content) {
 			entry(content += ':');
-			++indent_level;
 		}
-		void begin_set(const std::string_view& content)
-		{
+		void begin_set(const std::string_view& content) {
 			begin_set(std::string(content));
 		}
 
-		void end_set()
-		{
+		void end_set() {
+			entry(":");
+		}
+	};
+
+	struct OutputStream_Indent : OutputStream
+	{
+		using OutputStream::OutputStream;
+
+		void entry(const std::string& content) {
+			indent();
+			OutputStream::entry(content);
+		}
+
+		void begin_set(std::string&& content) {
+			entry(content += ':');
+			++indent_level;
+		}
+		void begin_set(const std::string_view& content) {
+			begin_set(std::string(content));	// use own version for indenting
+		}
+
+		void end_set() {
 			--indent_level;
-			entry(std::string(":"));
+			entry(":");
 		}
 
 	protected:
 		unsigned indent_level = 0;
 
-		void indent()
-		{
+		void indent() {
 			for (unsigned n = 0; n < indent_level; ++n)
 				str += '\t';
 		}
@@ -139,11 +155,11 @@ namespace deco
 
 namespace gs
 {
-	template<>
-	struct is_output<deco::OutputStream> : std::true_type {};
+	template<> struct is_output<deco::OutputStream> : std::true_type {};
+	template<> struct is_output<deco::OutputStream_Indent> : std::true_type {};
 
-	template<>
-	struct is_deco<deco::OutputStream> : std::true_type {};
+	template<> struct is_deco<deco::OutputStream> : std::true_type {};
+	template<> struct is_deco<deco::OutputStream_Indent> : std::true_type {};
 
 
 	// serialize output deco
@@ -158,25 +174,34 @@ namespace gs
 	}
 
 	//automatically provide default serialization implementation for arithmetic types
-	template<typename T>
-	typename std::enable_if_t<std::is_integral_v<T>>
-	write(deco::OutputStream& stream, const T& value) {
+	template<typename Stream, typename T>
+	typename std::enable_if_t<
+		std::is_base_of_v<deco::OutputStream, Stream> &&
+		std::is_integral_v<T>
+	>
+	write(Stream& stream, const T& value) {
 		stream.entry(std::to_string(value));
 	}
 
-	template<typename T>
-	typename std::enable_if_t<std::is_floating_point_v<T>>
-	write(deco::OutputStream& stream, const T& value) {
+	template<typename Stream, typename T>
+	typename std::enable_if_t<
+		std::is_base_of_v<deco::OutputStream, Stream> &&
+		std::is_floating_point_v<T>
+	>
+	write(Stream& stream, const T& value) {
 		stream.entry(deco::to_string(value));
 		//stream.entry(deco::trim_float(std::to_string(value)));
 	}
-
-	void write(deco::OutputStream& stream, const std::string& value) {
+	
+	template<typename Stream>
+	typename std::enable_if_t<std::is_base_of_v<deco::OutputStream, Stream>>
+	write(Stream& stream, const std::string& value) {
 		stream.entry(value);
 	}
 
-	template<typename T>
-	void write(deco::OutputStream& stream, std::vector<T>& value)
+	template<typename Stream, typename T>
+	typename std::enable_if_t<std::is_base_of_v<deco::OutputStream, Stream>>
+	write(Stream& stream, std::vector<T>& value)
 	{
 		for (auto& e : value)
 			serialize(stream, e);

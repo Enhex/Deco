@@ -50,7 +50,7 @@ int main()
 		B b;
 		int i = 5;
 
-		deco::OutputStream stream;
+		deco::OutputStream_Indent stream;
 		gs::serialize(stream, b, i);
 
 		ofstream os("out.deco", ios::binary);

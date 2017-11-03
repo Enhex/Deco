@@ -54,7 +54,7 @@ int main()
 
 	// write
 	{
-		deco::OutputStream stream;
+		deco::OutputStream_Indent stream;
 
 		gs::serialize(stream, str_val);
 
