@@ -1,6 +1,14 @@
 #ifndef deco_OutputStream_h
 #define deco_OutputStream_h
 
+// used to fix boost spirit karma signbit error bug
+namespace boost::spirit::detail {
+	using boost::spirit::x3::signbit;
+}
+
+#include <boost/spirit/include/karma_generate.hpp>
+#include <boost/spirit/include/karma_real.hpp>
+
 #include "Traits.h"
 #include "deco.h"
 #include <gs/Core.h>
@@ -50,6 +58,29 @@ namespace deco
 		const auto pos = str.find_last_not_of('0');
 		str.erase(pos + (str[pos] != '.'));	// if last character isn't a decimal point, don't delete it
 		return str;
+	}
+
+	// don't use scientific notation
+	template <typename T>
+	struct fixed_policy : boost::spirit::karma::real_policies<T> {
+		typedef boost::spirit::karma::real_policies<T> base_type;
+		static int floatfield(T) { return base_type::fmtflags::fixed; }
+		static unsigned int precision(T) { return 10; }
+	};
+
+	template<typename T>
+	using float_fixed = boost::spirit::karma::real_generator<T, fixed_policy<T>>;
+
+	template<typename T>
+	std::string to_string(const T& value)
+	{
+		std::string s;
+		std::back_insert_iterator<std::string> sink(s);
+
+		if constexpr(std::is_floating_point_v<T>)
+			boost::spirit::karma::generate(sink, float_fixed<T>(), value);
+
+		return s;
 	}
 
 	// escape content delimiters
@@ -122,7 +153,8 @@ namespace gs
 	template<typename T>
 	typename std::enable_if_t<std::is_floating_point_v<T>>
 	write(deco::OutputStream& stream, const T& value) {
-		stream.entry(deco::trim_float(std::to_string(value)));
+		stream.entry(deco::float_to_string(value));
+		//stream.entry(deco::trim_float(std::to_string(value)));
 	}
 
 	void write(deco::OutputStream& stream, const std::string& value) {

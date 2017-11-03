@@ -3,6 +3,8 @@
 
 #include "Traits.h"
 #include "deco.h"
+#include <boost/spirit/home/x3.hpp>
+#include <boost/spirit/home/x3/numeric.hpp>
 #include <gs/Core.h>
 #include <string>
 #include <vector>
@@ -104,12 +106,18 @@ namespace gs
 
 	void read(const deco::Entry& entry, int& value)
 	{
-		value = stoi(std::string(entry.content)); // no string_view/iterators support
+		using namespace boost::spirit::x3;
+		phrase_parse(entry.content.begin(), entry.content.end(), int_, ascii::space, value);
+
+		//value = stoi(std::string(entry.content)); // no string_view/iterators support
 	}
 
 	void read(const deco::Entry& entry, float& value)
 	{
-		value = stof(std::string(entry.content)); // no string_view/iterators support
+		using namespace boost::spirit::x3;
+		phrase_parse(entry.content.begin(), entry.content.end(), float_, ascii::space, value);
+
+		//value = stof(std::string(entry.content)); // no string_view/iterators support
 	}
 
 	void read(const deco::Entry& entry, std::string& value)
