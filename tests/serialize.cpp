@@ -5,78 +5,107 @@
 #include <cassert>
 #include <fstream>
 #include <iostream>
+#include <limits>
 
 using namespace std;
 
+constexpr auto floating_test_value = 123.125;
+
+template<typename T>
+void write_type(deco::OutputStream& stream) {
+	if constexpr(is_floating_point_v<T>) {
+		auto value = T(floating_test_value);
+		gs::serialize(stream, value);
+	}
+	else if (is_integral_v<T> && is_signed_v<T>) {
+		auto value = numeric_limits<T>::min();
+		gs::serialize(stream, value);
+	}
+	else {
+		auto value = numeric_limits<T>::max();
+		gs::serialize(stream, value);
+	}
+};
+
+template<typename T>
+void read_type(deco::InputStream& stream) {
+	T value;
+	gs::serialize(stream, value);
+	if constexpr(is_floating_point_v<T>)
+		assert(value == floating_test_value);
+	else if(is_integral_v<T> && is_signed_v<T>)
+		assert(value == numeric_limits<T>::min());
+	else
+		assert(value == numeric_limits<T>::max());
+};
+
+
 int main()
 {
-	// values
-	constexpr char c_val = 'c';
-	constexpr int i_val = 2;
-	constexpr float f_val = 3.25;
-	constexpr string_view s_val = "an entry"sv;
-	const vector<int> v_val{ 0,1,2,3,4,10 };
-
-	// variables
-	char c = c_val;
-	int i = i_val;
-	float f = f_val;
-	auto s = string(s_val);
-	auto v = v_val;
+	const string str_val = "string";
+	vector<int> v_val{1,2,3,4,5,6,7,8};
 
 	// write
 	{
 		deco::OutputStream stream;
 
-		gs::serialize(stream, c);
-		stream.begin_set("some set");
-			gs::serialize(stream, i);
-			gs::serialize(stream, f);
-			stream.begin_set("another set");
-				gs::serialize(stream, s);
-			stream.end_set();
+		gs::serialize(stream, str_val);
+		stream.begin_set("integral");
+			write_type<char>(stream);
+			write_type<unsigned char>(stream);
+			write_type<short>(stream);
+			write_type<unsigned short>(stream);
+			write_type<int>(stream);
+			write_type<unsigned int>(stream);
+			write_type<long>(stream);
+			write_type<unsigned long>(stream);
+			write_type<long long>(stream);
+			write_type<unsigned long long>(stream);
+		stream.end_set();
+		stream.begin_set("floating point");
+			write_type<float>(stream);
+			write_type<double>(stream);
+			write_type<long double>(stream);
 		stream.end_set();
 
-		gs::serialize(stream, deco::make_NVP("vec", v));
+		gs::serialize(stream, deco::make_NVP("vector", v_val));
 
 		ofstream os("out.deco", ios::binary);
 		os << stream.str;
 	}
 
-	// reset
-	c = '0';
-	i = 0;
-	f = 0;
-	s = "";
-	v.clear();
-
 	// read
 	{
-		deco::InputStream is({
+		deco::InputStream stream({
 			istreambuf_iterator<char>(ifstream("out.deco", ios::binary)),
 			istreambuf_iterator<char>()
 		});
 
-		cout << is.str;
+		cout << stream.str;
 
-		std::string set_name;	// dummy
+		std::string str; // dummy
+		vector<int> v;
 
-		gs::serialize(is, c);
-			gs::serialize(is, set_name);
-			gs::serialize(is, i);
-			gs::serialize(is, f);
-				gs::serialize(is, set_name);
-					gs::serialize(is, s);
-				is.parse_entry();		// set end
-			is.parse_entry();			// set end
-		gs::serialize(is, set_name);	// NVP name
-		gs::serialize(is, v);
+		gs::serialize(stream, str); assert(str == str_val);
+		gs::serialize(stream, str); assert(str == "integral");			// set name
+			read_type<char>(stream);
+			read_type<unsigned char>(stream);
+			read_type<short>(stream);
+			read_type<unsigned short>(stream);
+			read_type<int>(stream);
+			read_type<unsigned int>(stream);
+			read_type<long>(stream);
+			read_type<unsigned long>(stream);
+			read_type<long long>(stream);
+			read_type<unsigned long long>(stream);
+		stream.parse_entry();		// set end
+		gs::serialize(stream, str); assert(str == "floating point");	// set name
+			read_type<float>(stream);
+			read_type<double>(stream);
+			read_type<long double>(stream);
+		stream.parse_entry();		// set end
 
-		// verify reading the same values written
-		assert(c == c_val);
-		assert(i == i_val);
-		assert(f == f_val);
-		assert(s == s_val);
+		gs::serialize(stream, deco::make_NVP("vector", v));
 		assert(v == v_val);
 	}
 }

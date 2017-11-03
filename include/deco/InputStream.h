@@ -99,23 +99,30 @@ namespace gs
 		stream.parse_entry();	// skip set end
 	}
 
-	void read(const deco::Entry& entry, char& value)
-	{
-		value = entry.content[0];
+	template<typename T>
+	constexpr auto get_integral_parser() {
+		if constexpr(std::is_signed_v<T>)
+			return int_parser<T>();
+		else
+			return uint_parser<T>();
 	}
 
-	void read(const deco::Entry& entry, int& value)
+	template<typename T>
+	typename std::enable_if_t<std::is_integral_v<T>>
+	read(const deco::Entry& entry, T& value)
 	{
 		using namespace boost::spirit::x3;
-		phrase_parse(entry.content.begin(), entry.content.end(), int_, ascii::space, value);
+		phrase_parse(entry.content.begin(), entry.content.end(), get_integral_parser<T>(), ascii::space, value);
 
 		//value = stoi(std::string(entry.content)); // no string_view/iterators support
 	}
 
-	void read(const deco::Entry& entry, float& value)
+	template<typename T>
+	typename std::enable_if_t<std::is_floating_point_v<T>>
+	read(const deco::Entry& entry, T& value)
 	{
 		using namespace boost::spirit::x3;
-		phrase_parse(entry.content.begin(), entry.content.end(), float_, ascii::space, value);
+		phrase_parse(entry.content.begin(), entry.content.end(), real_parser<T>(), ascii::space, value);
 
 		//value = stof(std::string(entry.content)); // no string_view/iterators support
 	}
