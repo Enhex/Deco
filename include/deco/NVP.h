@@ -93,7 +93,7 @@ namespace gs
 		entry.content.remove_prefix(std::distance(entry.content.begin(), whitespace_end));
 
 		// unescape delimiters chars
-		deco::unescape_content(entry.content);
+		deco::unescape_content<true>(entry.content);
 
 		// parse value
 		serialize(entry, nvp.value);

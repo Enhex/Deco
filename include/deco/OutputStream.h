@@ -91,9 +91,9 @@ namespace deco
 		// escape content starting with whitespace or content delimiter
 		const auto first = content.front();
 		if (first == ' ' ||
-			first == '\t' ||
+			first == '\t'||
 			first == deco::content_delimiter)
-			str += deco::content_delimiter;
+			str.insert(str.begin(), deco::content_delimiter);
 
 		str += content;
 
@@ -107,15 +107,32 @@ namespace deco
 	}
 
 	// remove delimiters used to escape content
+	template<bool unescape_content_begin = false>	// entry parsing already removes content begin delimiter
 	auto unescape_content(std::string_view& content)
 	{
 		// erase start content delimiter
-		if (content.front() == content_delimiter)
-			content.remove_prefix(1);
+		if (unescape_content_begin) {
+			if (content.front() == content_delimiter)
+				content.remove_prefix(1);
+		}
 
 		// erase end content delimiter
 		if (content.back() == content_delimiter)
 			content.remove_suffix(1);
+	}
+
+	template<bool unescape_content_begin = false>
+	auto unescape_content(std::string& content)
+	{
+		// erase start content delimiter
+		if (unescape_content_begin) {
+			if (content.front() == content_delimiter)
+				content.erase(0, 1);
+		}
+
+		// erase end content delimiter
+		if (content.back() == content_delimiter)
+			content.pop_back();
 	}
 }
 

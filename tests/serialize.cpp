@@ -1,6 +1,5 @@
-#include <deco/InputStream.h>
 #include <deco/NVP.h>
-#include <deco/OutputStream.h>
+#include <deco/escaped_string.h>
 
 #include <cassert>
 #include <fstream>
@@ -43,6 +42,14 @@ void read_type(deco::InputStream& stream) {
 int main()
 {
 	const string str_val = "string";
+	const deco::escaped_string esc_str_space =				"  string";
+	const deco::escaped_string esc_str_tab =				"		string";
+	const deco::escaped_string esc_str_spc_tab =			"		string";
+	const deco::escaped_string esc_str_content_begin =		"' string";
+	const deco::escaped_string esc_str_content_end =		"string'";
+	const deco::escaped_string esc_str_structure =			"string:";
+	const deco::escaped_string esc_str_structure_con_end =	"string:'";
+
 	vector<int> v_val{1,2,3,4,5,6,7,8};
 
 	// write
@@ -50,6 +57,15 @@ int main()
 		deco::OutputStream stream;
 
 		gs::serialize(stream, str_val);
+
+		gs::serialize(stream, esc_str_space);
+		gs::serialize(stream, esc_str_tab);
+		gs::serialize(stream, esc_str_spc_tab);
+		gs::serialize(stream, esc_str_content_begin);
+		gs::serialize(stream, esc_str_content_end);
+		gs::serialize(stream, esc_str_structure);
+		gs::serialize(stream, esc_str_structure_con_end);
+
 		stream.begin_set("integral");
 			write_type<char>(stream);
 			write_type<unsigned char>(stream);
@@ -62,6 +78,7 @@ int main()
 			write_type<long long>(stream);
 			write_type<unsigned long long>(stream);
 		stream.end_set();
+
 		stream.begin_set("floating point");
 			write_type<float>(stream);
 			write_type<double>(stream);
@@ -87,6 +104,16 @@ int main()
 		vector<int> v;
 
 		gs::serialize(stream, str); assert(str == str_val);
+
+		deco::escaped_string esc_str; // dummy
+		gs::serialize(stream, esc_str); assert(esc_str == esc_str_space);
+		gs::serialize(stream, esc_str); assert(esc_str == esc_str_tab);
+		gs::serialize(stream, esc_str); assert(esc_str == esc_str_spc_tab);
+		gs::serialize(stream, esc_str); assert(esc_str == esc_str_content_begin);
+		gs::serialize(stream, esc_str); assert(esc_str == esc_str_content_end);
+		gs::serialize(stream, esc_str); assert(esc_str == esc_str_structure);
+		gs::serialize(stream, esc_str); assert(esc_str == esc_str_structure_con_end);
+
 		gs::serialize(stream, str); assert(str == "integral");			// set name
 			read_type<char>(stream);
 			read_type<unsigned char>(stream);
@@ -99,6 +126,7 @@ int main()
 			read_type<long long>(stream);
 			read_type<unsigned long long>(stream);
 		stream.parse_entry();		// set end
+
 		gs::serialize(stream, str); assert(str == "floating point");	// set name
 			read_type<float>(stream);
 			read_type<double>(stream);
