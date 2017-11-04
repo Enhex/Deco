@@ -127,7 +127,7 @@ namespace deco
 	auto unescape_content(std::string_view& content)
 	{
 		// erase start content delimiter
-		if (unescape_content_begin) {
+		if constexpr (unescape_content_begin) {
 			if (content.front() == content_delimiter)
 				content.remove_prefix(1);
 		}
@@ -141,7 +141,7 @@ namespace deco
 	auto unescape_content(std::string& content)
 	{
 		// erase start content delimiter
-		if (unescape_content_begin) {
+		if constexpr (unescape_content_begin) {
 			if (content.front() == content_delimiter)
 				content.erase(0, 1);
 		}
