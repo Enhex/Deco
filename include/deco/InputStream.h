@@ -13,12 +13,8 @@ namespace deco
 {
 	struct InputStream
 	{
-		InputStream(std::string&& new_str) :
-			str(new_str),
-			position(str.begin())
-		{}
+		InputStream(std::string::const_iterator begin) : position(begin) {}
 
-		std::string str;
 		std::string::const_iterator position;
 
 		Entry current_entry;
