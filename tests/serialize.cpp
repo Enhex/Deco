@@ -12,7 +12,8 @@ using namespace std;
 constexpr auto floating_test_value = 123.125;
 
 template<typename T>
-void write_type(deco::OutputStream& stream) {
+void write_type(deco::OutputStream& stream)
+{
 	if constexpr(is_floating_point_v<T>) {
 		auto value = T(floating_test_value);
 		gs::serialize(stream, value);

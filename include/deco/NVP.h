@@ -70,8 +70,7 @@ namespace gs
 	{
 		serialize(stream, deco::skip);	// skip set entry name
 		serialize(stream, nvp.value);	// read child entry
-		if(stream.current_entry.type != deco::Entry::set_end)
-			stream.parse_entry();		// skip set end if T didn't
+		stream.parse_entry();			// skip set end
 	}
 
 

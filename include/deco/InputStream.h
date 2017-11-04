@@ -15,10 +15,8 @@ namespace deco
 
 		std::string::const_iterator position;
 
-		Entry current_entry;
-
-		const Entry& parse_entry() {
-			return current_entry = deco::parse_entry(position);
+		Entry parse_entry() {
+			return deco::parse_entry(position);
 		}
 
 		Entry peek_entry() const {
@@ -90,7 +88,7 @@ namespace gs
 		//NOTE: set-entry content should've been read already, now reading children
 		while (!stream.peek_set_end())
 			serialize(stream, value.emplace_back());
-		stream.parse_entry();	// skip set end
+		//NOTE: set end will be skipped by the caller
 	}
 
 	template<typename T>

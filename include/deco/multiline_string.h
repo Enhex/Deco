@@ -50,7 +50,6 @@ namespace gs
 			serialize(stream, str);
 			(value += '\n') += str;
 		}
-		stream.parse_entry();	// skip set end
 	}
 }
 
