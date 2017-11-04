@@ -1,5 +1,6 @@
 #include <deco/NVP.h>
 #include <deco/escaped_string.h>
+#include <deco/multiline_string.h>
 
 #include <cassert>
 #include <fstream>
@@ -48,7 +49,9 @@ int main()
 	const deco::escaped_string esc_str_content_begin =		"' string";
 	const deco::escaped_string esc_str_content_end =		"string'";
 	const deco::escaped_string esc_str_structure =			"string:";
-	const deco::escaped_string esc_str_structure_con_end =	"string:'";
+	const deco::escaped_string esc_str_structure_con_end = "string:'";
+
+	const deco::multiline_string ml_str_val = "multi\nline\nstring";
 
 	vector<int> v_val{1,2,3,4,5,6,7,8};
 
@@ -65,6 +68,10 @@ int main()
 		gs::serialize(stream, esc_str_content_end);
 		gs::serialize(stream, esc_str_structure);
 		gs::serialize(stream, esc_str_structure_con_end);
+
+		gs::serialize(stream, deco::make_NVP("multiline_string", ml_str_val));
+		//gs::serialize(stream, ml_str_val);
+
 
 		stream.begin_set("integral");
 			write_type<char>(stream);
@@ -114,6 +121,9 @@ int main()
 		gs::serialize(stream, esc_str); assert(esc_str == esc_str_content_end);
 		gs::serialize(stream, esc_str); assert(esc_str == esc_str_structure);
 		gs::serialize(stream, esc_str); assert(esc_str == esc_str_structure_con_end);
+
+		deco::multiline_string ml_str; // dummy
+		gs::serialize(stream, deco::make_NVP("multiline_string", ml_str)); assert(ml_str == ml_str_val);
 
 		gs::serialize(stream, str); assert(str == "integral");			// set name
 			read_type<char>(stream);
