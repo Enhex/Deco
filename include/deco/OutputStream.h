@@ -169,13 +169,6 @@ namespace gs
 		write(stream, value);
 	}
 
-	// disallow vector as non-set entry
-	template<typename Stream, typename T>
-	typename std::enable_if_t<is_deco_output_v<Stream>>
-		serialize(Stream& stream, std::vector<T>& value) {
-		static_assert(false, "std::vector must be serialized as a set entry");
-	}
-
 	//automatically provide default serialization implementation for arithmetic types
 	template<typename Stream, typename T>
 	typename std::enable_if_t<
@@ -200,14 +193,6 @@ namespace gs
 	typename std::enable_if_t<std::is_base_of_v<deco::OutputStream, Stream>>
 	write(Stream& stream, const std::string& value) {
 		stream.entry(value);
-	}
-
-	template<typename Stream, typename T>
-	typename std::enable_if_t<std::is_base_of_v<deco::OutputStream, Stream>>
-	write(Stream& stream, std::vector<T>& value)
-	{
-		for (auto& e : value)
-			serialize(stream, e);
 	}
 }
 

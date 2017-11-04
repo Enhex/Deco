@@ -55,16 +55,6 @@ namespace gs
 		stream.end_set();
 	}
 
-	// allow vector as set entry
-	template<typename Stream, typename T>
-	typename std::enable_if_t<std::is_base_of_v<deco::OutputStream, Stream>>
-		write(Stream& stream, const deco::NVP<std::vector<T>>& nvp)
-	{
-		stream.begin_set(nvp.name);
-		write(stream, nvp.value);
-		stream.end_set();
-	}
-
 	template<typename T>
 	void read(deco::InputStream& stream, deco::NVP<T>& nvp)
 	{

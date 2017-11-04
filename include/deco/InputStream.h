@@ -81,16 +81,6 @@ namespace gs
 	{
 	}
 
-
-	template<typename T>
-	void read(deco::InputStream& stream, std::vector<T>& value)
-	{
-		//NOTE: set-entry content should've been read already, now reading children
-		while (!stream.peek_set_end())
-			serialize(stream, value.emplace_back());
-		//NOTE: set end will be skipped by the caller
-	}
-
 	template<typename T>
 	constexpr auto get_integral_parser() {
 		if constexpr(std::is_signed_v<T>)
