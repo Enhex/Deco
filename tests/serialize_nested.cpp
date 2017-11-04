@@ -1,6 +1,5 @@
-#include <deco/InputStream.h>
 #include <deco/NVP.h>
-#include <deco/OutputStream.h>
+#include <deco/vector.h>
 
 #include <fstream>
 #include <iostream>

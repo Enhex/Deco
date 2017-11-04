@@ -1,6 +1,7 @@
 #include <deco/NVP.h>
 #include <deco/escaped_string.h>
 #include <deco/multiline_string.h>
+#include <deco/vector.h>
 
 #include <cassert>
 #include <fstream>
@@ -11,8 +12,8 @@ using namespace std;
 
 constexpr auto floating_test_value = 123.125;
 
-template<typename T>
-void write_type(deco::OutputStream& stream)
+template<typename T, typename Stream>
+void write_type(Stream& stream)
 {
 	if constexpr(is_floating_point_v<T>) {
 		auto value = T(floating_test_value);
@@ -71,8 +72,6 @@ int main()
 		gs::serialize(stream, esc_str_structure_con_end);
 
 		gs::serialize(stream, deco::make_NVP("multiline_string", ml_str_val));
-		//gs::serialize(stream, ml_str_val);
-
 
 		stream.begin_set("integral");
 			write_type<char>(stream);
