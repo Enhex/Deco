@@ -1,6 +1,7 @@
 #include <deco/NVP.h>
 #include <deco/escaped_string.h>
 #include <deco/multiline_string.h>
+#include <deco/set.h>
 #include <deco/vector.h>
 
 #include <cassert>
@@ -71,7 +72,7 @@ int main()
 		gs::serialize(stream, esc_str_structure);
 		gs::serialize(stream, esc_str_structure_con_end);
 
-		gs::serialize(stream, deco::make_NVP("multiline_string", ml_str_val));
+		gs::serialize(stream, deco::make_set("multiline_string", ml_str_val));
 
 		stream.begin_set("integral");
 			write_type<char>(stream);
@@ -92,7 +93,7 @@ int main()
 			write_type<long double>(stream);
 		stream.end_set();
 
-		gs::serialize(stream, deco::make_NVP("vector", v_val));
+		gs::serialize(stream, deco::make_set("vector", v_val));
 
 		ofstream os("out.deco", ios::binary);
 		os << stream.str;
@@ -123,7 +124,7 @@ int main()
 		gs::serialize(stream, esc_str); assert(esc_str == esc_str_structure_con_end);
 
 		deco::multiline_string ml_str; // dummy
-		gs::serialize(stream, deco::make_NVP("multiline_string", ml_str)); assert(ml_str == ml_str_val);
+		gs::serialize(stream, deco::make_set("multiline_string", ml_str)); assert(ml_str == ml_str_val);
 
 		gs::serialize(stream, str); assert(str == "integral");			// set name
 			read_type<char>(stream);
@@ -144,7 +145,7 @@ int main()
 			read_type<long double>(stream);
 		stream.parse_entry();		// set end
 
-		gs::serialize(stream, deco::make_NVP("vector", v));
+		gs::serialize(stream, deco::make_set("vector", v));
 		assert(v == v_val);
 	}
 }

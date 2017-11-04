@@ -3,6 +3,7 @@
 
 #include "InputStream.h"
 #include "OutputStream.h"
+#include "set.h"
 #include <vector>
 
 namespace gs
@@ -17,7 +18,7 @@ namespace gs
 	// allow vector as set entry
 	template<typename Stream, typename T>
 	typename std::enable_if_t<std::is_base_of_v<deco::OutputStream, Stream>>
-		write(Stream& stream, const deco::NVP<std::vector<T>>& nvp)
+		write(Stream& stream, const deco::set_t<std::vector<T>>& nvp)
 	{
 		stream.begin_set(nvp.name);
 		write(stream, nvp.value);

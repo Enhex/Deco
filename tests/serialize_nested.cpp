@@ -15,8 +15,8 @@ namespace gs
 {
 	template<typename Stream>
 	void serialize(Stream& stream, A& value /* shouldn't be const to allow reading */) {
-		serialize(stream, deco::make_CNVP("i", value.i));
-		serialize(stream, deco::make_CNVP("s", value.s));
+		serialize(stream, deco::make_NVP("i", value.i));
+		serialize(stream, deco::make_NVP("s", value.s));
 	}
 }
 
@@ -34,10 +34,10 @@ namespace gs
 	void serialize(Stream& stream, B& value) {
 		using namespace deco;
 		auto s = [&stream](auto& v) {serialize(stream, v); };
-		s(make_NVP("a", value.a));
-		s(make_NVP("v", value.v));
-		s(make_NVP("va", value.va));
-		s(make_CNVP("f", value.f));
+		s(make_set("a", value.a));
+		s(make_set("v", value.v));
+		s(make_set("va", value.va));
+		s(make_NVP("f", value.f));
 	}
 }
 

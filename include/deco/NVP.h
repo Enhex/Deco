@@ -3,39 +3,19 @@
 
 #include "InputStream.h"
 #include "OutputStream.h"
-#include <string>
-
 
 namespace deco
 {
-	// name value pair for serialization
+	// Content name value pair: NVP inside the entry content, using the structure delimiter to separate between name and value, which means it can't be inside the name
 	template<typename T>
-	struct NVP
-	{
+	struct NVP {
 		std::string_view name;
 		T& value;
 	};
 
-	//NOTE: class template argument deduction not supported yet
 	template<typename T>
 	auto make_NVP(std::string_view&& name, T& value) {
 		return NVP<T>{
-			std::forward<std::string_view>(name),
-				value	// want to always use T member, so no forwarding
-		};
-	}
-
-
-	// Content name value pair: NVP inside the entry content, using the structure delimiter to separate between name and value, which means it can't be inside the name
-	template<typename T>
-	struct CNVP {
-		std::string_view name;
-		T& value;
-	};
-
-	template<typename T>
-	auto make_CNVP(std::string_view&& name, T& value) {
-		return CNVP<T>{
 			std::forward<std::string_view>(name),
 				value	// want to always use T member, so no forwarding
 		};
@@ -49,25 +29,6 @@ namespace gs
 	template<typename Stream, typename T>
 	typename std::enable_if_t<std::is_base_of_v<deco::OutputStream, Stream>>
 	write(Stream& stream, const deco::NVP<T>& nvp)
-	{
-		stream.begin_set(nvp.name);
-		serialize(stream, nvp.value);
-		stream.end_set();
-	}
-
-	template<typename T>
-	void read(deco::InputStream& stream, deco::NVP<T>& nvp)
-	{
-		serialize(stream, deco::skip);	// skip set entry name
-		serialize(stream, nvp.value);	// read child entry
-		stream.parse_entry();			// skip set end
-	}
-
-
-	// CNVP
-	template<typename Stream, typename T>
-	typename std::enable_if_t<std::is_base_of_v<deco::OutputStream, Stream>>
-	write(Stream& stream, const deco::CNVP<T>& nvp)
 	{
 		const auto str = [&nvp]() {
 			return std::string(nvp.name) += ": ";
@@ -84,7 +45,7 @@ namespace gs
 
 
 	template<typename T>
-	void read(deco::InputStream& stream, deco::CNVP<T>& nvp)
+	void read(deco::InputStream& stream, deco::NVP<T>& nvp)
 	{	
 		auto entry = stream.parse_entry();
 
