@@ -93,12 +93,13 @@ int main()
 
 	// read
 	{
-		deco::InputStream stream({
+		string file_str{
 			istreambuf_iterator<char>(ifstream("out.deco", ios::binary)),
-			istreambuf_iterator<char>()
-		});
+			istreambuf_iterator<char>()};
 
-		cout << stream.str;
+		cout << file_str;
+
+		deco::InputStream stream(file_str.cbegin());
 
 		std::string str; // dummy
 		vector<int> v;

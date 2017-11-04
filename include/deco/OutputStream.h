@@ -169,6 +169,7 @@ namespace gs
 		write(stream, value);
 	}
 
+	// disallow vector as non-set entry
 	template<typename Stream, typename T>
 	typename std::enable_if_t<is_deco_output_v<Stream>>
 		serialize(Stream& stream, std::vector<T>& value) {
