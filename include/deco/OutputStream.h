@@ -12,9 +12,6 @@ namespace boost::spirit::detail {
 #include "Traits.h"
 #include "deco.h"
 #include <gs/Core.h>
-#include <string>
-#include <vector>
-#include <string_view>
 
 namespace deco
 {
@@ -161,16 +158,21 @@ namespace gs
 	template<> struct is_deco<deco::OutputStream> : std::true_type {};
 	template<> struct is_deco<deco::OutputStream_Indent> : std::true_type {};
 
+	template<typename T>
+	constexpr auto is_deco_output_v = is_deco_v<T> && is_output_v<T>;
 
 	// serialize output deco
 	template<typename Stream, typename T>
-	typename std::enable_if_t<
-		is_deco_v<Stream> &&
-		is_output_v<Stream>
-	>
+	typename std::enable_if_t<is_deco_output_v<Stream>>
 	serialize(Stream& stream, T& value)
 	{
 		write(stream, value);
+	}
+
+	template<typename Stream, typename T>
+	typename std::enable_if_t<is_deco_output_v<Stream>>
+		serialize(Stream& stream, std::vector<T>& value) {
+		static_assert(false, "std::vector must be serialized as a set entry");
 	}
 
 	//automatically provide default serialization implementation for arithmetic types

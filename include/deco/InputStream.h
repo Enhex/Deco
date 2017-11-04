@@ -6,8 +6,6 @@
 #include <boost/spirit/home/x3.hpp>
 #include <boost/spirit/home/x3/numeric.hpp>
 #include <gs/Core.h>
-#include <string>
-#include <vector>
 
 namespace deco
 {

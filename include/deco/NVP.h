@@ -51,7 +51,7 @@ namespace gs
 	write(Stream& stream, const deco::NVP<T>& nvp)
 	{
 		stream.begin_set(nvp.name);
-		serialize(stream, nvp.value);
+		write(stream, nvp.value);
 		stream.end_set();
 	}
 
