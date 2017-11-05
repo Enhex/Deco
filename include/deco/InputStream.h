@@ -2,7 +2,7 @@
 #define deco_InputStream_h
 
 #include "Traits.h"
-#include "deco.h"
+#include "Deco.h"
 #include <boost/spirit/home/x3.hpp>
 #include <boost/spirit/home/x3/numeric.hpp>
 #include <gs/Core.h>

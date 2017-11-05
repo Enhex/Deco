@@ -10,7 +10,7 @@ namespace boost::spirit::detail {
 #include <boost/spirit/include/karma_real.hpp>
 
 #include "Traits.h"
-#include "deco.h"
+#include "Deco.h"
 #include <gs/Core.h>
 
 namespace deco
