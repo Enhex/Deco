@@ -1,4 +1,5 @@
 #include <deco/NVP.h>
+#include <deco/string.h>
 #include <deco/vector.h>
 
 #include <fstream>

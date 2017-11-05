@@ -121,7 +121,7 @@ namespace deco
 
 	// remove delimiters used to escape content
 	template<bool unescape_content_begin = false>	// entry parsing already removes content begin delimiter
-	auto unescape_content(std::string_view& content)
+	void unescape_content(std::string_view& content)
 	{
 		// erase start content delimiter
 		if constexpr (unescape_content_begin) {
@@ -135,7 +135,15 @@ namespace deco
 	}
 
 	template<bool unescape_content_begin = false>
-	auto unescape_content(std::string& content)
+	auto unescape_content(const std::string_view& ref_content)
+	{
+		auto content = ref_content;
+		unescape_content(content);
+		return content;
+	}
+
+	template<bool unescape_content_begin = false>
+	void unescape_content(std::string& content)
 	{
 		// erase start content delimiter
 		if constexpr (unescape_content_begin) {
@@ -187,12 +195,6 @@ namespace gs
 	write(Stream& stream, const T& value) {
 		stream.entry(deco::to_string(value));
 		//stream.entry(deco::trim_float(std::to_string(value)));
-	}
-	
-	template<typename Stream>
-	typename std::enable_if_t<std::is_base_of_v<deco::OutputStream, Stream>>
-	write(Stream& stream, const std::string& value) {
-		stream.entry(value);
 	}
 }
 

@@ -39,7 +39,7 @@ namespace gs
 
 	void read(deco::InputStream& stream, deco::multiline_string& value)
 	{
-		deco::escaped_string str;
+		std::string str;
 
 		//NOTE: set-entry content should've been read already, now reading children
 		if (!stream.peek_set_end()) {

@@ -108,11 +108,6 @@ namespace gs
 
 		//value = stof(std::string(entry.content)); // no string_view/iterators support
 	}
-
-	void read(const deco::Entry& entry, std::string& value)
-	{
-		value = entry.content;
-	}
 }
 
 #endif//guard

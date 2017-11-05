@@ -1,7 +1,8 @@
 #include <deco/NVP.h>
-#include <deco/escaped_string.h>
 #include <deco/multiline_string.h>
 #include <deco/set.h>
+#include <deco/string.h>
+#include <deco/unescaped_string.h>
 #include <deco/vector.h>
 
 #include <cassert>
@@ -45,14 +46,14 @@ void read_type(deco::InputStream& stream) {
 
 int main()
 {
-	const string str_val = "string";
-	const deco::escaped_string esc_str_space =				"  string";
-	const deco::escaped_string esc_str_tab =				"		string";
-	const deco::escaped_string esc_str_spc_tab =			"		string";
-	const deco::escaped_string esc_str_content_begin =		"' string";
-	const deco::escaped_string esc_str_content_end =		"string'";
-	const deco::escaped_string esc_str_structure =			"string:";
-	const deco::escaped_string esc_str_structure_con_end = "string:'";
+	const deco::unescaped_string unesc_str_val ="string";
+	const std::string str_space =				"  string";
+	const std::string str_tab =					"		string";
+	const std::string str_spc_tab =				"		string";
+	const std::string str_content_begin =		"' string";
+	const std::string str_content_end =			"string'";
+	const std::string str_structure =			"string:";
+	const std::string str_structure_con_end =	"string:'";
 
 	const deco::multiline_string ml_str_val = "multi\nline\nstring";
 
@@ -62,15 +63,15 @@ int main()
 	{
 		deco::OutputStream_Indent stream;
 
-		gs::serialize(stream, str_val);
+		gs::serialize(stream, unesc_str_val);
 
-		gs::serialize(stream, esc_str_space);
-		gs::serialize(stream, esc_str_tab);
-		gs::serialize(stream, esc_str_spc_tab);
-		gs::serialize(stream, esc_str_content_begin);
-		gs::serialize(stream, esc_str_content_end);
-		gs::serialize(stream, esc_str_structure);
-		gs::serialize(stream, esc_str_structure_con_end);
+		gs::serialize(stream, str_space);
+		gs::serialize(stream, str_tab);
+		gs::serialize(stream, str_spc_tab);
+		gs::serialize(stream, str_content_begin);
+		gs::serialize(stream, str_content_end);
+		gs::serialize(stream, str_structure);
+		gs::serialize(stream, str_structure_con_end);
 
 		gs::serialize(stream, deco::make_set("multiline_string", ml_str_val));
 
@@ -109,19 +110,17 @@ int main()
 
 		deco::InputStream stream(file_str.cbegin());
 
+		deco::unescaped_string unesc_str; // dummy
+		gs::serialize(stream, unesc_str); assert(unesc_str == unesc_str_val);
+
 		std::string str; // dummy
-		vector<int> v;
-
-		gs::serialize(stream, str); assert(str == str_val);
-
-		deco::escaped_string esc_str; // dummy
-		gs::serialize(stream, esc_str); assert(esc_str == esc_str_space);
-		gs::serialize(stream, esc_str); assert(esc_str == esc_str_tab);
-		gs::serialize(stream, esc_str); assert(esc_str == esc_str_spc_tab);
-		gs::serialize(stream, esc_str); assert(esc_str == esc_str_content_begin);
-		gs::serialize(stream, esc_str); assert(esc_str == esc_str_content_end);
-		gs::serialize(stream, esc_str); assert(esc_str == esc_str_structure);
-		gs::serialize(stream, esc_str); assert(esc_str == esc_str_structure_con_end);
+		gs::serialize(stream, str); assert(str == str_space);
+		gs::serialize(stream, str); assert(str == str_tab);
+		gs::serialize(stream, str); assert(str == str_spc_tab);
+		gs::serialize(stream, str); assert(str == str_content_begin);
+		gs::serialize(stream, str); assert(str == str_content_end);
+		gs::serialize(stream, str); assert(str == str_structure);
+		gs::serialize(stream, str); assert(str == str_structure_con_end);
 
 		deco::multiline_string ml_str; // dummy
 		gs::serialize(stream, deco::make_set("multiline_string", ml_str)); assert(ml_str == ml_str_val);
@@ -145,6 +144,7 @@ int main()
 			read_type<long double>(stream);
 		stream.parse_entry();		// set end
 
+		vector<int> v;
 		gs::serialize(stream, deco::make_set("vector", v));
 		assert(v == v_val);
 	}
