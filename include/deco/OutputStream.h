@@ -1,6 +1,8 @@
 #ifndef deco_OutputStream_h
 #define deco_OutputStream_h
 
+#include <boost/spirit/home/x3.hpp>
+
 // used to fix boost spirit karma signbit error bug
 namespace boost::spirit::detail {
 	using boost::spirit::x3::signbit;
@@ -155,27 +157,7 @@ namespace deco
 		if (content.back() == content_delimiter)
 			content.pop_back();
 	}
-}
 
-
-namespace gs
-{
-	template<> struct is_output<deco::OutputStream> : std::true_type {};
-	template<> struct is_output<deco::OutputStream_Indent> : std::true_type {};
-
-	template<> struct is_deco<deco::OutputStream> : std::true_type {};
-	template<> struct is_deco<deco::OutputStream_Indent> : std::true_type {};
-
-	template<typename T>
-	constexpr auto is_deco_output_v = is_deco_v<T> && is_output_v<T>;
-
-	// serialize output deco
-	template<typename Stream, typename T>
-	typename std::enable_if_t<is_deco_output_v<Stream>>
-	serialize(Stream& stream, T& value)
-	{
-		write(stream, value);
-	}
 
 	//automatically provide default serialization implementation for arithmetic types
 	template<typename Stream, typename T>
@@ -195,6 +177,27 @@ namespace gs
 	write(Stream& stream, const T& value) {
 		stream.entry(deco::to_string(value));
 		//stream.entry(deco::trim_float(std::to_string(value)));
+	}
+}
+
+
+namespace gs
+{
+	template<> struct is_output<deco::OutputStream> : std::true_type {};
+	template<> struct is_output<deco::OutputStream_Indent> : std::true_type {};
+
+	template<> struct is_deco<deco::OutputStream> : std::true_type {};
+	template<> struct is_deco<deco::OutputStream_Indent> : std::true_type {};
+
+	template<typename T>
+	constexpr auto is_deco_output_v = is_deco_v<T> && is_output_v<T>;
+
+	// serialize output deco
+	template<typename Stream, typename T>
+	typename std::enable_if_t<is_deco_output_v<Stream>>
+	serialize(Stream& stream, T& value)
+	{
+		deco::write(stream, value);
 	}
 }
 

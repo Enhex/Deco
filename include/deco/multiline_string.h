@@ -1,20 +1,16 @@
 #ifndef deco_multiline_string_h
 #define deco_multiline_string_h
 
-#include "InputStream.h"
-#include "OutputStream.h"
-#include <string>
+#include <deco/string.h>
 #include <string_view>
 #include <strong_type.h>
+#include "OutputStream.h"
 
 
 namespace deco
 {
 	STRONG_TYPE(multiline_string, std::string);
-}
 
-namespace gs
-{
 	template<typename Stream>
 	typename std::enable_if_t<std::is_base_of_v<deco::OutputStream, Stream>>
 	write(Stream& stream, const deco::multiline_string& value)
@@ -43,11 +39,11 @@ namespace gs
 
 		//NOTE: set-entry content should've been read already, now reading children
 		if (!stream.peek_set_end()) {
-			serialize(stream, str);
+			gs::serialize(stream, str);
 			value += str;
 		}
 		while (!stream.peek_set_end()) {
-			serialize(stream, str);
+			gs::serialize(stream, str);
 			(value += '\n') += str;
 		}
 	}

@@ -1,4 +1,5 @@
 #include <deco/NVP.h>
+#include <deco/InputStream.h>
 #include <deco/string.h>
 #include <deco/vector.h>
 
@@ -16,8 +17,8 @@ namespace gs
 {
 	template<typename Stream>
 	void serialize(Stream& stream, A& value /* shouldn't be const to allow reading */) {
-		serialize(stream, deco::make_NVP("i", value.i));
-		serialize(stream, deco::make_NVP("s", value.s));
+		//serialize(stream, deco::make_NVP("i", value.i));
+		//serialize(stream, deco::make_NVP("s", value.s));
 	}
 }
 

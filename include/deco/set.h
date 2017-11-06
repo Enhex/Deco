@@ -23,24 +23,22 @@ namespace deco
 				value	// want to always use T& member, so no forwarding
 		};
 	}
-}
 
-namespace gs
-{
+
 	template<typename Stream, typename T>
 	typename std::enable_if_t<std::is_base_of_v<deco::OutputStream, Stream>>
 	write(Stream& stream, const deco::set_t<T>& nvp)
 	{
 		stream.begin_set(nvp.name);
-		serialize(stream, nvp.value);
+		gs::serialize(stream, nvp.value);
 		stream.end_set();
 	}
 
 	template<typename T>
 	void read(deco::InputStream& stream, deco::set_t<T>& nvp)
 	{
-		serialize(stream, deco::skip);	// skip set entry name
-		serialize(stream, nvp.value);	// read child entry
+		gs::serialize(stream, deco::skip);	// skip set entry name
+		gs::serialize(stream, nvp.value);	// read child entry
 		stream.parse_entry();			// skip set end
 	}
 }

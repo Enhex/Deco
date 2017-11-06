@@ -20,11 +20,7 @@ namespace deco
 				value	// want to always use T member, so no forwarding
 		};
 	}
-}
 
-
-namespace gs
-{
 	// NVP
 	template<typename Stream, typename T>
 	typename std::enable_if_t<std::is_base_of_v<deco::OutputStream, Stream>>
@@ -35,12 +31,12 @@ namespace gs
 		};
 
 		if constexpr (std::is_same_v<T, std::string>)
-			serialize(stream, str() += deco::escape_content(nvp.value));
+			gs::serialize(stream, str() += deco::escape_content(nvp.value));
 		else if constexpr (std::is_floating_point_v<T>)
-			serialize(stream, str() += deco::to_string(nvp.value));
-			//serialize(stream, str() += deco::trim_float(std::to_string(nvp.value)));
+			gs::serialize(stream, str() += deco::to_string(nvp.value));
+			//gs::serialize(stream, str() += deco::trim_float(std::to_string(nvp.value)));
 		else
-			serialize(stream, str() += std::to_string(nvp.value));
+			gs::serialize(stream, str() += std::to_string(nvp.value));
 	}
 
 
@@ -58,7 +54,7 @@ namespace gs
 		deco::unescape_content<true>(entry.content);
 
 		// parse value
-		serialize(entry, nvp.value);
+		gs::serialize(entry, nvp.value);
 	}
 }
 

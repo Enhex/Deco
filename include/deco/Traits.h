@@ -1,6 +1,8 @@
 #ifndef deco_Traits_h
 #define deco_Traits_h
 
+#include <type_traits>
+
 namespace gs
 {
 	// deco trait

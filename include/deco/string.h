@@ -1,11 +1,10 @@
 #ifndef deco_string_h
 #define deco_string_h
 
-#include "InputStream.h"
 #include "OutputStream.h"
 #include <string>
 
-namespace gs
+namespace deco
 {
 	template<typename Stream>
 	typename std::enable_if_t<std::is_base_of_v<deco::OutputStream, Stream>>
