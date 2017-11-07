@@ -2,22 +2,23 @@
 #define deco_integral_h
 
 #include "OutputStream.h"
+#include <gs/Serializer.h>
 
 namespace deco
 {
 	//automatically provide default serialization implementation for arithmetic types
 	template<typename Stream, typename T>
-	typename std::enable_if_t<
-		std::is_base_of_v<deco::OutputStream, Stream> &&
+	std::enable_if_t<
+		std::is_base_of_v<OutputStream, std::decay_t<Stream>> &&
 		std::is_integral_v<T>
 	>
-		write(Stream& stream, const T& value) {
-		stream.entry(std::to_string(value));
+	write(gs::Serializer<Stream>& serializer, const T& value) {
+		serializer.stream.entry(std::to_string(value));
 	}
 
 	template<typename T>
-	typename std::enable_if_t<std::is_integral_v<T>>
-		read(const deco::Entry& entry, T& value)
+	std::enable_if_t<std::is_integral_v<T>>
+		read(const Entry& entry, T& value)
 	{
 		using namespace boost::spirit::x3;
 		phrase_parse(entry.content.begin(), entry.content.end(), get_integral_parser<T>(), ascii::space, value);

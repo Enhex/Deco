@@ -10,7 +10,7 @@ namespace gs
 	struct is_deco : std::false_type {};
 
 	template<typename T>
-	constexpr bool is_deco_v = is_deco<T>::value;
+	constexpr bool is_deco_v = is_deco<std::decay_t<T>>::value;
 }
 
 #endif//guard

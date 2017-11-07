@@ -11,8 +11,9 @@ namespace boost::spirit::detail {
 #include <boost/spirit/include/karma_generate.hpp>
 #include <boost/spirit/include/karma_real.hpp>
 
-#include "Traits.h"
 #include "Deco.h"
+#include "traits.h"
+#include <gs/serializer.h>
 #include <gs/traits.h>
 
 namespace deco
@@ -173,10 +174,10 @@ namespace gs
 
 	// serialize output deco
 	template<typename Stream, typename T>
-	typename std::enable_if_t<is_deco_output_v<Stream>>
-	serialize(Stream& stream, T& value)
+	std::enable_if_t<is_deco_output_v<Stream>>
+		serialize(Serializer<Stream>& serializer, T& value)
 	{
-		deco::write(stream, value);
+		deco::write(serializer, value);
 	}
 }
 

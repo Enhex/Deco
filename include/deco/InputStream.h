@@ -10,14 +10,15 @@ namespace boost::spirit::detail {
 
 #include <boost/spirit/home/x3/numeric.hpp>
 
-#include "Traits.h"
 #include "Deco.h"
-#include <gs/traits.h>
-
 #include "string.h"
+#include "traits.h"
+#include <gs/Serializer.h>
+#include <gs/traits.h>
 
 namespace deco
 {
+	//TODO templatize iterator type
 	struct InputStream
 	{
 		InputStream(std::string::const_iterator begin) : position(begin) {}
@@ -43,64 +44,56 @@ namespace deco
 
 
 	template<typename T>
-	constexpr auto get_integral_parser() {
+	constexpr auto get_integral_parser()
+	{
 		using namespace boost::spirit::x3;
+
 		if constexpr(std::is_signed_v<T>)
 			return int_parser<T>();
 		else
 			return uint_parser<T>();
 	}
 
-
-	/*TODO disables non-specialized?
 	template<typename T>
-	void read(T& value);*/
-
-	template<typename T>
-	void read(deco::InputStream& stream, T& value)
+	void read(gs::Serializer<InputStream&>& serializer, T& value)
 	{
-		deco::read(stream.parse_entry(), value);
+		read(serializer.stream.parse_entry(), value);
 	}
 }
 
 namespace gs
 {
-	template<>
-	struct is_input<deco::InputStream> : std::true_type {};
+	template<> struct is_input<deco::InputStream> : std::true_type {};
 
-	template<>
-	struct is_deco<deco::InputStream> : std::true_type {};
+	template<> struct is_deco<deco::InputStream> : std::true_type {};
+
+	template<typename T>
+	constexpr auto is_deco_input_v = is_deco_v<T> && is_input_v<T>;
 
 
 	// serialize input deco
 	template<typename Stream, typename T>
-	typename std::enable_if_t<
-		is_deco_v<Stream> &&
-		is_input_v<Stream>
-	>
-	serialize(Stream& stream, T& value)
+	std::enable_if_t<is_deco_input_v<Stream>>
+	serialize(Serializer<Stream>& serializer, T& value)
 	{
-		deco::read(stream, value);
+		deco::read(serializer, value);
 	}
 
-	template<typename T>
+	/*template<typename T>
 	void serialize(deco::Entry& entry, T& value)
 	{
 		deco::read(entry, value);
-	}
+	}*/
+
 
 	// skip entry without parsing
 	template<typename Stream>
-	typename std::enable_if_t<
-		is_deco_v<Stream> &&
-		is_input_v<Stream>
-	>
-	serialize(Stream& stream, const deco::skip_t&)
+	std::enable_if_t<is_deco_input_v<Stream>>
+	serialize(Serializer<Stream>& serializer, const deco::skip_t&)
 	{
-		stream.parse_entry();
+		serializer.stream.parse_entry();
 	}
 
-	template<>
 	void serialize(deco::Entry& entry, const deco::skip_t&)
 	{
 	}

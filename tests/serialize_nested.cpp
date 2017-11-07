@@ -1,9 +1,6 @@
 #include <deco/NVP.h>
-#include <deco/InputStream.h>
-#include <deco/string.h>
+#include <deco/arithmetic.h>
 #include <deco/vector.h>
-
-#include <gs/include_last.h>
 
 #include <fstream>
 #include <iostream>
@@ -18,9 +15,12 @@ struct A {
 namespace gs
 {
 	template<typename Stream>
-	void serialize(Stream& stream, A& value /* shouldn't be const to allow reading */) {
-		//serialize(stream, deco::make_NVP("i", value.i));
-		//serialize(stream, deco::make_NVP("s", value.s));
+	void serialize(Serializer<Stream>& serializer, A& value) // shouldn't be const to allow reading
+	{
+		using namespace deco;
+		serializer(
+			make_NVP("i", value.i),
+			make_NVP("s", value.s));
 	}
 }
 
@@ -35,13 +35,13 @@ struct B {
 namespace gs
 {
 	template<typename Stream>
-	void serialize(Stream& stream, B& value) {
+	void serialize(Serializer<Stream>& serializer, B& value) {
 		using namespace deco;
-		auto s = [&stream](auto& v) {serialize(stream, v); };
-		s(make_set("a", value.a));
-		s(make_set("v", value.v));
-		s(make_set("va", value.va));
-		s(make_NVP("f", value.f));
+		serializer(
+			make_set("a", value.a),
+			make_set("v", value.v),
+			make_set("va", value.va),
+			make_NVP("f", value.f));
 	}
 }
 
@@ -53,10 +53,12 @@ int main()
 		B b;
 		int i = 5;
 
-		deco::OutputStream_Indent stream;
-		gs::serialize(stream, b, i);
-
 		ofstream os("out.deco", ios::binary);
+		deco::OutputStream_Indent stream;
+		auto serializer = gs::make_serializer(stream);
+
+		serializer(b, i);
+
 		os << stream.str;
 	}
 
@@ -77,6 +79,8 @@ int main()
 		cout << file_str;
 
 		deco::InputStream stream(file_str.cbegin());
-		gs::serialize(stream, b, i);
+		auto serializer = gs::make_serializer(stream);
+
+		serializer(b, i);
 	}
 }

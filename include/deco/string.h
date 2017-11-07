@@ -3,19 +3,20 @@
 
 #include "OutputStream.h"
 #include <string>
+#include <gs/Serializer.h>
 
 namespace deco
 {
 	template<typename Stream>
-	typename std::enable_if_t<std::is_base_of_v<deco::OutputStream, Stream>>
-	write(Stream& stream, const std::string& value)
+	std::enable_if_t<std::is_base_of_v<OutputStream, std::decay_t<Stream>>>
+	write(gs::Serializer<Stream>& serializer, const std::string& value)
 	{
-		stream.entry(deco::escape_content(value));
+		serializer.stream.entry(escape_content(value));
 	}
 
-	void read(const deco::Entry& entry, std::string& value)
+	void read(const Entry& entry, std::string& value)
 	{
-		value = deco::unescape_content(entry.content);
+		value = unescape_content(entry.content);
 	}
 }
 

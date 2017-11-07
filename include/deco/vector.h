@@ -11,36 +11,38 @@ namespace gs
 	// disallow vector as non-set entry
 	template<typename Stream, typename T>
 	typename std::enable_if_t<is_deco_output_v<Stream>>
-		serialize(Stream& stream, std::vector<T>& value);
+		serialize(Serializer<Stream>& serializer, std::vector<T>& value);
 }
 
 namespace deco
 {
 	// allow vector as set entry
 	template<typename Stream, typename T>
-	typename std::enable_if_t<std::is_base_of_v<deco::OutputStream, Stream>>
-		write(Stream& stream, const deco::set_t<std::vector<T>>& nvp)
+	typename std::enable_if_t<std::is_base_of_v<OutputStream, std::decay_t<Stream>>>
+		write(gs::Serializer<Stream>& serializer, const set_t<std::vector<T>>& nvp)
 	{
+		auto& stream = serializer.stream;
+
 		stream.begin_set(nvp.name);
-		write(stream, nvp.value);
+		write(serializer, nvp.value);
 		stream.end_set();
 	}
 
 	template<typename Stream, typename T>
-	typename std::enable_if_t<std::is_base_of_v<deco::OutputStream, Stream>>
-		write(Stream& stream, std::vector<T>& value)
+	typename std::enable_if_t<std::is_base_of_v<OutputStream, std::decay_t<Stream>>>
+		write(gs::Serializer<Stream>& serializer, std::vector<T>& value)
 	{
 		for (auto& e : value)
-			gs::serialize(stream, e);
+			serializer(e);
 	}
 
 
 	template<typename T>
-	void read(deco::InputStream& stream, std::vector<T>& value)
+	void read(gs::Serializer<InputStream&>& serializer, std::vector<T>& value)
 	{
 		//NOTE: set-entry content should've been read already, now reading children
-		while (!stream.peek_set_end())
-			gs::serialize(stream, value.emplace_back());
+		while (!serializer.stream.peek_set_end())
+			serializer(value.emplace_back());
 		//NOTE: set end will be skipped by the caller
 	}
 }
