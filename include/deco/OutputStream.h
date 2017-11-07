@@ -157,27 +157,6 @@ namespace deco
 		if (content.back() == content_delimiter)
 			content.pop_back();
 	}
-
-
-	//automatically provide default serialization implementation for arithmetic types
-	template<typename Stream, typename T>
-	typename std::enable_if_t<
-		std::is_base_of_v<deco::OutputStream, Stream> &&
-		std::is_integral_v<T>
-	>
-	write(Stream& stream, const T& value) {
-		stream.entry(std::to_string(value));
-	}
-
-	template<typename Stream, typename T>
-	typename std::enable_if_t<
-		std::is_base_of_v<deco::OutputStream, Stream> &&
-		std::is_floating_point_v<T>
-	>
-	write(Stream& stream, const T& value) {
-		stream.entry(deco::to_string(value));
-		//stream.entry(deco::trim_float(std::to_string(value)));
-	}
 }
 
 

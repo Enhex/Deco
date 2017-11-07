@@ -61,26 +61,6 @@ namespace deco
 	{
 		deco::read(stream.parse_entry(), value);
 	}
-
-	template<typename T>
-	typename std::enable_if_t<std::is_integral_v<T>>
-	read(const deco::Entry& entry, T& value)
-	{
-		using namespace boost::spirit::x3;
-		phrase_parse(entry.content.begin(), entry.content.end(), get_integral_parser<T>(), ascii::space, value);
-
-		//value = stoi(std::string(entry.content)); // no string_view/iterators support
-	}
-
-	template<typename T>
-	typename std::enable_if_t<std::is_floating_point_v<T>>
-	read(const deco::Entry& entry, T& value)
-	{
-		using namespace boost::spirit::x3;
-		phrase_parse(entry.content.begin(), entry.content.end(), real_parser<T>(), ascii::space, value);
-
-		//value = stof(std::string(entry.content)); // no string_view/iterators support
-	}
 }
 
 namespace gs
