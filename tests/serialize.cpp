@@ -5,6 +5,8 @@
 #include <deco/unescaped_string.h>
 #include <deco/vector.h>
 
+#include <gs/include_last.h>
+
 #include <cassert>
 #include <fstream>
 #include <iostream>

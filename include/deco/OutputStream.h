@@ -13,7 +13,7 @@ namespace boost::spirit::detail {
 
 #include "Traits.h"
 #include "Deco.h"
-#include <gs/Core.h>
+#include <gs/traits.h>
 
 namespace deco
 {

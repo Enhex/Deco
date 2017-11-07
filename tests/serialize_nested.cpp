@@ -3,6 +3,8 @@
 #include <deco/string.h>
 #include <deco/vector.h>
 
+#include <gs/include_last.h>
+
 #include <fstream>
 #include <iostream>
 
