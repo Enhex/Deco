@@ -2,7 +2,6 @@
 #define deco_integral_h
 
 #include "../OutputStream.h"
-#include <gs/Serializer.h>
 
 namespace deco
 {
@@ -12,8 +11,8 @@ namespace deco
 		std::is_base_of_v<OutputStream, std::decay_t<Stream>> &&
 		std::is_integral_v<T>
 	>
-	write(gs::Serializer<Stream>& serializer, const T& value) {
-		serializer.stream.entry(std::to_string(value));
+	write(Stream& stream, const T& value) {
+		stream.entry(std::to_string(value));
 	}
 
 	template<typename T> constexpr

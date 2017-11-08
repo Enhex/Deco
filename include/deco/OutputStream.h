@@ -13,7 +13,6 @@ namespace boost::spirit::detail {
 
 #include "Deco.h"
 #include "traits.h"
-#include <gs/serializer.h>
 #include <gs/traits.h>
 
 namespace deco
@@ -175,9 +174,9 @@ namespace gs
 	// serialize output deco
 	template<typename Stream, typename T> constexpr
 	std::enable_if_t<is_deco_output_v<Stream>>
-		serialize(Serializer<Stream>& serializer, T& value)
+		serialize(Stream& stream, T& value)
 	{
-		deco::write(serializer, value);
+		deco::write(stream, value);
 	}
 }
 

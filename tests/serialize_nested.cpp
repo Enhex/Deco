@@ -1,4 +1,5 @@
 #include <deco/NVP.h>
+#include <deco/set.h>
 #include <deco/types/arithmetic.h>
 #include <deco/types/vector.h>
 
@@ -15,10 +16,10 @@ struct A {
 namespace gs
 {
 	template<typename Stream>
-	void serialize(Serializer<Stream>& serializer, A& value) // shouldn't be const to allow reading
+	void serialize(Stream& stream, A& value) // shouldn't be const to allow reading
 	{
 		using namespace deco;
-		serializer(
+		gs::serializer(stream,
 			make_NVP("i", value.i),
 			make_NVP("s", value.s));
 	}
@@ -35,9 +36,9 @@ struct B {
 namespace gs
 {
 	template<typename Stream>
-	void serialize(Serializer<Stream>& serializer, B& value) {
+	void serialize(Stream& stream, B& value) {
 		using namespace deco;
-		serializer(
+		gs::serializer(stream,
 			make_set("a", value.a),
 			make_set("v", value.v),
 			make_set("va", value.va),
@@ -55,9 +56,8 @@ int main()
 
 		ofstream os("out.deco", ios::binary);
 		deco::OutputStream_Indent stream;
-		auto serializer = gs::make_serializer(stream);
 
-		serializer(b, i);
+		gs::serializer(stream, b, i);
 
 		os << stream.str;
 	}
@@ -79,8 +79,7 @@ int main()
 		cout << file_str;
 
 		deco::InputStream stream(file_str.cbegin());
-		auto serializer = gs::make_serializer(stream);
 
-		serializer(b, i);
+		gs::serializer(stream, b, i);
 	}
 }

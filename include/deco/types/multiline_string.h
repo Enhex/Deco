@@ -4,7 +4,7 @@
 #include "../InputStream.h"
 #include "../OutputStream.h"
 #include <deco/types/string.h>
-#include <gs/Serializer.h>
+#include <gs/serializer.h>
 #include <string_view>
 #include <strong_type.h>
 
@@ -14,10 +14,8 @@ namespace deco
 
 	template<typename Stream> constexpr
 	typename std::enable_if_t<std::is_base_of_v<OutputStream, std::decay_t<Stream>>>
-	write(gs::Serializer<Stream>& serializer, const multiline_string& value)
+	write(Stream& stream, const multiline_string& value)
 	{
-		auto& stream = serializer.stream;
-
 		auto line_start = value.cbegin();
 		auto iter = line_start;
 
@@ -36,19 +34,17 @@ namespace deco
 		write_line();
 	}
 
-	void read(gs::Serializer<InputStream&>& serializer, multiline_string& value)
+	void read(InputStream& stream, multiline_string& value)
 	{
 		std::string str;
 
-		auto& stream = serializer.stream;
-
 		//NOTE: set-entry content should've been read already, now reading children
 		if (!stream.peek_set_end()) {
-			serializer(str);
+			gs::serializer(stream, str);
 			value += str;
 		}
 		while (!stream.peek_set_end()) {
-			serializer(str);
+			gs::serializer(stream, str);
 			(value += '\n') += str;
 		}
 	}

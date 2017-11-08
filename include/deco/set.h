@@ -3,6 +3,7 @@
 
 #include "InputStream.h"
 #include "OutputStream.h"
+#include <gs/serializer.h>
 #include <string_view>
 
 namespace deco
@@ -28,21 +29,19 @@ namespace deco
 
 	template<typename Stream, typename T> constexpr
 	typename std::enable_if_t<std::is_base_of_v<OutputStream, std::decay_t<Stream>>>
-	write(gs::Serializer<Stream>& serializer, const set_t<T>& nvp)
+	write(Stream& stream, const set_t<T>& nvp)
 	{
-		auto& stream = serializer.stream;
-
 		stream.begin_set(nvp.name);
-		serializer(nvp.value);
+		gs::serializer(stream, nvp.value);
 		stream.end_set();
 	}
 
 	template<typename T> constexpr
-	void read(gs::Serializer<InputStream&>& serialzier, set_t<T>& nvp)
+	void read(InputStream& stream, set_t<T>& nvp)
 	{
-		serialzier(skip);		// skip set entry name
-		serialzier(nvp.value);	// read child entry
-		serialzier.stream.parse_entry();	// skip set end
+		gs::serializer(stream, skip);		// skip set entry name
+		gs::serializer(stream, nvp.value);	// read child entry
+		stream.parse_entry();				// skip set end
 	}
 }
 

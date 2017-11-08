@@ -27,26 +27,26 @@ namespace deco
 	// NVP
 	template<typename Stream, typename T> constexpr
 	std::enable_if_t<std::is_base_of_v<OutputStream, std::decay_t<Stream>>>
-	write(gs::Serializer<Stream>& serializer, const NVP<T>& nvp)
+	write(Stream& stream, const NVP<T>& nvp)
 	{
 		const auto str = [&nvp]() {
 			return std::string(nvp.name) += ": ";
 		};
 
 		if constexpr (std::is_same_v<T, std::string>)
-			serializer(str() += escape_content(nvp.value));
+			gs::serialize(stream, str() += escape_content(nvp.value));
 		else if constexpr (std::is_floating_point_v<T>)
-			serializer(str() += to_string(nvp.value));
-			//serializer(str() += trim_float(std::to_string(nvp.value)));
+			gs::serialize(stream, str() += to_string(nvp.value));
+			//gs::serialize(stream, str() += trim_float(std::to_string(nvp.value)));
 		else
-			serializer(str() += std::to_string(nvp.value));
+			gs::serialize(stream, str() += std::to_string(nvp.value));
 	}
 
 
 	template<typename T> constexpr
-	void read(gs::Serializer<InputStream&>& serializer, NVP<T>& nvp)
+	void read(InputStream& stream, NVP<T>& nvp)
 	{	
-		auto entry = serializer.stream.parse_entry();
+		auto entry = stream.parse_entry();
 
 		// skip whitespace
 		const auto whitespace_end = skip_whitespace(entry.content.begin() + entry.content.find(':') + 1);

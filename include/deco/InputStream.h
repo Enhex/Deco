@@ -11,9 +11,7 @@ namespace boost::spirit::detail {
 #include <boost/spirit/home/x3/numeric.hpp>
 
 #include "Deco.h"
-#include "string.h"
 #include "traits.h"
-#include <gs/Serializer.h>
 #include <gs/traits.h>
 
 namespace deco
@@ -55,9 +53,9 @@ namespace deco
 	}
 
 	template<typename T> constexpr
-	void read(gs::Serializer<InputStream&>& serializer, T& value)
+	void read(InputStream& stream, T& value)
 	{
-		read(serializer.stream.parse_entry(), value);
+		read(stream.parse_entry(), value);
 	}
 }
 
@@ -74,24 +72,18 @@ namespace gs
 	// serialize input deco
 	template<typename Stream, typename T> constexpr
 	std::enable_if_t<is_deco_input_v<Stream>>
-	serialize(Serializer<Stream>& serializer, T& value)
+	serialize(Stream& stream, T& value)
 	{
-		deco::read(serializer, value);
+		deco::read(stream, value);
 	}
-
-	/*template<typename T>
-	void serialize(deco::Entry& entry, T& value)
-	{
-		deco::read(entry, value);
-	}*/
 
 
 	// skip entry without parsing
 	template<typename Stream> constexpr
 	std::enable_if_t<is_deco_input_v<Stream>>
-	serialize(Serializer<Stream>& serializer, const deco::skip_t&)
+	serialize(Stream& stream, deco::skip_t&)
 	{
-		serializer.stream.parse_entry();
+		stream.parse_entry();
 	}
 
 	constexpr void serialize(deco::Entry& entry, const deco::skip_t&)
