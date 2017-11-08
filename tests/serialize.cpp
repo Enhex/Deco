@@ -46,7 +46,7 @@ void read_type(deco::InputStream& stream) {
 
 int main()
 {
-	const deco::unescaped_string unesc_str_val ="string";
+	const deco::unescaped_string unesc_str_val{ "string" };
 	const std::string str_val =					"string";
 	const std::string str_space =				"  string";
 	const std::string str_tab =					"		string";
@@ -56,14 +56,14 @@ int main()
 	const std::string str_structure =			"string:";
 	const std::string str_structure_con_end =	"string:'";
 
-	const deco::multiline_string ml_str_val = "multi\nline\nstring";
+	const deco::multiline_string ml_str_val{ "multi\nline\nstring" };
 
 	vector<int> v_val{1,2,3,4,5,6,7,8};
 
 	// write
 	{
 		deco::OutputStream_Indent stream;
-		const auto serialize = [&stream](auto& t) {
+		const auto serialize = [&stream](auto&& t) {
 			gs::serializer(stream, t);
 		};
 
@@ -109,14 +109,15 @@ int main()
 
 	// read
 	{
+		auto file = ifstream("out.deco", ios::binary);
 		string file_str{
-			istreambuf_iterator<char>(ifstream("out.deco", ios::binary)),
+			istreambuf_iterator<char>(file),
 			istreambuf_iterator<char>()};
 
 		cout << file_str;
 
 		deco::InputStream stream(file_str.cbegin());
-		const auto serialize = [&stream](auto& t) {
+		const auto serialize = [&stream](auto&& t) {
 			gs::serializer(stream, t);
 		};
 
