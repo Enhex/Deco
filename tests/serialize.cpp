@@ -1,9 +1,9 @@
-#include <deco/arithmetic.h>
-#include <deco/multiline_string.h>
 #include <deco/set.h>
-#include <deco/string.h>
-#include <deco/unescaped_string.h>
-#include <deco/vector.h>
+#include <deco/types/arithmetic.h>
+#include <deco/types/multiline_string.h>
+#include <deco/types/string.h>
+#include <deco/types/unescaped_string.h>
+#include <deco/types/vector.h>
 
 #include <cassert>
 #include <fstream>

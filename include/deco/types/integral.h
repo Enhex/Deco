@@ -1,7 +1,7 @@
 #ifndef deco_integral_h
 #define deco_integral_h
 
-#include "OutputStream.h"
+#include "../OutputStream.h"
 #include <gs/Serializer.h>
 
 namespace deco

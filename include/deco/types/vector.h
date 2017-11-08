@@ -1,9 +1,9 @@
 #ifndef deco_std_vector_h
 #define deco_std_vector_h
 
-#include "InputStream.h"
-#include "OutputStream.h"
-#include "set.h"
+#include "../InputStream.h"
+#include "../OutputStream.h"
+#include "../set.h"
 #include <vector>
 
 namespace gs

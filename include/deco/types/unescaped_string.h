@@ -1,8 +1,8 @@
 #ifndef deco_unescaped_string_h
 #define deco_unescaped_string_h
 
-#include "InputStream.h"
-#include "OutputStream.h"
+#include "../InputStream.h"
+#include "../OutputStream.h"
 #include <gs/serializer.h>
 #include <string>
 #include <strong_type.h>

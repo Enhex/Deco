@@ -1,6 +1,6 @@
 #include <deco/NVP.h>
-#include <deco/arithmetic.h>
-#include <deco/vector.h>
+#include <deco/types/arithmetic.h>
+#include <deco/types/vector.h>
 
 #include <fstream>
 #include <iostream>

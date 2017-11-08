@@ -3,7 +3,7 @@
 
 #include "InputStream.h"
 #include "OutputStream.h"
-#include <deco/string.h>
+#include <deco/types/string.h>
 #include <gs/Serializer.h>
 
 namespace deco

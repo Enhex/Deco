@@ -1,7 +1,7 @@
 #ifndef deco_string_h
 #define deco_string_h
 
-#include "OutputStream.h"
+#include "../OutputStream.h"
 #include <string>
 #include <gs/Serializer.h>
 

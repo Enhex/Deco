@@ -1,7 +1,7 @@
 #ifndef deco_floating_point_h
 #define deco_floating_point_h
 
-#include "OutputStream.h"
+#include "../OutputStream.h"
 #include <gs/Serializer.h>
 
 namespace deco
