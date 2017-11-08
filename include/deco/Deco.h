@@ -26,7 +26,7 @@ namespace deco
 	};
 
 
-	constexpr auto make_whitespace_jump_table()
+	constexpr auto make_whitespace_jump_table() noexcept
 	{
 		std::array<unsigned char, std::numeric_limits<unsigned char>::max()> table{ 0 };
 		table['\t'] = 1;
@@ -37,11 +37,19 @@ namespace deco
 
 	// skip whitespace
 	template <typename Iterator>
-	void skip_whitespace(Iterator& current)
+	constexpr void skip_whitespace(Iterator& current)
 	{
 		while (whitespace_jump_table[*current])
 			++current;
 	}
+	template <typename Iterator>
+	constexpr auto skip_whitespace(Iterator&& current)
+	{
+		while (whitespace_jump_table[*current])
+			++current;
+		return current;
+	}
+
 
 	struct Entry
 	{
@@ -57,7 +65,7 @@ namespace deco
 
 	// parse next entry
 	template <typename Iterator>
-	Entry parse_entry(Iterator& current)
+	constexpr Entry parse_entry(Iterator& current)
 	{
 		Entry entry;
 
@@ -131,13 +139,13 @@ namespace deco
 
 
 	template <typename Iterator>
-	EntryObject parse_object(Iterator& current)
+	constexpr EntryObject parse_object(Iterator& current)
 	{
 		return parse_object(current, parse_entry(current));
 	}
 
 	template <typename Iterator>
-	EntryObject parse_object(Iterator& current, const Entry& entry)
+	constexpr EntryObject parse_object(Iterator& current, const Entry& entry)
 	{
 		switch (entry.type)
 		{
@@ -160,7 +168,7 @@ namespace deco
 	}
 
 	template <typename Iterator>
-	auto parse(Iterator current, const Iterator last)
+	constexpr auto parse(Iterator current, const Iterator last)
 	{
 		std::vector<EntryObject> objects;
 
@@ -173,14 +181,14 @@ namespace deco
 
 
 	template <typename Iterator>
-	Entry peek_entry(Iterator current)
+	constexpr Entry peek_entry(Iterator current)
 	{
 		return parse_entry(current);
 	}
 
 
 	template <typename Iterator>
-	bool peek_set_end(Iterator current)
+	constexpr bool peek_set_end(Iterator current)
 	{
 		skip_whitespace(current);
 

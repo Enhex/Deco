@@ -11,7 +11,7 @@ namespace deco
 {
 	STRONG_TYPE(unescaped_string, std::string);
 
-	template<typename Stream>
+	template<typename Stream> constexpr
 	typename std::enable_if_t<std::is_base_of_v<OutputStream, std::decay_t<Stream>>>
 	write(gs::Serializer<Stream>& serializer, unescaped_string& value) {
 		serializer.stream.entry(value);
@@ -21,20 +21,6 @@ namespace deco
 	{
 		value = std::string(entry.content);
 	}
-	/*
-	void read(gs::Serializer<InputStream&>& serializer, unescaped_string& value)
-	{
-		auto entry = serializer.stream.parse_entry();
-		value = std::string(entry.content);
-	}
-	*/
-	/* works
-	template<typename Stream>
-	void read(gs::Serializer<Stream>& serializer, unescaped_string& value)
-	{
-	auto entry = serializer.stream.parse_entry();
-	value = std::string(entry.content);
-	}*/
 }
 
 #endif//guard

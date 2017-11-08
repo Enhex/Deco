@@ -6,7 +6,7 @@
 
 namespace deco
 {
-	template<typename Stream, typename T>
+	template<typename Stream, typename T> constexpr
 	typename std::enable_if_t<
 		std::is_base_of_v<OutputStream, std::decay_t<Stream>> &&
 		std::is_floating_point_v<T>
@@ -17,7 +17,7 @@ namespace deco
 		//serializer.stream.entry(trim_float(std::to_string(value)));
 	}
 
-	template<typename T>
+	template<typename T> constexpr
 	typename std::enable_if_t<std::is_floating_point_v<T>>
 		read(const Entry& entry, T& value)
 	{

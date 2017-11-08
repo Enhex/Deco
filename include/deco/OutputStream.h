@@ -63,7 +63,7 @@ namespace deco
 	protected:
 		unsigned indent_level = 0;
 
-		void indent() {
+		constexpr void indent() {
 			for (unsigned n = 0; n < indent_level; ++n)
 				str += '\t';
 		}
@@ -88,7 +88,7 @@ namespace deco
 	using float_fixed = boost::spirit::karma::real_generator<T, fixed_policy<T>>;
 
 	template<typename T, typename = std::enable_if_t<std::is_floating_point_v<T>>>
-	std::string to_string(const T& value)
+	constexpr std::string to_string(const T& value)
 	{
 		std::string s;
 		std::back_insert_iterator<std::string> sink(s);
@@ -123,7 +123,7 @@ namespace deco
 	}
 
 	// remove delimiters used to escape content
-	template<bool unescape_content_begin = false>	// entry parsing already removes content begin delimiter
+	template<bool unescape_content_begin = false> constexpr	// entry parsing already removes content begin delimiter
 	void unescape_content(std::string_view& content)
 	{
 		// erase start content delimiter
@@ -137,7 +137,7 @@ namespace deco
 			content.remove_suffix(1);
 	}
 
-	template<bool unescape_content_begin = false>
+	template<bool unescape_content_begin = false> constexpr
 	auto unescape_content(const std::string_view& ref_content)
 	{
 		auto content = ref_content;
@@ -145,7 +145,7 @@ namespace deco
 		return content;
 	}
 
-	template<bool unescape_content_begin = false>
+	template<bool unescape_content_begin = false> constexpr
 	void unescape_content(std::string& content)
 	{
 		// erase start content delimiter
@@ -173,7 +173,7 @@ namespace gs
 	constexpr auto is_deco_output_v = is_deco_v<T> && is_output_v<T>;
 
 	// serialize output deco
-	template<typename Stream, typename T>
+	template<typename Stream, typename T> constexpr
 	std::enable_if_t<is_deco_output_v<Stream>>
 		serialize(Serializer<Stream>& serializer, T& value)
 	{

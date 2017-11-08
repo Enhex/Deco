@@ -16,7 +16,7 @@ namespace deco
 	};
 
 	template<typename T>
-	auto make_NVP(std::string_view&& name, T& value)
+	constexpr auto make_NVP(std::string_view&& name, T& value)
 	{
 		return NVP<T>{
 			std::forward<std::string_view>(name),
@@ -25,7 +25,7 @@ namespace deco
 	}
 
 	// NVP
-	template<typename Stream, typename T>
+	template<typename Stream, typename T> constexpr
 	std::enable_if_t<std::is_base_of_v<OutputStream, std::decay_t<Stream>>>
 	write(gs::Serializer<Stream>& serializer, const NVP<T>& nvp)
 	{
@@ -43,14 +43,13 @@ namespace deco
 	}
 
 
-	template<typename T>
+	template<typename T> constexpr
 	void read(gs::Serializer<InputStream&>& serializer, NVP<T>& nvp)
 	{	
 		auto entry = serializer.stream.parse_entry();
 
 		// skip whitespace
-		auto whitespace_end = entry.content.begin() + entry.content.find(':') + 1;
-		skip_whitespace(whitespace_end);
+		const auto whitespace_end = skip_whitespace(entry.content.begin() + entry.content.find(':') + 1);
 		entry.content.remove_prefix(std::distance(entry.content.begin(), whitespace_end));
 
 		// unescape delimiters chars

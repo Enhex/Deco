@@ -17,7 +17,7 @@ namespace gs
 namespace deco
 {
 	// allow vector as set entry
-	template<typename Stream, typename T>
+	template<typename Stream, typename T> constexpr
 	typename std::enable_if_t<std::is_base_of_v<OutputStream, std::decay_t<Stream>>>
 		write(gs::Serializer<Stream>& serializer, const set_t<std::vector<T>>& nvp)
 	{
@@ -28,7 +28,7 @@ namespace deco
 		stream.end_set();
 	}
 
-	template<typename Stream, typename T>
+	template<typename Stream, typename T> constexpr
 	typename std::enable_if_t<std::is_base_of_v<OutputStream, std::decay_t<Stream>>>
 		write(gs::Serializer<Stream>& serializer, std::vector<T>& value)
 	{
@@ -37,7 +37,7 @@ namespace deco
 	}
 
 
-	template<typename T>
+	template<typename T> constexpr
 	void read(gs::Serializer<InputStream&>& serializer, std::vector<T>& value)
 	{
 		//NOTE: set-entry content should've been read already, now reading children

@@ -12,7 +12,7 @@ namespace deco
 {
 	STRONG_TYPE(multiline_string, std::string);
 
-	template<typename Stream>
+	template<typename Stream> constexpr
 	typename std::enable_if_t<std::is_base_of_v<OutputStream, std::decay_t<Stream>>>
 	write(gs::Serializer<Stream>& serializer, const multiline_string& value)
 	{

@@ -7,7 +7,7 @@
 namespace deco
 {
 	//automatically provide default serialization implementation for arithmetic types
-	template<typename Stream, typename T>
+	template<typename Stream, typename T> constexpr
 	std::enable_if_t<
 		std::is_base_of_v<OutputStream, std::decay_t<Stream>> &&
 		std::is_integral_v<T>
@@ -16,7 +16,7 @@ namespace deco
 		serializer.stream.entry(std::to_string(value));
 	}
 
-	template<typename T>
+	template<typename T> constexpr
 	std::enable_if_t<std::is_integral_v<T>>
 		read(const Entry& entry, T& value)
 	{

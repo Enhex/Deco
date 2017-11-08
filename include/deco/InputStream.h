@@ -21,19 +21,19 @@ namespace deco
 	//TODO templatize iterator type
 	struct InputStream
 	{
-		InputStream(std::string::const_iterator begin) : position(begin) {}
+		InputStream(std::string::const_iterator begin) noexcept : position(begin) {}
 
 		std::string::const_iterator position;
 
-		Entry parse_entry() {
+		constexpr Entry parse_entry() {
 			return deco::parse_entry(position);
 		}
 
-		Entry peek_entry() const {
+		constexpr Entry peek_entry() const {
 			return deco::peek_entry(position);
 		}
 
-		bool peek_set_end() const {
+		constexpr bool peek_set_end() const {
 			return deco::peek_set_end(position);
 		}
 	};
@@ -54,7 +54,7 @@ namespace deco
 			return uint_parser<T>();
 	}
 
-	template<typename T>
+	template<typename T> constexpr
 	void read(gs::Serializer<InputStream&>& serializer, T& value)
 	{
 		read(serializer.stream.parse_entry(), value);
@@ -72,7 +72,7 @@ namespace gs
 
 
 	// serialize input deco
-	template<typename Stream, typename T>
+	template<typename Stream, typename T> constexpr
 	std::enable_if_t<is_deco_input_v<Stream>>
 	serialize(Serializer<Stream>& serializer, T& value)
 	{
@@ -87,14 +87,14 @@ namespace gs
 
 
 	// skip entry without parsing
-	template<typename Stream>
+	template<typename Stream> constexpr
 	std::enable_if_t<is_deco_input_v<Stream>>
 	serialize(Serializer<Stream>& serializer, const deco::skip_t&)
 	{
 		serializer.stream.parse_entry();
 	}
 
-	void serialize(deco::Entry& entry, const deco::skip_t&)
+	constexpr void serialize(deco::Entry& entry, const deco::skip_t&)
 	{
 	}
 }

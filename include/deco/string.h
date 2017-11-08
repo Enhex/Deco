@@ -7,7 +7,7 @@
 
 namespace deco
 {
-	template<typename Stream>
+	template<typename Stream> constexpr
 	std::enable_if_t<std::is_base_of_v<OutputStream, std::decay_t<Stream>>>
 	write(gs::Serializer<Stream>& serializer, const std::string& value)
 	{

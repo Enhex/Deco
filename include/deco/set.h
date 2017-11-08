@@ -17,7 +17,7 @@ namespace deco
 
 	//NOTE: class template argument deduction not supported yet
 	template<typename T>
-	auto make_set(std::string_view&& name, T& value)
+	constexpr auto make_set(std::string_view&& name, T& value)
 	{
 		return set_t<T>{
 			std::forward<std::string_view>(name),
@@ -26,7 +26,7 @@ namespace deco
 	}
 
 
-	template<typename Stream, typename T>
+	template<typename Stream, typename T> constexpr
 	typename std::enable_if_t<std::is_base_of_v<OutputStream, std::decay_t<Stream>>>
 	write(gs::Serializer<Stream>& serializer, const set_t<T>& nvp)
 	{
@@ -37,7 +37,7 @@ namespace deco
 		stream.end_set();
 	}
 
-	template<typename T>
+	template<typename T> constexpr
 	void read(gs::Serializer<InputStream&>& serialzier, set_t<T>& nvp)
 	{
 		serialzier(skip);		// skip set entry name
