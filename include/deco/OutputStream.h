@@ -32,6 +32,10 @@ namespace deco
 			begin_set(std::string(content));
 		}
 
+		void begin_anonymous_set() {
+			entry("':");
+		}
+
 		void end_set() {
 			entry(":");
 		}
@@ -52,6 +56,11 @@ namespace deco
 		}
 		void begin_set(const std::string_view& content) {
 			begin_set(std::string(content));	// use own version for indenting
+		}
+
+		void begin_anonymous_set() {
+			entry("':");
+			++indent_level;
 		}
 
 		void end_set() {

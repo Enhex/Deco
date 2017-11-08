@@ -7,26 +7,8 @@
 #include <gs/serializer.h>
 #include <vector>
 
-namespace gs
-{
-	// disallow vector as non-set entry
-	template<typename Stream, typename T>
-	std::enable_if_t<is_deco_output_v<Stream>>
-		serialize(Stream& stream, std::vector<T>& value);
-}
-
 namespace deco
 {
-	// allow vector as set entry
-	template<typename Stream, typename T> constexpr
-	std::enable_if_t<std::is_base_of_v<OutputStream, std::decay_t<Stream>>>
-		write(Stream& stream, const set_t<std::vector<T>>& nvp)
-	{
-		stream.begin_set(nvp.name);
-		write(stream, nvp.value);
-		stream.end_set();
-	}
-
 	template<typename Stream, typename T> constexpr
 	std::enable_if_t<std::is_base_of_v<OutputStream, std::decay_t<Stream>>>
 		write(Stream& stream, std::vector<T>& value)
