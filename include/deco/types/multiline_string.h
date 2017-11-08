@@ -13,7 +13,7 @@ namespace deco
 	STRONG_TYPE(multiline_string, std::string);
 
 	template<typename Stream> constexpr
-	typename std::enable_if_t<std::is_base_of_v<OutputStream, std::decay_t<Stream>>>
+	std::enable_if_t<std::is_base_of_v<OutputStream, std::decay_t<Stream>>>
 	write(Stream& stream, const multiline_string& value)
 	{
 		auto line_start = value.cbegin();
