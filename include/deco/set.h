@@ -28,7 +28,7 @@ namespace deco
 	constexpr
 	void read(InputStream& stream, begin_set_t& value)
 	{
-		gs::serializer(stream, value.name);	// read set name
+		gs::serialize(stream, value.name);	// read set name
 	}
 
 
@@ -51,7 +51,7 @@ namespace deco
 	constexpr
 	void read(InputStream& stream, begin_set_ignore_name_t&)
 	{
-		gs::serializer(stream, skip);	// skip set name
+		gs::serialize(stream, skip);	// skip set name
 	}
 
 
@@ -72,7 +72,7 @@ namespace deco
 	constexpr
 	void read(InputStream& stream, begin_set_anonymous_t&)
 	{
-		gs::serializer(stream, skip);	// skip set name
+		gs::serialize(stream, skip);	// skip set name
 	}
 
 
@@ -116,15 +116,15 @@ namespace deco
 		write(Stream& stream, const set_t<T>& nvp)
 	{
 		stream.begin_set(nvp.name);
-		gs::serializer(stream, nvp.value);
+		gs::serialize(stream, nvp.value);
 		stream.end_set();
 	}
 
 	template<typename T> constexpr
 		void read(InputStream& stream, set_t<T>& nvp)
 	{
-		gs::serializer(stream, nvp.name);	// read entry name
-		gs::serializer(stream, nvp.value);	// read child entry
+		gs::serialize(stream, nvp.name);	// read entry name
+		gs::serialize(stream, nvp.value);	// read child entry
 		stream.parse_entry();				// skip set end
 	}
 
@@ -150,15 +150,15 @@ namespace deco
 		write(Stream& stream, const set_anonymous_t<T>& nvp)
 	{
 		stream.begin_anonymous_set();
-		gs::serializer(stream, nvp.value);
+		gs::serialize(stream, nvp.value);
 		stream.end_set();
 	}
 
 	template<typename T> constexpr
 		void read(InputStream& stream, set_anonymous_t<T>& nvp)
 	{
-		gs::serializer(stream, skip);		// skip set entry name
-		gs::serializer(stream, nvp.value);	// read child entry
+		gs::serialize(stream, skip);		// skip set entry name
+		gs::serialize(stream, nvp.value);	// read child entry
 		stream.parse_entry();				// skip set end
 	}
 
@@ -185,15 +185,15 @@ namespace deco
 	write(Stream& stream, const set_ignore_name_t<T>& nvp)
 	{
 		stream.begin_set(nvp.name);
-		gs::serializer(stream, nvp.value);
+		gs::serialize(stream, nvp.value);
 		stream.end_set();
 	}
 
 	template<typename T> constexpr
 	void read(InputStream& stream, set_ignore_name_t<T>& nvp)
 	{
-		gs::serializer(stream, skip);		// skip set entry name
-		gs::serializer(stream, nvp.value);	// read child entry
+		gs::serialize(stream, skip);		// skip set entry name
+		gs::serialize(stream, nvp.value);	// read child entry
 		stream.parse_entry();				// skip set end
 	}
 }

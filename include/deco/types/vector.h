@@ -14,7 +14,7 @@ namespace deco
 		write(Stream& stream, std::vector<T>& value)
 	{
 		for (auto& e : value)
-			gs::serializer(stream, e);
+			gs::serialize(stream, e);
 	}
 
 
@@ -23,7 +23,7 @@ namespace deco
 	{
 		//NOTE: set-entry content should've been read already, now reading children
 		while (!stream.peek_set_end())
-			gs::serializer(stream, value.emplace_back());
+			gs::serialize(stream, value.emplace_back());
 		//NOTE: set end will be skipped by the caller
 	}
 }

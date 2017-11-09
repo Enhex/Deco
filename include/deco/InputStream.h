@@ -81,7 +81,7 @@ namespace gs
 	// skip entry without parsing
 	template<typename Stream> constexpr
 	std::enable_if_t<is_deco_input_v<Stream>>
-	serialize(Stream& stream, deco::skip_t&)
+	serialize(Stream& stream, const deco::skip_t&)
 	{
 		stream.parse_entry();
 	}
