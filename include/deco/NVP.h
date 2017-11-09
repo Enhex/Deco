@@ -33,7 +33,7 @@ namespace deco
 			return std::string(nvp.name) += ": ";
 		};
 
-		if constexpr (std::is_same_v<T, std::string>)
+		if constexpr (std::is_same_v<std::decay_t<T>, std::string>)
 			gs::serialize(stream, str() += escape_content(nvp.value));
 		else if constexpr (std::is_floating_point_v<T>)
 			gs::serialize(stream, str() += to_string(nvp.value));

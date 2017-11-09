@@ -1,3 +1,4 @@
+#include <deco/NVP.h>
 #include <deco/set.h>
 #include <deco/types/arithmetic.h>
 #include <deco/types/multiline_string.h>
@@ -80,6 +81,8 @@ int main()
 
 		serialize(deco::make_set("set", str_val));
 
+		serialize(deco::make_NVP("nvp", str_val));
+
 		serialize(deco::make_set("multiline_string", ml_str_val));
 
 		stream.begin_set("integral");
@@ -134,6 +137,8 @@ int main()
 		serialize(str); assert(str == str_structure_con_end);
 
 		serialize(deco::make_set("set", str)); assert(str == str_val);
+		
+		//serialize(deco::make_NVP("nvp", str)); assert(str == str_val);
 
 		deco::multiline_string ml_str; // dummy
 		serialize(deco::make_set("multiline_string", ml_str)); assert(ml_str == ml_str_val);
