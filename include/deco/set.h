@@ -4,10 +4,98 @@
 #include "InputStream.h"
 #include "OutputStream.h"
 #include <gs/serializer.h>
+#include <string>
 #include <string_view>
 
 namespace deco
 {
+	// Wrapper type to start a set
+	struct begin_set_t {
+		std::string& name;
+	};
+
+	constexpr auto begin_set(std::string& name) {
+		return begin_set_t{ name };
+	}
+
+	template<typename Stream> constexpr
+	std::enable_if_t<std::is_base_of_v<OutputStream, std::decay_t<Stream>>>
+		write(Stream& stream, const begin_set_t& value)
+	{
+		stream.begin_set(value.name);
+	}
+
+	constexpr
+	void read(InputStream& stream, begin_set_t& value)
+	{
+		gs::serializer(stream, value.name);	// read set name
+	}
+
+
+	// Wrapper type to start a set, and skip reading the name
+	struct begin_set_ignore_name_t {
+		const std::string_view name;
+	};
+
+	constexpr auto begin_set(std::string_view&& name) {
+		return begin_set_ignore_name_t{ name };
+	}
+
+	template<typename Stream> constexpr
+	std::enable_if_t<std::is_base_of_v<OutputStream, std::decay_t<Stream>>>
+		write(Stream& stream, const begin_set_ignore_name_t& value)
+	{
+		stream.begin_set(value.name);
+	}
+
+	constexpr
+	void read(InputStream& stream, begin_set_ignore_name_t&)
+	{
+		gs::serializer(stream, skip);	// skip set name
+	}
+
+
+	// type to start an anonymous set
+	struct begin_set_anonymous_t {};
+
+	constexpr auto begin_set() {
+		return begin_set_anonymous_t{};
+	}
+
+	template<typename Stream> constexpr
+	std::enable_if_t<std::is_base_of_v<OutputStream, std::decay_t<Stream>>>
+		write(Stream& stream, const begin_set_anonymous_t&)
+	{
+		stream.begin_anonymous_set();
+	}
+
+	constexpr
+	void read(InputStream& stream, begin_set_anonymous_t&)
+	{
+		gs::serializer(stream, skip);	// skip set name
+	}
+
+
+	// type to end a set
+	struct end_set_t {};
+	constexpr end_set_t end_set;
+
+	template<typename Stream> constexpr
+		std::enable_if_t<std::is_base_of_v<OutputStream, std::decay_t<Stream>>>
+		write(Stream& stream, const end_set_t&)
+	{
+		stream.end_set();
+	}
+
+	constexpr
+	void read(InputStream& stream, end_set_t&)
+	{
+		stream.parse_entry();	// skip set end
+	}
+
+
+
+
 	// Wrapper type to serialize another type inside a set
 	template<typename T>
 	struct set_t

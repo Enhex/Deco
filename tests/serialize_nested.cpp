@@ -20,8 +20,10 @@ namespace gs
 	{
 		using namespace deco;
 		gs::serializer(stream,
-			make_NVP("i", value.i),
-			make_NVP("s", value.s));
+			begin_set("a"),
+				make_NVP("i", value.i),
+				make_NVP("s", value.s),
+			end_set);
 	}
 }
 
@@ -39,7 +41,7 @@ namespace gs
 	void serialize(Stream& stream, B& value) {
 		using namespace deco;
 		gs::serializer(stream,
-			make_set("a", value.a),
+			value.a,
 			make_set("v", value.v),
 			make_set("va", value.va),
 			make_NVP("f", value.f));
