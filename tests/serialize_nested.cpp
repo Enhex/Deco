@@ -55,7 +55,7 @@ int main()
 		int i = 5;
 
 		ofstream os("out.deco", ios::binary);
-		deco::OutputStream_Indent stream;
+		deco::OutputStream_indent stream;
 
 		gs::serializer(stream, b, i);
 

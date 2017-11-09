@@ -63,7 +63,7 @@ int main()
 
 	// write
 	{
-		deco::OutputStream_Indent stream;
+		deco::OutputStream_indent stream;
 		const auto serialize = [&stream](auto&& t) {
 			gs::serializer(stream, t);
 		};

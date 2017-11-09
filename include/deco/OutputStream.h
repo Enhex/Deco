@@ -41,7 +41,7 @@ namespace deco
 		}
 	};
 
-	struct OutputStream_Indent : OutputStream
+	struct OutputStream_indent : OutputStream
 	{
 		using OutputStream::OutputStream;
 
@@ -172,10 +172,10 @@ namespace deco
 namespace gs
 {
 	template<> struct is_output<deco::OutputStream> : std::true_type {};
-	template<> struct is_output<deco::OutputStream_Indent> : std::true_type {};
+	template<> struct is_output<deco::OutputStream_indent> : std::true_type {};
 
 	template<> struct is_deco<deco::OutputStream> : std::true_type {};
-	template<> struct is_deco<deco::OutputStream_Indent> : std::true_type {};
+	template<> struct is_deco<deco::OutputStream_indent> : std::true_type {};
 
 	template<typename T>
 	constexpr auto is_deco_output_v = is_deco_v<T> && is_output_v<T>;
