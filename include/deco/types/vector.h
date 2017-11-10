@@ -11,7 +11,7 @@ namespace deco
 {
 	template<typename Stream, typename T> constexpr
 	std::enable_if_t<std::is_base_of_v<OutputStream, std::decay_t<Stream>>>
-		write(Stream& stream, std::vector<T>& value)
+		write(Stream& stream, std::vector<T>& value)	//NOTE: calling gs::serialize prevents using const since it's used for both read & write
 	{
 		for (auto& e : value)
 			gs::serialize(stream, e);
