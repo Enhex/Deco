@@ -80,7 +80,7 @@ int main()
 
 		cout << file_str;
 
-		deco::InputStream stream(file_str.cbegin());
+		auto stream = deco::make_InputStream(file_str.cbegin());
 
 		gs::serializer(stream, b, i);
 	}

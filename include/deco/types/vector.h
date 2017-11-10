@@ -18,8 +18,8 @@ namespace deco
 	}
 
 
-	template<typename T> constexpr
-	void read(InputStream& stream, std::vector<T>& value)
+	template<typename T, typename I> constexpr
+	void read(InputStream<I>& stream, std::vector<T>& value)
 	{
 		//NOTE: set-entry content should've been read already, now reading children
 		while (!stream.peek_set_end())

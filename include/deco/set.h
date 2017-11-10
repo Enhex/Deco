@@ -25,8 +25,8 @@ namespace deco
 		stream.begin_set(value.name);
 	}
 
-	constexpr
-	void read(InputStream& stream, begin_set_t& value)
+	template<typename I> constexpr
+	void read(InputStream<I>& stream, begin_set_t& value)
 	{
 		gs::serialize(stream, value.name);	// read set name
 	}
@@ -48,8 +48,8 @@ namespace deco
 		stream.begin_set(value.name);
 	}
 
-	constexpr
-	void read(InputStream& stream, begin_set_ignore_name_t&)
+	template<typename I> constexpr
+	void read(InputStream<I>& stream, begin_set_ignore_name_t&)
 	{
 		gs::serialize(stream, skip);	// skip set name
 	}
@@ -69,8 +69,8 @@ namespace deco
 		stream.begin_anonymous_set();
 	}
 
-	constexpr
-	void read(InputStream& stream, begin_set_anonymous_t&)
+	template<typename I> constexpr
+	void read(InputStream<I>& stream, begin_set_anonymous_t&)
 	{
 		gs::serialize(stream, skip);	// skip set name
 	}
@@ -87,8 +87,8 @@ namespace deco
 		stream.end_set();
 	}
 
-	constexpr
-	void read(InputStream& stream, end_set_t&)
+	template<typename I> constexpr
+	void read(InputStream<I>& stream, end_set_t&)
 	{
 		stream.parse_entry();	// skip set end
 	}
@@ -120,8 +120,8 @@ namespace deco
 		stream.end_set();
 	}
 
-	template<typename T> constexpr
-		void read(InputStream& stream, set_t<T>& nvp)
+	template<typename T, typename I> constexpr
+		void read(InputStream<I>& stream, set_t<T>& nvp)
 	{
 		gs::serialize(stream, nvp.name);	// read entry name
 		gs::serialize(stream, nvp.value);	// read child entry
@@ -154,8 +154,8 @@ namespace deco
 		stream.end_set();
 	}
 
-	template<typename T> constexpr
-		void read(InputStream& stream, set_anonymous_t<T>& nvp)
+	template<typename T, typename I> constexpr
+		void read(InputStream<I>& stream, set_anonymous_t<T>& nvp)
 	{
 		gs::serialize(stream, skip);		// skip set entry name
 		gs::serialize(stream, nvp.value);	// read child entry
@@ -189,8 +189,8 @@ namespace deco
 		stream.end_set();
 	}
 
-	template<typename T> constexpr
-	void read(InputStream& stream, set_ignore_name_t<T>& nvp)
+	template<typename T, typename I> constexpr
+	void read(InputStream<I>& stream, set_ignore_name_t<T>& nvp)
 	{
 		gs::serialize(stream, skip);		// skip set entry name
 		gs::serialize(stream, nvp.value);	// read child entry

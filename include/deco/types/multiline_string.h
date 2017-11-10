@@ -34,7 +34,8 @@ namespace deco
 		write_line();
 	}
 
-	void read(InputStream& stream, multiline_string& value)
+	template<typename I>
+	void read(InputStream<I>& stream, multiline_string& value)
 	{
 		std::string str;
 

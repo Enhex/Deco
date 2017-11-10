@@ -43,8 +43,8 @@ namespace deco
 	}
 
 
-	template<typename T> constexpr
-	void read(InputStream& stream, NVP<T>& nvp)
+	template<typename T, typename I> constexpr
+	void read(InputStream<I>& stream, NVP<T>& nvp)
 	{	
 		auto entry = stream.parse_entry();
 

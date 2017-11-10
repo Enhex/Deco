@@ -16,12 +16,12 @@ namespace boost::spirit::detail {
 
 namespace deco
 {
-	//TODO templatize iterator type
+	template<typename Iterator>
 	struct InputStream
 	{
-		InputStream(std::string::const_iterator begin) noexcept : position(begin) {}
+		InputStream(Iterator begin) noexcept : position(begin) {}
 
-		std::string::const_iterator position;
+		Iterator position;
 
 		constexpr Entry parse_entry() {
 			return deco::parse_entry(position);
@@ -35,6 +35,12 @@ namespace deco
 			return deco::peek_set_end(position);
 		}
 	};
+
+	template<typename Iterator>
+	constexpr auto make_InputStream(Iterator&& iter)
+	{
+		return InputStream<Iterator>{std::forward<Iterator>(iter)};
+	}
 
 	// used to skip an entry without parsing it into a type
 	struct skip_t {};
@@ -52,8 +58,8 @@ namespace deco
 			return uint_parser<T>();
 	}
 
-	template<typename T> constexpr
-	void read(InputStream& stream, T& value)
+	template<typename T, typename I> constexpr
+	void read(InputStream<I>& stream, T& value)
 	{
 		read(stream.parse_entry(), value);
 	}
@@ -61,9 +67,9 @@ namespace deco
 
 namespace gs
 {
-	template<> struct is_input<deco::InputStream> : std::true_type {};
+	template<typename I> struct is_input<deco::InputStream<I>> : std::true_type {};
 
-	template<> struct is_deco<deco::InputStream> : std::true_type {};
+	template<typename I> struct is_deco<deco::InputStream<I>> : std::true_type {};
 
 	template<typename T>
 	constexpr auto is_deco_input_v = is_deco_v<T> && is_input_v<T>;

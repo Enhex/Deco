@@ -32,8 +32,8 @@ void write_type(Stream& stream)
 	}
 };
 
-template<typename T>
-void read_type(deco::InputStream& stream) {
+template<typename T, typename I>
+void read_type(deco::InputStream<I>& stream) {
 	T value;
 	gs::serializer(stream, value);
 	if constexpr(is_floating_point_v<T>)
@@ -119,7 +119,7 @@ int main()
 
 		cout << file_str;
 
-		deco::InputStream stream(file_str.cbegin());
+		auto stream = deco::make_InputStream(file_str.cbegin());
 		const auto serialize = [&stream](auto&& t) {
 			gs::serializer(stream, t);
 		};
