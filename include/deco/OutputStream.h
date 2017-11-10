@@ -166,6 +166,13 @@ namespace deco
 		if (content.back() == content_delimiter)
 			content.pop_back();
 	}
+
+	template<typename Stream, typename T> constexpr
+	void write_elements(Stream&& stream, T&& value)
+	{
+		for (auto& e : value)
+			gs::serialize(stream, e);
+	}
 }
 
 

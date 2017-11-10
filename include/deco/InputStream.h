@@ -42,6 +42,15 @@ namespace deco
 		return InputStream<Iterator>{std::forward<Iterator>(iter)};
 	}
 
+	template<typename Stream, typename T> constexpr
+	void read_elements(Stream&& stream, T&& value)
+	{
+		//NOTE: set-entry content should've been read already, now reading children
+		while (!stream.peek_set_end())
+			gs::serialize(stream, value.emplace_back());
+		//NOTE: set end will be skipped by the caller
+	}
+
 	// used to skip an entry without parsing it into a type
 	struct skip_t {};
 	constexpr skip_t skip;
