@@ -5,6 +5,7 @@
 #include <deco/types/string.h>
 #include <deco/types/unescaped_string.h>
 #include <deco/types/vector.h>
+#include <deco/types/set.h>
 
 #include <cassert>
 #include <fstream>
@@ -59,7 +60,8 @@ int main()
 
 	const deco::multiline_string ml_str_val{ "multi\nline\nstring" };
 
-	vector<int> v_val{1,2,3,4,5,6,7,8};
+	const vector<int> v_val{ 1,2,3,4,5,6,7,8 };
+	const set<int> set_val{1,2,3,4,5,6,7,8};
 
 	// write
 	{
@@ -104,7 +106,8 @@ int main()
 			write_type<long double>(stream);
 		stream.end_set();
 
-		serialize(deco::make_set("vector", v_val));
+		serialize(deco::make_set("std::vector", v_val));
+		serialize(deco::make_set("std::set", set_val));
 
 		ofstream os("out.deco", ios::binary);
 		os << stream.str;
@@ -138,7 +141,7 @@ int main()
 
 		serialize(deco::make_set("set", str)); assert(str == str_val);
 		
-		//serialize(deco::make_NVP("nvp", str)); assert(str == str_val);
+		serialize(deco::make_NVP("nvp", str)); assert(str == str_val);
 
 		deco::multiline_string ml_str; // dummy
 		serialize(deco::make_set("multiline_string", ml_str)); assert(ml_str == ml_str_val);
@@ -163,7 +166,8 @@ int main()
 		stream.parse_entry();		// set end
 
 		vector<int> v;
-		serialize(deco::make_set("vector", v));
-		assert(v == v_val);
+		serialize(deco::make_set("std::vector", v)); assert(v == v_val);
+		set<int> set;
+		serialize(deco::make_set("std::set", set)); assert(set == set_val);
 	}
 }

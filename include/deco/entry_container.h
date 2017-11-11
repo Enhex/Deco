@@ -1,8 +1,8 @@
 #ifndef deco_entry_container_h
 #define deco_entry_container_h
 
-#include "../InputStream.h"
-#include "../OutputStream.h"
+#include "InputStream.h"
+#include "OutputStream.h"
 
 namespace deco
 {
