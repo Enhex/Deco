@@ -1,11 +1,12 @@
 #include <deco/NVP.h>
 #include <deco/set.h>
 #include <deco/types/arithmetic.h>
+#include <deco/types/deque.h>
 #include <deco/types/multiline_string.h>
+#include <deco/types/set.h>
 #include <deco/types/string.h>
 #include <deco/types/unescaped_string.h>
 #include <deco/types/vector.h>
-#include <deco/types/set.h>
 
 #include <cassert>
 #include <fstream>
@@ -14,7 +15,7 @@
 
 using namespace std;
 
-constexpr auto floating_test_value = 123.125;
+constexpr auto floating_test_value = 123.125;	// 0.125 shouldn't have floating point precision error
 
 template<typename T, typename Stream>
 void write_type(Stream& stream)
@@ -60,8 +61,10 @@ int main()
 
 	const deco::multiline_string ml_str_val{ "multi\nline\nstring" };
 
-	const vector<int> v_val{ 1,2,3,4,5,6,7,8 };
-	const set<int> set_val{1,2,3,4,5,6,7,8};
+	int el = 0;	// element value
+	const vector<int> v_val{ el++,el++,el++,el++,el++ };
+	const set<int> set_val{ el++,el++,el++,el++,el++ };
+	const std::deque<int> deq_val{ el++,el++,el++,el++,el++ };
 
 	// write
 	{
@@ -108,6 +111,7 @@ int main()
 
 		serialize(deco::make_set("std::vector", v_val));
 		serialize(deco::make_set("std::set", set_val));
+		serialize(deco::make_set("std::deque", deq_val));
 
 		ofstream os("out.deco", ios::binary);
 		os << stream.str;
@@ -169,5 +173,7 @@ int main()
 		serialize(deco::make_set("std::vector", v)); assert(v == v_val);
 		set<int> set;
 		serialize(deco::make_set("std::set", set)); assert(set == set_val);
+		deque<int> deq;
+		serialize(deco::make_set("std::deque", deq)); assert(deq == deq_val);
 	}
 }
