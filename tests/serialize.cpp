@@ -2,6 +2,7 @@
 #include <deco/set.h>
 #include <deco/types/arithmetic.h>
 #include <deco/types/deque.h>
+#include <deco/types/forward_list.h>
 #include <deco/types/multiline_string.h>
 #include <deco/types/set.h>
 #include <deco/types/string.h>
@@ -62,10 +63,10 @@ int main()
 	const deco::multiline_string ml_str_val{ "multi\nline\nstring" };
 
 	int el = 0;	// element value
-	const vector<int> v_val{ el++,el++,el++,el++,el++ };
-	const set<int> set_val{ el++,el++,el++,el++,el++ };
+	const std::vector<int> v_val{ el++,el++,el++,el++,el++ };
+	const std::set<int> set_val{ el++,el++,el++,el++,el++ };
 	const std::deque<int> deq_val{ el++,el++,el++,el++,el++ };
-
+	const std::forward_list<int> flist_val{ el++,el++,el++,el++,el++ };
 	// write
 	{
 		deco::OutputStream_indent stream;
@@ -112,6 +113,7 @@ int main()
 		serialize(deco::make_set("std::vector", v_val));
 		serialize(deco::make_set("std::set", set_val));
 		serialize(deco::make_set("std::deque", deq_val));
+		serialize(deco::make_set("std::forward_list", flist_val));
 
 		ofstream os("out.deco", ios::binary);
 		os << stream.str;
@@ -169,11 +171,13 @@ int main()
 			read_type<long double>(stream);
 		stream.parse_entry();		// set end
 
-		vector<int> v;
+		std::vector<int> v;
 		serialize(deco::make_set("std::vector", v)); assert(v == v_val);
-		set<int> set;
+		std::set<int> set;
 		serialize(deco::make_set("std::set", set)); assert(set == set_val);
-		deque<int> deq;
+		std::deque<int> deq;
 		serialize(deco::make_set("std::deque", deq)); assert(deq == deq_val);
+		std::forward_list<int> flist;
+		serialize(deco::make_set("std::forward_list", flist)); assert(flist == flist_val);
 	}
 }
