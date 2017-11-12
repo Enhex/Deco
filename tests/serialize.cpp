@@ -8,6 +8,7 @@
 #include <deco/types/set.h>
 #include <deco/types/string.h>
 #include <deco/types/unescaped_string.h>
+#include <deco/types/unordered_set.h>
 #include <deco/types/vector.h>
 
 #include <cassert>
@@ -69,6 +70,7 @@ int main()
 	const std::deque<int> deq_val{ el++,el++,el++,el++,el++ };
 	const std::forward_list<int> flist_val{ el++,el++,el++,el++,el++ };
 	const std::list<int> list_val{ el++,el++,el++,el++,el++ };
+	const std::unordered_set<int> uset_val{ el++,el++,el++,el++,el++ };
 	// write
 	{
 		deco::OutputStream_indent stream;
@@ -117,6 +119,7 @@ int main()
 		serialize(deco::make_set("std::deque", deq_val));
 		serialize(deco::make_set("std::forward_list", flist_val));
 		serialize(deco::make_set("std::list", list_val));
+		serialize(deco::make_set("std::unordered_set", uset_val));
 
 		ofstream os("out.deco", ios::binary);
 		os << stream.str;
@@ -184,5 +187,7 @@ int main()
 		serialize(deco::make_set("std::forward_list", flist)); assert(flist == flist_val);
 		std::list<int> li;
 		serialize(deco::make_set("std::list", li)); assert(li == list_val);
+		std::unordered_set<int> uset;
+		serialize(deco::make_set("std::unordered_set", uset)); assert(uset == uset_val);
 	}
 }
