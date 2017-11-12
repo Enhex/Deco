@@ -12,7 +12,7 @@ namespace deco
 	template<typename Stream, typename... Args> constexpr
 		void read_elements(Stream& stream, std::unordered_multiset<Args...>& value)
 	{
-		std::unordered_multiset<Args...>::value_type input;
+		typename std::unordered_multiset<Args...>::value_type input;
 
 		while (!stream.peek_set_end()) {
 			gs::serialize(stream, input);

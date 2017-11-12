@@ -18,7 +18,7 @@ namespace deco
 	template<typename I, typename T, std::size_t N> constexpr
 	void read(InputStream<I>& stream, std::array<T, N>& value)
 	{
-		std::array<T, N>::size_type index = 0;
+		typename std::array<T, N>::size_type index = 0;
 
 		while (!stream.peek_set_end())
 			gs::serialize(stream, value[index++]);

@@ -25,8 +25,8 @@ namespace deco
 	template<typename Stream, typename... Args> constexpr
 	void read_element_sets(Stream& stream, std::multimap<Args...>& value)
 	{
-		std::multimap<Args...>::key_type key_input;
-		std::multimap<Args...>::mapped_type mapped_input;
+		typename std::multimap<Args...>::key_type key_input;
+		typename std::multimap<Args...>::mapped_type mapped_input;
 
 		while (!stream.peek_set_end()) {
 			gs::serialize(stream, skip);		// skip set name
