@@ -4,6 +4,7 @@
 #include <deco/types/deque.h>
 #include <deco/types/forward_list.h>
 #include <deco/types/list.h>
+#include <deco/types/map.h>
 #include <deco/types/multiline_string.h>
 #include <deco/types/multiset.h>
 #include <deco/types/set.h>
@@ -75,6 +76,8 @@ int main()
 	const std::unordered_set<int> uset_val{ el++,el++,el++,el++,el++ };
 	const std::multiset<int> mset_val{ el++,el++,el++,el++,el++ };
 	const std::unordered_multiset<int> umset_val{ el++,el++,el++,el++,el++ };
+	const std::map<int, int> map_val{ {el++,el++}, {el++,el++}, {el++, el++} };
+
 	// write
 	{
 		deco::OutputStream_indent stream;
@@ -126,6 +129,7 @@ int main()
 		serialize(deco::make_set("std::unordered_set", uset_val));
 		serialize(deco::make_set("std::multiset", mset_val));
 		serialize(deco::make_set("std::unordered_multiset", umset_val));
+		serialize(deco::make_set("std::map", map_val));
 
 		ofstream os("out.deco", ios::binary);
 		os << stream.str;
@@ -199,5 +203,7 @@ int main()
 		serialize(deco::make_set("std::multiset", mset)); assert(mset == mset_val);
 		std::unordered_multiset<int> umset;
 		serialize(deco::make_set("std::unordered_multiset", umset)); assert(umset == umset_val);
+		std::map<int, int> map_;
+		serialize(deco::make_set("std::map", map_)); assert(map_ == map_val);
 	}
 }
