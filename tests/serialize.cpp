@@ -1,6 +1,7 @@
 #include <deco/NVP.h>
 #include <deco/set.h>
 #include <deco/types/arithmetic.h>
+#include <deco/types/array.h>
 #include <deco/types/deque.h>
 #include <deco/types/forward_list.h>
 #include <deco/types/list.h>
@@ -71,6 +72,7 @@ int main()
 	const deco::multiline_string ml_str_val{ "multi\nline\nstring" };
 
 	int el = 0;	// element value
+	const std::array<int, 5> arr_val{ el++,el++,el++,el++,el++ };
 	const std::vector<int> v_val{ el++,el++,el++,el++,el++ };
 	const std::set<int> set_val{ el++,el++,el++,el++,el++ };
 	const std::deque<int> deq_val{ el++,el++,el++,el++,el++ };
@@ -127,6 +129,7 @@ int main()
 			write_type<long double>(stream);
 		stream.end_set();
 
+		serialize(deco::make_set("std::array", arr_val));
 		serialize(deco::make_set("std::vector", v_val));
 		serialize(deco::make_set("std::set", set_val));
 		serialize(deco::make_set("std::deque", deq_val));
@@ -196,6 +199,8 @@ int main()
 			read_type<long double>(stream);
 		stream.parse_entry();		// set end
 
+		std::array<int, 5> arr;
+		serialize(deco::make_set("std::array", arr)); assert(arr == arr_val);
 		std::vector<int> v;
 		serialize(deco::make_set("std::vector", v)); assert(v == v_val);
 		std::set<int> set;
