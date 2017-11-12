@@ -5,6 +5,17 @@
 
 namespace deco
 {
+	template<typename T>
+	struct is_single_entry<T, std::enable_if_t<std::is_integral_v<T>> > : std::true_type {};
+
+	template<typename T> constexpr
+	std::enable_if_t<std::is_integral_v<T>
+	, std::string>
+	to_string(const T& value)
+	{
+		return std::to_string(value);
+	}
+
 	//automatically provide default serialization implementation for arithmetic types
 	template<typename Stream, typename T> constexpr
 	std::enable_if_t<

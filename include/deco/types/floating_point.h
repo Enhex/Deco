@@ -5,6 +5,20 @@
 
 namespace deco
 {
+	template<typename T>
+	struct is_single_entry<T, std::enable_if_t<std::is_floating_point_v<T>> > : std::true_type {};
+
+	template<typename T> constexpr
+	std::enable_if_t<std::is_floating_point_v<T>
+	, std::string>
+	to_string(const T& value)
+	{
+		std::string s;
+		std::back_insert_iterator<std::string> sink(s);
+		boost::spirit::karma::generate(sink, float_fixed<T>(), value);
+		return s;
+	}
+
 	template<typename Stream, typename T> constexpr
 	std::enable_if_t<
 		std::is_base_of_v<OutputStream, std::decay_t<Stream>> &&

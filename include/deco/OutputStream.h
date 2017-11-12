@@ -95,15 +95,6 @@ namespace deco
 	template<typename T>
 	using float_fixed = boost::spirit::karma::real_generator<T, fixed_policy<T>>;
 
-	template<typename T, typename = std::enable_if_t<std::is_floating_point_v<T>>>
-	constexpr std::string to_string(const T& value)
-	{
-		std::string s;
-		std::back_insert_iterator<std::string> sink(s);
-		boost::spirit::karma::generate(sink, float_fixed<T>(), value);
-		return s;
-	}
-
 	// escape content delimiters
 	auto escape_content(const std::string_view content)
 	{

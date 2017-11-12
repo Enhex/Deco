@@ -3,6 +3,16 @@
 
 #include <type_traits>
 
+namespace deco
+{
+	// trait for types that can be serialized as a single entry
+	template<typename T, typename Enable = void>
+	struct is_single_entry : std::false_type {};
+
+	template<typename T>
+	constexpr bool is_single_entry_v = is_single_entry<std::decay_t<T>>::value;
+}
+
 namespace gs
 {
 	// deco trait
