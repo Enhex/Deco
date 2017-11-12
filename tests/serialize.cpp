@@ -9,6 +9,7 @@
 #include <deco/types/set.h>
 #include <deco/types/string.h>
 #include <deco/types/unescaped_string.h>
+#include <deco/types/unordered_multiset.h>
 #include <deco/types/unordered_set.h>
 #include <deco/types/vector.h>
 
@@ -73,6 +74,7 @@ int main()
 	const std::list<int> list_val{ el++,el++,el++,el++,el++ };
 	const std::unordered_set<int> uset_val{ el++,el++,el++,el++,el++ };
 	const std::multiset<int> mset_val{ el++,el++,el++,el++,el++ };
+	const std::unordered_multiset<int> umset_val{ el++,el++,el++,el++,el++ };
 	// write
 	{
 		deco::OutputStream_indent stream;
@@ -123,6 +125,7 @@ int main()
 		serialize(deco::make_set("std::list", list_val));
 		serialize(deco::make_set("std::unordered_set", uset_val));
 		serialize(deco::make_set("std::multiset", mset_val));
+		serialize(deco::make_set("std::unordered_multiset", umset_val));
 
 		ofstream os("out.deco", ios::binary);
 		os << stream.str;
@@ -194,5 +197,7 @@ int main()
 		serialize(deco::make_set("std::unordered_set", uset)); assert(uset == uset_val);
 		std::multiset<int> mset;
 		serialize(deco::make_set("std::multiset", mset)); assert(mset == mset_val);
+		std::unordered_multiset<int> umset;
+		serialize(deco::make_set("std::unordered_multiset", umset)); assert(umset == umset_val);
 	}
 }
