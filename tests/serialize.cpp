@@ -11,6 +11,7 @@
 #include <deco/types/set.h>
 #include <deco/types/string.h>
 #include <deco/types/unescaped_string.h>
+#include <deco/types/unordered_map.h>
 #include <deco/types/unordered_multiset.h>
 #include <deco/types/unordered_set.h>
 #include <deco/types/vector.h>
@@ -78,7 +79,8 @@ int main()
 	const std::multiset<int> mset_val{ el++,el,el++,el,el++ };
 	const std::unordered_multiset<int> umset_val{ el++,el++,el++,el++,el++ };
 	const std::map<int, int> map_val{ { el++,el++ },{ el++,el++ },{ el++, el++ } };
-	const std::multimap<int, int> mmap_val{ {el++,el++}, {el,el}, {el++, el++} };
+	const std::multimap<int, int> mmap_val{ { el++,el++ },{ el,el },{ el++, el++ } };
+	const std::unordered_map<int, int> umap_val{ {el++,el++}, {el,el}, {el++, el++} };
 
 	// write
 	{
@@ -133,6 +135,7 @@ int main()
 		serialize(deco::make_set("std::unordered_multiset", umset_val));
 		serialize(deco::make_set("std::map", map_val));
 		serialize(deco::make_set("std::multimap", mmap_val));
+		serialize(deco::make_set("std::unordered_map", umap_val));
 
 		ofstream os("out.deco", ios::binary);
 		os << stream.str;
@@ -210,5 +213,7 @@ int main()
 		serialize(deco::make_set("std::map", map_)); assert(map_ == map_val);
 		std::multimap<int, int> mmap;
 		serialize(deco::make_set("std::multimap", mmap)); assert(mmap == mmap_val);
+		std::unordered_map<int, int> umap;
+		serialize(deco::make_set("std::unordered_map", umap)); assert(umap == umap_val);
 	}
 }
