@@ -3,6 +3,7 @@
 #include <deco/types/arithmetic.h>
 #include <deco/types/deque.h>
 #include <deco/types/forward_list.h>
+#include <deco/types/list.h>
 #include <deco/types/multiline_string.h>
 #include <deco/types/set.h>
 #include <deco/types/string.h>
@@ -67,6 +68,7 @@ int main()
 	const std::set<int> set_val{ el++,el++,el++,el++,el++ };
 	const std::deque<int> deq_val{ el++,el++,el++,el++,el++ };
 	const std::forward_list<int> flist_val{ el++,el++,el++,el++,el++ };
+	const std::list<int> list_val{ el++,el++,el++,el++,el++ };
 	// write
 	{
 		deco::OutputStream_indent stream;
@@ -114,6 +116,7 @@ int main()
 		serialize(deco::make_set("std::set", set_val));
 		serialize(deco::make_set("std::deque", deq_val));
 		serialize(deco::make_set("std::forward_list", flist_val));
+		serialize(deco::make_set("std::list", list_val));
 
 		ofstream os("out.deco", ios::binary);
 		os << stream.str;
@@ -179,5 +182,7 @@ int main()
 		serialize(deco::make_set("std::deque", deq)); assert(deq == deq_val);
 		std::forward_list<int> flist;
 		serialize(deco::make_set("std::forward_list", flist)); assert(flist == flist_val);
+		std::list<int> li;
+		serialize(deco::make_set("std::list", li)); assert(li == list_val);
 	}
 }
