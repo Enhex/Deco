@@ -74,8 +74,9 @@ int main()
 
 		int i = 0;
 
+		auto file = ifstream("out.deco", ios::binary);
 		string file_str{
-			istreambuf_iterator<char>(ifstream("out.deco", ios::binary)),
+			istreambuf_iterator<char>(file),
 			istreambuf_iterator<char>()};
 
 		cout << file_str;
