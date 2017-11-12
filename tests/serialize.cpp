@@ -5,6 +5,7 @@
 #include <deco/types/forward_list.h>
 #include <deco/types/list.h>
 #include <deco/types/multiline_string.h>
+#include <deco/types/multiset.h>
 #include <deco/types/set.h>
 #include <deco/types/string.h>
 #include <deco/types/unescaped_string.h>
@@ -71,6 +72,7 @@ int main()
 	const std::forward_list<int> flist_val{ el++,el++,el++,el++,el++ };
 	const std::list<int> list_val{ el++,el++,el++,el++,el++ };
 	const std::unordered_set<int> uset_val{ el++,el++,el++,el++,el++ };
+	const std::multiset<int> mset_val{ el++,el++,el++,el++,el++ };
 	// write
 	{
 		deco::OutputStream_indent stream;
@@ -120,6 +122,7 @@ int main()
 		serialize(deco::make_set("std::forward_list", flist_val));
 		serialize(deco::make_set("std::list", list_val));
 		serialize(deco::make_set("std::unordered_set", uset_val));
+		serialize(deco::make_set("std::multiset", mset_val));
 
 		ofstream os("out.deco", ios::binary);
 		os << stream.str;
@@ -189,5 +192,7 @@ int main()
 		serialize(deco::make_set("std::list", li)); assert(li == list_val);
 		std::unordered_set<int> uset;
 		serialize(deco::make_set("std::unordered_set", uset)); assert(uset == uset_val);
+		std::multiset<int> mset;
+		serialize(deco::make_set("std::multiset", mset)); assert(mset == mset_val);
 	}
 }
