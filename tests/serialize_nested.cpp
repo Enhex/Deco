@@ -17,7 +17,7 @@ struct A {
 
 namespace deco
 {
-	template<typename Stream>
+	template<typename Stream> constexpr
 	void serialize(Stream& stream, A& value) // shouldn't be const to allow reading
 	{
 		using namespace deco;
@@ -39,7 +39,7 @@ struct B {
 
 namespace deco
 {
-	template<typename Stream>
+	template<typename Stream> constexpr
 	void serialize(Stream& stream, B& value)
 	{
 		using namespace deco;

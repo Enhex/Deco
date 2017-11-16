@@ -13,18 +13,21 @@ include(${CMAKE_CURRENT_BINARY_DIR}/conanbuildinfo_multi.cmake)
 project(deco)
 conan_basic_setup()
 
-add_executable(test_parse parse.cpp)
-conan_target_link_libraries(test_parse)
 
-add_executable(test_serialize serialize.cpp)
-conan_target_link_libraries(test_serialize)
+# add single cpp file project
+function(add_test name)
+	set(file ${name}.cpp)
+	add_executable(${name} ${file})
+	conan_target_link_libraries(${name})
+	if (MSVC)
+		set_target_properties(${name} PROPERTIES COMPILE_FLAGS "/permissive-")
+	endif(MSVC)
+endfunction(add_test)
 
-add_executable(test_serialize_nested serialize_nested.cpp)
-conan_target_link_libraries(test_serialize_nested)
 
-set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT test_serialize)
-if (MSVC)
-	set_target_properties(test_parse PROPERTIES COMPILE_FLAGS "/permissive-")
-	set_target_properties(test_serialize PROPERTIES COMPILE_FLAGS "/permissive-")
-	set_target_properties(test_serialize_nested PROPERTIES COMPILE_FLAGS "/permissive-")
-endif(MSVC)
+add_test(parse)
+add_test(serialize)
+add_test(serialize_nested)
+add_test(deco_set)
+
+set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT serialize)
