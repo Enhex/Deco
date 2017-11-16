@@ -15,7 +15,7 @@ namespace deco
 		typename std::unordered_multiset<Args...>::value_type input;
 
 		while (!stream.peek_set_end()) {
-			gs::serialize(stream, input);
+			serialize(stream, input);
 			value.emplace(input);
 		}
 	}

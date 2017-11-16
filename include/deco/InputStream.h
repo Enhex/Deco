@@ -57,12 +57,6 @@ namespace deco
 		else
 			return uint_parser<T>();
 	}
-
-	template<typename T, typename I> constexpr
-	void read(InputStream<I>& stream, T& value)
-	{
-		read(stream.parse_entry(), value);
-	}
 }
 
 namespace gs
@@ -75,25 +69,33 @@ namespace gs
 	constexpr auto is_deco_input_v = is_deco_v<T> && is_input_v<T>;
 
 
+}
+
+namespace deco
+{
 	// serialize input deco
 	template<typename Stream, typename T> constexpr
-	std::enable_if_t<is_deco_input_v<Stream>>
-	serialize(Stream& stream, T& value)
+		std::enable_if_t<gs::is_deco_input_v<Stream>>
+		serialize(Stream& stream, T&& value)
 	{
-		deco::read(stream, value);
+		read(stream, std::forward<T>(value));
+	}
+
+
+	// allow calling serialize directly with entry content to allow definition order independent lookup
+	template<typename T> constexpr
+	void serialize(const std::string_view content, T&& value)	//TODO content strong type to distinguish input/output?
+	{
+		read(content, std::forward<T>(value));
 	}
 
 
 	// skip entry without parsing
 	template<typename Stream> constexpr
-	std::enable_if_t<is_deco_input_v<Stream>>
-	serialize(Stream& stream, const deco::skip_t&)
+		std::enable_if_t<gs::is_deco_input_v<Stream>>
+		serialize(Stream& stream, const deco::skip_t&)
 	{
 		stream.parse_entry();
-	}
-
-	constexpr void serialize(deco::Entry& entry, const deco::skip_t&)
-	{
 	}
 }
 

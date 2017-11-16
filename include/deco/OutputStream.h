@@ -140,7 +140,23 @@ namespace deco
 	auto unescape_content(const std::string_view& ref_content)
 	{
 		auto content = ref_content;
-		unescape_content(content);
+		unescape_content<unescape_content_begin>(content);
+		return content;
+	}
+
+	template<bool unescape_content_begin = false> constexpr
+	auto unescape_content(std::string_view&& content)
+	{
+		// erase start content delimiter
+		if constexpr (unescape_content_begin) {
+			if (content.front() == content_delimiter)
+				content.remove_prefix(1);
+		}
+
+		// erase end content delimiter
+		if (content.back() == content_delimiter)
+			content.remove_suffix(1);
+
 		return content;
 	}
 
@@ -159,10 +175,10 @@ namespace deco
 	}
 
 	template<typename Stream, typename T> constexpr
-	void write_elements(Stream&& stream, T&& value)
+		void write_elements(Stream&& stream, T& value)
 	{
 		for (auto& e : value)
-			gs::serialize(stream, e);
+			serialize(stream, e);
 	}
 }
 
@@ -177,13 +193,17 @@ namespace gs
 
 	template<typename T>
 	constexpr auto is_deco_output_v = is_deco_v<T> && is_output_v<T>;
+}
 
+namespace deco
+{
 	// serialize output deco
+	// Using unqualified name lookup to find serialize(), so it should be called from within a deco namespace
 	template<typename Stream, typename T> constexpr
-	std::enable_if_t<is_deco_output_v<Stream>>
-		serialize(Stream& stream, T& value)
+	std::enable_if_t<gs::is_deco_output_v<Stream>>
+		serialize(Stream& stream, T&& value)
 	{
-		deco::write(stream, value);
+		deco::write(stream, std::forward<T>(value));
 	}
 }
 

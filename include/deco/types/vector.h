@@ -14,7 +14,7 @@ namespace deco
 	{
 		//NOTE: set-entry content should've been read already, now reading children
 		while (!stream.peek_set_end())
-			gs::serialize(stream, value.emplace_back());
+			serialize(stream, value.emplace_back());
 		//NOTE: set end will be skipped by the caller
 	}
 }

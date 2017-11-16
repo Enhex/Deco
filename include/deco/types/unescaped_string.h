@@ -15,10 +15,16 @@ namespace deco
 	write(Stream& stream, unescaped_string& value) {
 		stream.entry(value);
 	}
-	
-	void read(const deco::Entry& entry, unescaped_string& value)
+
+	void read(const std::string_view content, unescaped_string& value)
 	{
-		value = std::string(entry.content);
+		value = std::string(content);
+	}
+
+	template<typename I> constexpr
+	void read(InputStream<I>& stream, unescaped_string&& value)
+	{
+		read(stream.parse_entry().content, value);
 	}
 }
 

@@ -3,7 +3,6 @@
 
 #include "InputStream.h"
 #include "OutputStream.h"
-#include <gs/serializer.h>
 #include <string>
 #include <string_view>
 
@@ -28,7 +27,7 @@ namespace deco
 	template<typename I> constexpr
 	void read(InputStream<I>& stream, begin_set_t& value)
 	{
-		gs::serialize(stream, value.name);	// read set name
+		serialize(stream, value.name);	// read set name
 	}
 
 
@@ -51,7 +50,7 @@ namespace deco
 	template<typename I> constexpr
 	void read(InputStream<I>& stream, begin_set_ignore_name_t&)
 	{
-		gs::serialize(stream, skip);	// skip set name
+		serialize(stream, skip);	// skip set name
 	}
 
 
@@ -72,7 +71,7 @@ namespace deco
 	template<typename I> constexpr
 	void read(InputStream<I>& stream, begin_set_anonymous_t&)
 	{
-		gs::serialize(stream, skip);	// skip set name
+		serialize(stream, skip);	// skip set name
 	}
 
 
@@ -116,15 +115,15 @@ namespace deco
 		write(Stream& stream, const set_t<T>& nvp)
 	{
 		stream.begin_set(nvp.name);
-		gs::serialize(stream, nvp.value);
+		serialize(stream, nvp.value);
 		stream.end_set();
 	}
 
 	template<typename T, typename I> constexpr
 		void read(InputStream<I>& stream, set_t<T>& nvp)
 	{
-		gs::serialize(stream, nvp.name);	// read entry name
-		gs::serialize(stream, nvp.value);	// read child entry
+		serialize(stream, nvp.name);	// read entry name
+		serialize(stream, nvp.value);	// read child entry
 		stream.parse_entry();				// skip set end
 	}
 
@@ -150,15 +149,15 @@ namespace deco
 		write(Stream& stream, const set_anonymous_t<T>& nvp)
 	{
 		stream.begin_anonymous_set();
-		gs::serialize(stream, nvp.value);
+		serialize(stream, nvp.value);
 		stream.end_set();
 	}
 
 	template<typename T, typename I> constexpr
 		void read(InputStream<I>& stream, set_anonymous_t<T>& nvp)
 	{
-		gs::serialize(stream, skip);		// skip set entry name
-		gs::serialize(stream, nvp.value);	// read child entry
+		serialize(stream, skip);		// skip set entry name
+		serialize(stream, nvp.value);	// read child entry
 		stream.parse_entry();				// skip set end
 	}
 
@@ -185,15 +184,15 @@ namespace deco
 	write(Stream& stream, const set_ignore_name_t<T>& nvp)
 	{
 		stream.begin_set(nvp.name);
-		gs::serialize(stream, nvp.value);
+		serialize(stream, nvp.value);
 		stream.end_set();
 	}
 
-	template<typename T, typename I> constexpr
+	template<typename I, typename T> constexpr
 	void read(InputStream<I>& stream, set_ignore_name_t<T>& nvp)
 	{
-		gs::serialize(stream, skip);		// skip set entry name
-		gs::serialize(stream, nvp.value);	// read child entry
+		serialize(stream, skip);		// skip set entry name
+		serialize(stream, nvp.value);	// read child entry
 		stream.parse_entry();				// skip set end
 	}
 }

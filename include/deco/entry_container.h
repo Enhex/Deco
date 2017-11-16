@@ -23,7 +23,7 @@ namespace deco
 		std::is_base_of_v<OutputStream, std::decay_t<Stream>> &&
 		is_entry_container_v<T>
 	>
-		write(Stream& stream, T& value)	//NOTE: calling gs::serialize prevents using const since it's used for both read & write
+		write(Stream& stream, T& value)	//NOTE: calling serialize prevents using const since it's used for both read & write
 	{
 		write_elements(stream, value);
 	}

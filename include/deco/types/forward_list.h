@@ -19,7 +19,7 @@ namespace deco
 
 		while (!stream.peek_set_end()) {
 			before_end = value.emplace_after(before_end);
-			gs::serialize(stream, *before_end);
+			serialize(stream, *before_end);
 		}
 	}
 }

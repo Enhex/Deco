@@ -18,6 +18,8 @@
 #include <deco/types/unordered_set.h>
 #include <deco/types/vector.h>
 
+#include <gs/serializer.h>
+
 #include <cassert>
 #include <fstream>
 #include <iostream>
@@ -90,7 +92,7 @@ int main()
 	{
 		deco::OutputStream_indent stream;
 		const auto serialize = [&stream](auto&& t) {
-			gs::serializer(stream, t);
+			deco::serialize(stream, t);
 		};
 
 		serialize(unesc_str_val);
@@ -158,7 +160,7 @@ int main()
 
 		auto stream = deco::make_InputStream(file_str.cbegin());
 		const auto serialize = [&stream](auto&& t) {
-			gs::serializer(stream, t);
+			deco::serialize(stream, t);
 		};
 
 		deco::unescaped_string unesc_str; // dummy

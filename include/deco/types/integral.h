@@ -1,12 +1,14 @@
 #ifndef deco_integral_h
 #define deco_integral_h
 
+#include "../InputStream.h"
 #include "../OutputStream.h"
 
 namespace deco
 {
 	template<typename T>
 	struct is_single_entry<T, std::enable_if_t<std::is_integral_v<T>> > : std::true_type {};
+
 
 	template<typename T> constexpr
 	std::enable_if_t<std::is_integral_v<T>
@@ -16,6 +18,7 @@ namespace deco
 		return std::to_string(value);
 	}
 
+
 	//automatically provide default serialization implementation for arithmetic types
 	template<typename Stream, typename T> constexpr
 	std::enable_if_t<
@@ -23,17 +26,26 @@ namespace deco
 		std::is_integral_v<T>
 	>
 	write(Stream& stream, const T& value) {
-		stream.entry(std::to_string(value));
+		stream.entry(to_string(value));
 	}
+
 
 	template<typename T> constexpr
 	std::enable_if_t<std::is_integral_v<T>>
-		read(const Entry& entry, T& value)
+		read(const std::string_view content, T& value)
 	{
 		using namespace boost::spirit::x3;
-		phrase_parse(entry.content.begin(), entry.content.end(), get_integral_parser<T>(), ascii::space, value);
+		phrase_parse(content.begin(), content.end(), get_integral_parser<T>(), ascii::space, value);
 
 		//value = stoi(std::string(entry.content)); // no string_view/iterators support
+	}
+
+	template<typename I, typename T> constexpr
+		std::enable_if_t<std::is_integral_v<T>>
+		read(InputStream<I>& stream, T& value)
+	{
+		read(stream.parse_entry().content, value);
+
 	}
 }
 

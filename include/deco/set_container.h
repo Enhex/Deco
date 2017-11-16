@@ -47,17 +47,17 @@ namespace deco
 			if constexpr(is_single_entry_v<Map::key_type>)
 			{
 				stream.begin_set(to_string(e.first));
-				gs::serialize(stream, e.second);
+				serialize(stream, e.second);
 				stream.end_set();
 			}
 			else
 			{
 				// key may require more than a single entry to be serialized
 				stream.begin_set("key");
-				gs::serialize(stream, e.first);
+				serialize(stream, e.first);
 				stream.end_set();
 				stream.begin_set("value");
-				gs::serialize(stream, e.second);
+				serialize(stream, e.second);
 				stream.end_set();
 			}
 		}
@@ -72,18 +72,18 @@ namespace deco
 		while (!stream.peek_set_end()) {
 			if constexpr(is_single_entry_v<Map::key_type>)
 			{
-				gs::serialize(stream, key_input);	// read set name
-				gs::serialize(stream, mapped_input);// read value
+				serialize(stream, key_input);	// read set name
+				serialize(stream, mapped_input);// read value
 				stream.parse_entry();				// skip set end
 			}
 			else
 			{
-				gs::serialize(stream, skip);		// skip set name
-				gs::serialize(stream, key_input);	// read value
+				serialize(stream, skip);		// skip set name
+				serialize(stream, key_input);	// read value
 				stream.parse_entry();				// skip set end
 
-				gs::serialize(stream, skip);		// skip set name
-				gs::serialize(stream, mapped_input);// read value
+				serialize(stream, skip);		// skip set name
+				serialize(stream, mapped_input);// read value
 				stream.parse_entry();				// skip set end
 			}
 

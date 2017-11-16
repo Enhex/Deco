@@ -13,7 +13,7 @@ namespace deco
 	void read_elements(Stream&& stream, std::list<Args...>& value)
 	{
 		while (!stream.peek_set_end())
-			gs::serialize(stream, value.emplace_back());
+			serialize(stream, value.emplace_back());
 	}
 }
 

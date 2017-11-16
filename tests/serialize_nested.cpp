@@ -3,6 +3,8 @@
 #include <deco/types/arithmetic.h>
 #include <deco/types/vector.h>
 
+#include <gs/serializer.h>
+
 #include <fstream>
 #include <iostream>
 
@@ -13,7 +15,7 @@ struct A {
 	string s = "an entry";
 };
 
-namespace gs
+namespace deco
 {
 	template<typename Stream>
 	void serialize(Stream& stream, A& value) // shouldn't be const to allow reading
@@ -31,14 +33,15 @@ namespace gs
 struct B {
 	A a;
 	vector<int> v{ 0,1,2,3,4,10 };
-	vector<A> va{ A(), A(), A() };
+	vector<A> va{ A{}, A{}, A{} };
 	float f = 3.25;
 };
 
-namespace gs
+namespace deco
 {
 	template<typename Stream>
-	void serialize(Stream& stream, B& value) {
+	void serialize(Stream& stream, B& value)
+	{
 		using namespace deco;
 		gs::serializer(stream,
 			value.a,

@@ -4,7 +4,6 @@
 #include "../InputStream.h"
 #include "../OutputStream.h"
 #include <deco/types/string.h>
-#include <gs/serializer.h>
 #include <string_view>
 #include <strong_type.h>
 
@@ -41,11 +40,11 @@ namespace deco
 
 		//NOTE: set-entry content should've been read already, now reading children
 		if (!stream.peek_set_end()) {
-			gs::serializer(stream, str);
+			serialize(stream, str);
 			value += str;
 		}
 		while (!stream.peek_set_end()) {
-			gs::serializer(stream, str);
+			serialize(stream, str);
 			(value += '\n') += str;
 		}
 	}

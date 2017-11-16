@@ -4,7 +4,6 @@
 #include "InputStream.h"
 #include "OutputStream.h"
 #include <deco/types/string.h>
-#include <gs/serializer.h>
 
 namespace deco
 {
@@ -34,29 +33,29 @@ namespace deco
 		};
 
 		if constexpr (std::is_same_v<std::decay_t<T>, std::string>)
-			gs::serialize(stream, str() += escape_content(nvp.value));
+			serialize(stream, str() += escape_content(nvp.value));
 		else if constexpr (std::is_floating_point_v<T>)
-			gs::serialize(stream, str() += to_string(nvp.value));
-			//gs::serialize(stream, str() += trim_float(std::to_string(nvp.value)));
+			serialize(stream, str() += to_string(nvp.value));
+			//serialize(stream, str() += trim_float(std::to_string(nvp.value)));
 		else
-			gs::serialize(stream, str() += std::to_string(nvp.value));
+			serialize(stream, str() += std::to_string(nvp.value));
 	}
 
 
 	template<typename T, typename I> constexpr
 	void read(InputStream<I>& stream, NVP<T>& nvp)
 	{	
-		auto entry = stream.parse_entry();
+		auto content = stream.parse_entry().content;
 
 		// skip whitespace
-		const auto whitespace_end = skip_whitespace(entry.content.begin() + entry.content.find(':') + 1);
-		entry.content.remove_prefix(std::distance(entry.content.begin(), whitespace_end));
+		const auto whitespace_end = skip_whitespace(content.begin() + content.find(':') + 1);
+		content.remove_prefix(std::distance(content.begin(), whitespace_end));
 
 		// unescape delimiters chars
-		unescape_content<true>(entry.content);
+		unescape_content<true>(content);
 
 		// parse value
-		read(entry, nvp.value);
+		serialize(content, nvp.value);
 	}
 }
 

@@ -32,12 +32,19 @@ namespace deco
 
 	template<typename T> constexpr
 	std::enable_if_t<std::is_floating_point_v<T>>
-		read(const Entry& entry, T& value)
+		read(const std::string_view content, T& value)
 	{
 		using namespace boost::spirit::x3;
-		phrase_parse(entry.content.begin(), entry.content.end(), real_parser<T>(), ascii::space, value);
+		phrase_parse(content.begin(), content.end(), real_parser<T>(), ascii::space, value);
 
 		//value = stof(std::string(entry.content)); // no string_view/iterators support
+	}
+	
+	template<typename I, typename T> constexpr
+	std::enable_if_t<std::is_floating_point_v<T>>
+		read(InputStream<I>& stream, T& value)
+	{
+		read(stream.parse_entry().content, value);
 	}
 }
 
