@@ -21,3 +21,10 @@ conan_target_link_libraries(test_serialize)
 
 add_executable(test_serialize_nested serialize_nested.cpp)
 conan_target_link_libraries(test_serialize_nested)
+
+set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT test_serialize)
+if (MSVC)
+	set_target_properties(test_parse PROPERTIES COMPILE_FLAGS "/permissive-")
+	set_target_properties(test_serialize PROPERTIES COMPILE_FLAGS "/permissive-")
+	set_target_properties(test_serialize_nested PROPERTIES COMPILE_FLAGS "/permissive-")
+endif(MSVC)
