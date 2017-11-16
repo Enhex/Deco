@@ -29,9 +29,9 @@ namespace deco
 	}
 
 
-	template<typename I, template<typename...> typename T, typename... Args> constexpr
-	std::enable_if_t< is_entry_container_v<T<Args...>> >
-	read(InputStream<I>& stream, T<Args...>& value)
+	template<typename I, typename T> constexpr
+	std::enable_if_t<is_entry_container_v<T>>
+	read(InputStream<I>& stream, T& value)
 	{
 		read_elements(stream, value);
 	}
