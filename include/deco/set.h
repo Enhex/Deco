@@ -55,12 +55,7 @@ namespace deco
 	}
 
 	template<typename I> constexpr
-	void read(InputStream<I>& stream, begin_set_ignore_name_t&)
-	{
-		serialize(stream, skip);	// skip set name
-	}
-	template<typename I> constexpr
-		void read(InputStream<I>& stream, begin_set_ignore_name_t&&)
+	void read(InputStream<I>& stream, begin_set_ignore_name_t)
 	{
 		serialize(stream, skip);	// skip set name
 	}
@@ -77,18 +72,13 @@ namespace deco
 
 	template<typename Stream> constexpr
 	std::enable_if_t<std::is_base_of_v<OutputStream, std::decay_t<Stream>>>
-		write(Stream& stream, const begin_set_anonymous_t&)
+		write(Stream& stream, begin_set_anonymous_t)
 	{
 		stream.begin_anonymous_set();
 	}
 
 	template<typename I> constexpr
-	void read(InputStream<I>& stream, begin_set_anonymous_t&)
-	{
-		serialize(stream, skip);	// skip set name
-	}
-	template<typename I> constexpr
-	void read(InputStream<I>& stream, begin_set_anonymous_t&&)
+	void read(InputStream<I>& stream, begin_set_anonymous_t)
 	{
 		serialize(stream, skip);	// skip set name
 	}
@@ -100,18 +90,13 @@ namespace deco
 
 	template<typename Stream> constexpr
 		std::enable_if_t<std::is_base_of_v<OutputStream, std::decay_t<Stream>>>
-		write(Stream& stream, const end_set_t&)
+		write(Stream& stream, end_set_t)
 	{
 		stream.end_set();
 	}
 
 	template<typename I> constexpr
-	void read(InputStream<I>& stream, const end_set_t&)
-	{
-		stream.parse_entry();	// skip set end
-	}
-	template<typename I> constexpr
-	void read(InputStream<I>& stream, end_set_t&&)
+	void read(InputStream<I>& stream, end_set_t)
 	{
 		stream.parse_entry();	// skip set end
 	}
@@ -154,7 +139,7 @@ namespace deco
 	{
 		serialize(stream, nvp.name);	// read entry name
 		serialize(stream, nvp.value);	// read child entry
-		stream.parse_entry();				// skip set end
+		stream.parse_entry();			// skip set end
 	}
 	template<typename T, typename I> constexpr
 		void read(InputStream<I>& stream, set_t<T>&& nvp)
