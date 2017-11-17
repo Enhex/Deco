@@ -57,6 +57,11 @@ namespace deco
 		// parse value
 		serialize(content, nvp.value);
 	}
+	template<typename T, typename I> constexpr
+		void read(InputStream<I>& stream, NVP<T>&& nvp)
+	{
+		read(stream, nvp);
+	}
 }
 
 #endif//guard

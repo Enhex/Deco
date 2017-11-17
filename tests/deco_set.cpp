@@ -1,6 +1,5 @@
 #include <deco/set.h>
 #include <deco/types/arithmetic.h>
-#include <deco/types/vector.h>
 
 #include <gs/serializer.h>
 
@@ -55,6 +54,7 @@ int main()
 			std::istreambuf_iterator<char>()};
 
 		auto stream = deco::make_InputStream(file_str.cbegin());
+
 		deco::serialize(stream, deco::make_set(i_));				assert(i_ == i);
 		deco::serialize(stream, deco::make_set("ignore name", i_));	assert(i_ == i);
 		deco::serialize(stream, deco::make_set(name, i_));			assert(i_ == i);

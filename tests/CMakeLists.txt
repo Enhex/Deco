@@ -29,5 +29,6 @@ add_test(parse)
 add_test(serialize)
 add_test(serialize_nested)
 add_test(deco_set)
+add_test(deco_NVP)
 
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT serialize)
