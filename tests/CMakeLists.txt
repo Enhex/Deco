@@ -17,8 +17,14 @@ conan_basic_setup()
 # add single cpp file project
 function(add_test name)
 	set(file ${name}.cpp)
+
+	if (MSVC)
+		add_compile_options(/W4) 
+	endif(MSVC)
+
 	add_executable(${name} ${file})
 	conan_target_link_libraries(${name})
+	
 	if (MSVC)
 		set_target_properties(${name} PROPERTIES COMPILE_FLAGS "/permissive-")
 	endif(MSVC)

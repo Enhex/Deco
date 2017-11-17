@@ -32,11 +32,11 @@ constexpr auto floating_test_value = 123.125;	// 0.125 shouldn't have floating p
 template<typename T, typename Stream>
 void write_type(Stream& stream)
 {
-	if constexpr(is_floating_point_v<T>) {
+	if constexpr (is_floating_point_v<T>) {
 		auto value = T(floating_test_value);
 		gs::serializer(stream, value);
 	}
-	else if (is_integral_v<T> && is_signed_v<T>) {
+	else if constexpr (is_integral_v<T> && is_signed_v<T>) {
 		auto value = numeric_limits<T>::min();
 		gs::serializer(stream, value);
 	}
@@ -50,9 +50,9 @@ template<typename T, typename I>
 void read_type(deco::InputStream<I>& stream) {
 	T value;
 	gs::serializer(stream, value);
-	if constexpr(is_floating_point_v<T>)
+	if constexpr (is_floating_point_v<T>)
 		assert(value == floating_test_value);
-	else if(is_integral_v<T> && is_signed_v<T>)
+	else if constexpr (is_integral_v<T> && is_signed_v<T>)
 		assert(value == numeric_limits<T>::min());
 	else
 		assert(value == numeric_limits<T>::max());
