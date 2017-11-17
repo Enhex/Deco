@@ -60,7 +60,7 @@ namespace deco
 		};
 
 		std::string_view content;
-		Type type;
+		Type type = entry;
 	};
 
 	// parse next entry
@@ -120,7 +120,7 @@ namespace deco
 			}
 		}
 		else {
-			entry.type = Entry::entry;
+			// type = entry by default
 
 			// content end delimiter
 			if (one_before_last == content_delimiter &&
