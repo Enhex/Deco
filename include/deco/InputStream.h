@@ -84,9 +84,9 @@ namespace deco
 
 	// allow calling serialize directly with entry content to allow definition order independent lookup
 	template<typename T> constexpr
-	void serialize(const std::string_view content, T&& value)	//TODO content strong type to distinguish input/output?
+	void serialize(const Content content, T&& value)	//TODO content strong type to distinguish input/output?
 	{
-		read(content, std::forward<T>(value));
+		read_content(content, std::forward<T>(value));
 	}
 
 

@@ -4,6 +4,7 @@
 #include <array>
 #include <limits>
 #include <string_view>
+#include <strong_type.h>
 #include <vector>
 
 namespace deco
@@ -13,15 +14,11 @@ namespace deco
 	constexpr char structure_delimiter	{ ':'	};
 	constexpr char content_delimiter	{ '\''	};
 
+	// Helps with Argument Dependent Lookup by being in deco namespace
+	STRONG_TYPE(Content, std::string_view);
 	
-	/*TODO
-	separate into different types of entries:
-	- regular entry: only has content
-	- set entry: has content and child entries
-	- anonymous set entry: only has child entries
-	*/
 	struct EntryObject {
-		std::string_view content;
+		Content content;
 		std::vector<EntryObject> entries;
 	};
 
@@ -59,7 +56,7 @@ namespace deco
 			set_end
 		};
 
-		std::string_view content;
+		Content content;
 		Type type = entry;
 	};
 

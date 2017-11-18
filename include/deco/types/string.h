@@ -14,7 +14,7 @@ namespace deco
 		stream.entry(escape_content(value));
 	}
 
-	void read(const std::string_view content, std::string& value)
+	void read_content(const Content content, std::string& value)
 	{
 		value = unescape_content(content);
 	}
@@ -22,7 +22,7 @@ namespace deco
 	template<typename I> constexpr
 		void read(InputStream<I>& stream, std::string& value)
 	{
-		read(stream.parse_entry().content, value);
+		read_content(stream.parse_entry().content, value);
 	}
 }
 

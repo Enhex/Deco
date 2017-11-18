@@ -32,7 +32,7 @@ namespace deco
 
 	template<typename T> constexpr
 	std::enable_if_t<std::is_integral_v<T>>
-		read(const std::string_view content, T& value)
+		read_content(const Content content, T& value)
 	{
 		using namespace boost::spirit::x3;
 		phrase_parse(content.begin(), content.end(), get_integral_parser<T>(), ascii::space, value);
@@ -44,7 +44,7 @@ namespace deco
 		std::enable_if_t<std::is_integral_v<T>>
 		read(InputStream<I>& stream, T& value)
 	{
-		read(stream.parse_entry().content, value);
+		read_content(stream.parse_entry().content, value);
 
 	}
 }
