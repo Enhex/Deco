@@ -136,13 +136,13 @@ namespace deco
 
 
 	template <typename Iterator>
-	constexpr EntryObject parse_object(Iterator& current)
+	EntryObject parse_object(Iterator& current)
 	{
 		return parse_object(current, parse_entry(current));
 	}
 
 	template <typename Iterator>
-	constexpr EntryObject parse_object(Iterator& current, const Entry& entry)
+	EntryObject parse_object(Iterator& current, const Entry& entry)
 	{
 		switch (entry.type)
 		{
@@ -165,7 +165,7 @@ namespace deco
 	}
 
 	template <typename Iterator>
-	constexpr auto parse(Iterator current, const Iterator last)
+	auto parse(Iterator current, const Iterator last)
 	{
 		std::vector<EntryObject> objects;
 
