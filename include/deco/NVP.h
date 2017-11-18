@@ -3,6 +3,7 @@
 
 #include "InputStream.h"
 #include "OutputStream.h"
+#include <deco/types/arithmetic.h>
 #include <deco/types/string.h>
 
 namespace deco
