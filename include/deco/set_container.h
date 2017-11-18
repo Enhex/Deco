@@ -44,7 +44,7 @@ namespace deco
 	{
 		for (auto& e : value)
 		{
-			if constexpr(is_single_entry_v<Map::key_type>)
+			if constexpr(is_single_entry_v<typename Map::key_type>)
 			{
 				stream.begin_set(to_string(e.first));
 				serialize(stream, e.second);
@@ -70,21 +70,21 @@ namespace deco
 		typename Map::mapped_type mapped_input;
 
 		while (!stream.peek_set_end()) {
-			if constexpr(is_single_entry_v<Map::key_type>)
+			if constexpr(is_single_entry_v<typename Map::key_type>)
 			{
 				serialize(stream, key_input);	// read set name
 				serialize(stream, mapped_input);// read value
-				stream.parse_entry();				// skip set end
+				stream.parse_entry();			// skip set end
 			}
 			else
 			{
 				serialize(stream, skip);		// skip set name
 				serialize(stream, key_input);	// read value
-				stream.parse_entry();				// skip set end
+				stream.parse_entry();			// skip set end
 
 				serialize(stream, skip);		// skip set name
 				serialize(stream, mapped_input);// read value
-				stream.parse_entry();				// skip set end
+				stream.parse_entry();			// skip set end
 			}
 
 			value.emplace(std::make_pair(key_input, mapped_input));

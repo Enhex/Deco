@@ -31,6 +31,9 @@ namespace deco
 		void begin_set(const std::string_view& content) {
 			begin_set(std::string(content));
 		}
+		void begin_set(const char* content) {
+			begin_set(std::string(content));
+		}
 
 		void begin_anonymous_set() {
 			entry("':");
@@ -41,6 +44,8 @@ namespace deco
 		}
 	};
 
+	// Indented output
+	//NOTE: use own version of functions for indenting
 	struct OutputStream_indent : OutputStream
 	{
 		using OutputStream::OutputStream;
@@ -55,7 +60,10 @@ namespace deco
 			++indent_level;
 		}
 		void begin_set(const std::string_view& content) {
-			begin_set(std::string(content));	// use own version for indenting
+			begin_set(std::string(content));	
+		}
+		void begin_set(const char* content) {
+			begin_set(std::string(content));
 		}
 
 		void begin_anonymous_set() {
@@ -71,7 +79,7 @@ namespace deco
 	protected:
 		unsigned indent_level = 0;
 
-		constexpr void indent() {
+		void indent() {
 			for (unsigned n = 0; n < indent_level; ++n)
 				str += '\t';
 		}
@@ -203,7 +211,7 @@ namespace deco
 	std::enable_if_t<gs::is_deco_output_v<Stream>>
 		serialize(Stream& stream, T&& value)
 	{
-		deco::write(stream, std::forward<T>(value));
+		write(stream, std::forward<T>(value));
 	}
 }
 

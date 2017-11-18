@@ -1,6 +1,7 @@
 #ifndef deco_string_h
 #define deco_string_h
 
+#include "../InputStream.h"
 #include "../OutputStream.h"
 #include <string>
 
