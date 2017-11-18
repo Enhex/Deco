@@ -159,9 +159,11 @@ namespace deco
 			
 			return object;
 		}
+		case Entry::set_end:
+			throw std::invalid_argument("Unexpected set end");
 		}
 
-		throw std::invalid_argument("Unexpected set end");
+		throw std::invalid_argument("Invalid entry type");
 	}
 
 	template <typename Iterator>
