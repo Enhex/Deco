@@ -1,6 +1,7 @@
 #ifndef deco_floating_point_h
 #define deco_floating_point_h
 
+#include "../InputStream.h"
 #include "../OutputStream.h"
 
 namespace deco

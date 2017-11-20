@@ -1,6 +1,7 @@
 #ifndef deco_InputStream_h
 #define deco_InputStream_h
 
+#pragma warning(push, 0) // disable external warnings
 #include <boost/spirit/home/x3.hpp>
 
 // used to fix boost spirit karma signbit error bug
@@ -9,6 +10,7 @@ namespace boost::spirit::detail {
 }
 
 #include <boost/spirit/home/x3/numeric.hpp>
+#pragma warning(pop)
 
 #include "Deco.h"
 #include "traits.h"

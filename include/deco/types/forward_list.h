@@ -12,11 +12,12 @@ namespace deco
 	template<typename Stream, typename... Args> constexpr
 	void read_elements(Stream&& stream, std::forward_list<Args...>& value)
 	{
-		//// find iterator to last element
+		// find iterator to last element
 		auto before_end = value.before_begin();
-		for (auto& e : value)
+		for(auto i = value.cbegin(); i != value.cend(); ++i)
 			++before_end;
 
+		// read elements into the back of the list
 		while (!stream.peek_set_end()) {
 			before_end = value.emplace_after(before_end);
 			serialize(stream, *before_end);
