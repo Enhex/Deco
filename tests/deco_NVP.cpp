@@ -13,16 +13,16 @@ int main()
 	int i = 2;
 	int i_ = 0;
 
-	std::string name = "read name";
+	std::string name = "	 read name";	// test whitespace skipping too
 
 	// write file
 	{
 		deco::OutputStream_indent stream;
 
-		deco::serialize(stream, deco::make_NVP("name", i));		
+		deco::serialize(stream, deco::make_NVP("ignore name", i));		
 		deco::serialize(stream, deco::make_NVP(name, i));
 
-		gs::serializer(stream, deco::make_NVP("name", i));
+		gs::serializer(stream, deco::make_NVP("ignore name", i));
 		gs::serializer(stream, deco::make_NVP(name, i));
 
 		std::ofstream os("out.deco", std::ios::binary);
@@ -38,10 +38,10 @@ int main()
 
 		auto stream = deco::make_InputStream(file_str.cbegin());
 
-		deco::serialize(stream, deco::make_NVP("name", i_));	assert(i_ == i);
-		deco::serialize(stream, deco::make_NVP(name, i_));		assert(i_ == i);
+		deco::serialize(stream, deco::make_NVP("ignore name", i_));	assert(i_ == i);
+		deco::serialize(stream, deco::make_NVP(name, i_));			assert(i_ == i);
 
-		gs::serializer(stream, deco::make_NVP("name", i_));		assert(i_ == i);
-		gs::serializer(stream, deco::make_NVP(name, i_));		assert(i_ == i);
+		gs::serializer(stream, deco::make_NVP("ignore name", i_));	assert(i_ == i);
+		gs::serializer(stream, deco::make_NVP(name, i_));			assert(i_ == i);
 	}
 }
