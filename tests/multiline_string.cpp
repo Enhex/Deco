@@ -14,11 +14,8 @@ int main()
 	// write
 	{
 		deco::OutputStream_indent stream;
-		const auto serialize = [&stream](auto&& t) {
-			deco::serialize(stream, t);
-		};
-
-		serialize(deco::make_set("multiline_string", ml_str_val));
+		
+		deco::serialize(stream, deco::make_set("multiline_string", ml_str_val));
 
 		std::ofstream os("out.deco", std::ios::binary);
 		os << stream.str;

@@ -20,10 +20,7 @@ int main()
 	// write
 	{
 		deco::OutputStream_indent stream;
-		const auto serialize = [&stream](auto&& t) {
-			deco::serialize(stream, t);
-		};
-
+		
 		gs::serializer(stream,
 			str_val,
 			str_space,
