@@ -46,7 +46,10 @@ namespace deco
 		{
 			if constexpr(is_single_entry_v<typename Map::key_type>)
 			{
-				stream.begin_set(to_string(e.first));
+				if constexpr(std::is_base_of_v<std::string, std::decay_t<decltype(e.first)>>)
+					stream.begin_set(e.first);
+				else
+					stream.begin_set(to_string(e.first));
 				serialize(stream, e.second);
 				stream.end_set();
 			}
