@@ -1,5 +1,4 @@
 #include <deco/set.h>
-#include <deco/types/arithmetic.h>
 
 #include <gs/serializer.h>
 
@@ -10,8 +9,8 @@
 
 int main()
 {
-	int i = 2;
-	int i_ = 0;
+	std::string i = "2";
+	std::string i_ = "0";
 
 	std::string name = "read name";
 

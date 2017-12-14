@@ -1,5 +1,4 @@
 #include <deco/NVP.h>
-#include <deco/types/arithmetic.h>
 
 #include <gs/serializer.h>
 

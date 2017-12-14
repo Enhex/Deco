@@ -22,7 +22,7 @@ namespace deco
 	}
 
 	template<typename I> constexpr
-	void read(InputStream<I>& stream, unescaped_string&& value)
+	void read(InputStream<I>& stream, unescaped_string& value)
 	{
 		read_content(stream.parse_entry().content, value);
 	}

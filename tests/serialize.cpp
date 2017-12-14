@@ -25,37 +25,37 @@
 #include <iostream>
 #include <limits>
 
-using namespace std;
-
 constexpr auto floating_test_value = 123.125;	// 0.125 shouldn't have floating point precision error
 
 template<typename T, typename Stream>
 void write_type(Stream& stream)
 {
-	if constexpr (is_floating_point_v<T>) {
+	if constexpr (std::is_floating_point_v<T>) {
 		auto value = T(floating_test_value);
 		gs::serializer(stream, value);
 	}
-	else if constexpr (is_integral_v<T> && is_signed_v<T>) {
-		auto value = numeric_limits<T>::min();
+	else if constexpr (std::is_integral_v<T> && std::is_signed_v<T>) {
+		auto value = std::numeric_limits<T>::min();
 		gs::serializer(stream, value);
 	}
 	else {
-		auto value = numeric_limits<T>::max();
+		auto value = std::numeric_limits<T>::max();
 		gs::serializer(stream, value);
 	}
 };
 
 template<typename T, typename I>
-void read_type(deco::InputStream<I>& stream) {
+void read_type(deco::InputStream<I>& stream)
+{
 	T value;
 	gs::serializer(stream, value);
-	if constexpr (is_floating_point_v<T>)
+
+	if constexpr (std::is_floating_point_v<T>)
 		assert(value == floating_test_value);
-	else if constexpr (is_integral_v<T> && is_signed_v<T>)
-		assert(value == numeric_limits<T>::min());
+	else if constexpr (std::is_integral_v<T> && std::is_signed_v<T>)
+		assert(value == std::numeric_limits<T>::min());
 	else
-		assert(value == numeric_limits<T>::max());
+		assert(value == std::numeric_limits<T>::max());
 };
 
 
@@ -145,18 +145,18 @@ int main()
 		serialize(deco::make_set("std::unordered_map", umap_val));
 		serialize(deco::make_set("std::unordered_multimap", ummap_val));
 
-		ofstream os("out.deco", ios::binary);
+		std::ofstream os("out.deco", std::ios::binary);
 		os << stream.str;
 	}
 
 	// read
 	{
-		auto file = ifstream("out.deco", ios::binary);
-		string file_str{
-			istreambuf_iterator<char>(file),
-			istreambuf_iterator<char>()};
+		auto file = std::ifstream("out.deco", std::ios::binary);
+		std::string file_str{
+			std::istreambuf_iterator<char>(file),
+			std::istreambuf_iterator<char>()};
 
-		cout << file_str;
+		std::cout << file_str;
 
 		auto stream = deco::make_InputStream(file_str.cbegin());
 		const auto serialize = [&stream](auto&& t) {
