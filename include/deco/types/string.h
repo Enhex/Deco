@@ -3,6 +3,7 @@
 
 #include "../InputStream.h"
 #include "../OutputStream.h"
+#include "../escape.h"
 #include <string>
 
 namespace deco
