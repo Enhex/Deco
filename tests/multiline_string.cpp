@@ -9,7 +9,7 @@
 
 int main()
 {
-	const deco::multiline_string ml_str_val{ "multi\nline\nstring" };
+	const deco::multiline_string ml_str_val{ "multi:\n    line\nstring'" };
 
 	// write
 	{
