@@ -4,6 +4,7 @@
 namespace deco
 {
 	// escape content delimiters
+	template<bool escape_begin = true, bool escape_end = true> constexpr
 	auto escape_content(const std::string_view content)
 	{
 		std::string str;
@@ -11,20 +12,27 @@ namespace deco
 		if (content.empty())
 			return str;
 
-		// escape content starting with whitespace or content delimiter
-		const auto first = content.front();
-		if (first == ' ' ||
-			first == '\t'||
-			first == deco::content_delimiter)
-			str.insert(str.begin(), deco::content_delimiter);
+		if constexpr(escape_begin)
+		{
+			// escape content starting with whitespace or content delimiter
+			const auto first = content.front();
+			if (first == ' ' ||
+				first == '\t' ||
+				first == deco::content_delimiter)
+				str.insert(str.begin(), deco::content_delimiter);
+		}
 
 		str += content;
 
-		// escape content ending with content delimiter or structure delimiter
-		const auto last = content.back();
-		if (last == deco::structure_delimiter ||
-			last == deco::content_delimiter)
-			str += deco::content_delimiter;
+
+		if constexpr(escape_end)
+		{
+			// escape content ending with content delimiter or structure delimiter
+			const auto last = content.back();
+			if (last == deco::structure_delimiter ||
+				last == deco::content_delimiter)
+				str += deco::content_delimiter;
+		}
 
 		return str;
 	}
