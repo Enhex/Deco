@@ -51,6 +51,7 @@ int main()
 		"		Format\n"
 		"	:\n"
 		":\n"
+		"content ending with content delimiter'\n"
 		"content ending with structure delimiter:'\n"
 		"'		 content starting with whitespace\n"
 		": structure : delimiter : and ' content ' delimiter ' as : content ' without : escaping\n"
