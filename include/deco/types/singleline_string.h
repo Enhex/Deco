@@ -22,11 +22,6 @@ namespace deco
 		write(stream, static_cast<const std::string&>(value));
 	}
 
-	void read_content(const Content content, singleline_string& value)
-	{
-		read_content(content, static_cast<std::string&>(value));
-	}
-
 	template<typename I> constexpr
 		void read(InputStream<I>& stream, singleline_string& value)
 	{

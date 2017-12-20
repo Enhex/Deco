@@ -82,16 +82,7 @@ namespace deco
 	{
 		read(stream, std::forward<T>(value));
 	}
-
-
-	// allow calling serialize directly with entry content to allow definition order independent lookup
-	template<typename T> constexpr
-	void serialize(const Content content, T&& value)	//TODO content strong type to distinguish input/output?
-	{
-		read_content(content, std::forward<T>(value));
-	}
-
-
+	
 	// skip entry without parsing
 	template<typename Stream> constexpr
 		std::enable_if_t<gs::is_deco_input_v<Stream>>

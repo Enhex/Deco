@@ -15,15 +15,10 @@ namespace deco
 		stream.entry(escape_content(value));
 	}
 
-	void read_content(const Content content, std::string& value)
-	{
-		value = content;	// deco parsing will already unescape
-	}
-
 	template<typename I> constexpr
 		void read(InputStream<I>& stream, std::string& value)
 	{
-		read_content(stream.parse_entry().content, value);
+		value = stream.parse_entry().content;	// deco parsing will already unescape
 	}
 
 	constexpr

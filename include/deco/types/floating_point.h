@@ -30,22 +30,17 @@ namespace deco
 		stream.entry(to_string(value));
 		//stream.entry(trim_float(std::to_string(value)));
 	}
-
-	template<typename T> constexpr
-	std::enable_if_t<std::is_floating_point_v<T>>
-		read_content(const Content content, T& value)
-	{
-		using namespace boost::spirit::x3;
-		phrase_parse(content.begin(), content.end(), real_parser<T>(), ascii::space, value);
-
-		//value = stof(std::string(entry.content)); // no string_view/iterators support
-	}
 	
 	template<typename I, typename T> constexpr
 	std::enable_if_t<std::is_floating_point_v<T>>
 		read(InputStream<I>& stream, T& value)
 	{
-		read_content(stream.parse_entry().content, value);
+		const auto content = stream.parse_entry().content;
+
+		using namespace boost::spirit::x3;
+		phrase_parse(content.begin(), content.end(), real_parser<T>(), ascii::space, value);
+
+		//value = stof(std::string(entry.content)); // no string_view/iterators support
 	}
 }
 

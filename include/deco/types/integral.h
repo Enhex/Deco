@@ -29,23 +29,16 @@ namespace deco
 		stream.entry(to_string(value));
 	}
 
-
-	template<typename T> constexpr
-	std::enable_if_t<std::is_integral_v<T>>
-		read_content(const Content content, T& value)
-	{
-		using namespace boost::spirit::x3;
-		phrase_parse(content.begin(), content.end(), get_integral_parser<T>(), ascii::space, value);
-
-		//value = stoi(std::string(entry.content)); // no string_view/iterators support
-	}
-
 	template<typename I, typename T> constexpr
 		std::enable_if_t<std::is_integral_v<T>>
 		read(InputStream<I>& stream, T& value)
 	{
-		read_content(stream.parse_entry().content, value);
+		const auto content = stream.parse_entry().content;
 
+		using namespace boost::spirit::x3;
+		phrase_parse(content.begin(), content.end(), get_integral_parser<T>(), ascii::space, value);
+
+		//value = stoi(std::string(entry.content)); // no string_view/iterators support
 	}
 }
 
