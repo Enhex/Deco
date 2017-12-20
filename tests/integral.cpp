@@ -39,9 +39,6 @@ int main()
 	// write
 	{
 		deco::OutputStream_indent stream;
-		const auto serialize = [&stream](auto&& t) {
-			deco::serialize(stream, t);
-		};
 
 		write_type<char>(stream);
 		write_type<unsigned char>(stream);

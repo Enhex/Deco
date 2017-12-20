@@ -1,7 +1,5 @@
 #include <deco/types/floating_point.h>
 
-#include <gs/serializer.h>
-
 #include <cassert>
 #include <fstream>
 #include <iostream>
@@ -13,21 +11,18 @@ int main()
 	// write
 	{
 		deco::OutputStream_indent stream;
-		const auto serialize = [&stream](auto&& t) {
-			deco::serialize(stream, t);
-		};
 
 		{
 			const float value = floating_test_value;
-			gs::serializer(stream, value);
+			deco::serialize(stream, value);
 		}
 		{
 			const double value = floating_test_value;
-			gs::serializer(stream, value);
+			deco::serialize(stream, value);
 		}
 		{
 			const long double value = floating_test_value;
-			gs::serializer(stream, value);
+			deco::serialize(stream, value);
 		}
 
 		std::ofstream os("out.deco", std::ios::binary);
@@ -47,17 +42,17 @@ int main()
 
 		{
 			float value;
-			gs::serializer(stream, value);
+			deco::serialize(stream, value);
 			assert(value == floating_test_value);
 		}
 		{
 			double value;
-			gs::serializer(stream, value);
+			deco::serialize(stream, value);
 			assert(value == floating_test_value);
 		}
 		{
 			long double value;
-			gs::serializer(stream, value);
+			deco::serialize(stream, value);
 			assert(value == floating_test_value);
 		}
 	}

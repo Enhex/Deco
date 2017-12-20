@@ -32,11 +32,7 @@ int main()
 
 		auto stream = deco::make_InputStream(file_str.cbegin());
 
-		const auto serialize = [&stream](auto&& t) {
-			deco::serialize(stream, t);
-		};
-
 		deco::multiline_string ml_str;
-		serialize(deco::make_set("multiline_string", ml_str)); assert(ml_str == ml_str_val);
+		deco::serialize(stream, deco::make_set("multiline_string", ml_str)); assert(ml_str == ml_str_val);
 	}
 }
