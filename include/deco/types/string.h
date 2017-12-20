@@ -25,6 +25,18 @@ namespace deco
 	{
 		read_content(stream.parse_entry().content, value);
 	}
+
+	constexpr
+	std::string& to_string(std::string& value)
+	{
+		return value;
+	}
+
+	constexpr
+	std::string&& to_string(std::string&& value)
+	{
+		return std::move(value);
+	}
 }
 
 #endif//guard
