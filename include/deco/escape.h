@@ -44,6 +44,7 @@ namespace deco
 			content.remove_suffix(1);
 	}
 
+	// take const& and return a copy
 	template<bool unescape_content_begin = false> constexpr
 	auto unescape_content(const std::string_view& ref_content)
 	{
@@ -52,22 +53,15 @@ namespace deco
 		return content;
 	}
 
+	// rvalue
 	template<bool unescape_content_begin = false> constexpr
 	auto unescape_content(std::string_view&& content)
 	{
-		// erase start content delimiter
-		if constexpr (unescape_content_begin) {
-			if (content.front() == content_delimiter)
-				content.remove_prefix(1);
-		}
-
-		// erase end content delimiter
-		if (content.back() == content_delimiter)
-			content.remove_suffix(1);
-
+		unescape_content<unescape_content_begin>(content);
 		return content;
 	}
 
+	// string
 	template<bool unescape_content_begin = false> constexpr
 	void unescape_content(std::string& content)
 	{
