@@ -9,11 +9,13 @@
 int main()
 {
 	const std::string str_val =					"string";
+	const std::string str_empty =				"";
 	const std::string str_space =				"  string";
 	const std::string str_tab =					"		string";
 	const std::string str_spc_tab =				"		string";
 	const std::string str_content_begin =		"' string";
 	const std::string str_content_end =			"string'";
+	const std::string str_content_end2 =		"string''";
 	const std::string str_structure =			"string:";
 	const std::string str_structure_con_end =	"string:'";
 
@@ -23,11 +25,13 @@ int main()
 		
 		gs::serializer(stream,
 			str_val,
+			str_empty,
 			str_space,
 			str_tab,
 			str_spc_tab,
 			str_content_begin,
 			str_content_end,
+			str_content_end2,
 			str_structure,
 			str_structure_con_end);
 
@@ -52,11 +56,13 @@ int main()
 
 		std::string str;
 		serialize(str); assert(str == str_val);
+		serialize(str); assert(str == str_empty);
 		serialize(str); assert(str == str_space);
 		serialize(str); assert(str == str_tab);
 		serialize(str); assert(str == str_spc_tab);
 		serialize(str); assert(str == str_content_begin);
 		serialize(str); assert(str == str_content_end);
+		serialize(str); assert(str == str_content_end2);
 		serialize(str); assert(str == str_structure);
 		serialize(str); assert(str == str_structure_con_end);
 	}
