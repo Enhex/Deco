@@ -17,7 +17,7 @@ namespace deco
 
 	void read_content(const Content content, std::string& value)
 	{
-		value = unescape_content(content);
+		value = content;	// deco parsing will already unescape
 	}
 
 	template<typename I> constexpr

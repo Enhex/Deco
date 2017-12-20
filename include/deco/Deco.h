@@ -116,17 +116,15 @@ namespace deco
 				return entry;
 			}
 		}
+		// content end delimiter
+		else if (one_before_last == content_delimiter) {
+			// type = entry by default
+			content_end = current - 1;
+		}
+		// only entry delimiter
 		else {
 			// type = entry by default
-
-			// content end delimiter
-			if (one_before_last == content_delimiter &&
-				*(current - 2) == structure_delimiter)
-				content_end = current - 1;
-
-			// only entry delimiter
-			else
-				content_end = current;
+			content_end = current;
 		}
 
 		end_entry();
