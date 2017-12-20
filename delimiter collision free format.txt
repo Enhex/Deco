@@ -1,0 +1,110 @@
+Delimiter Collision Free Format
+===============================
+First created 19/7/2017
+by Yehonatan Ballas
+
+
+Abbreviation:
+Deco
+
+File extension:
+.deco
+
+
+Rules for creating delimiter collision free format:
+===================================================
+- using first of delimiter allows having it as content afterwards without collision
+- using last of delimiter allows having it as content beforehand without collision
+- several first/last of delimiters can be used if they're in fixed order
+- use newline character as the entry delimiter.
+Newline is used both as a delimiter and implicitly as newline from structure (interpret each entry as a line), and text editors use newline to break lines, so there's no need to explicitly write it as content.
+
+Notes:
+- deduced from the first/last of rules, each delimiter can be used up to 2 times without collision - as first before the content and last after the content
+
+
+The format
+==========
+
+Standard delimiter characters:
+------------------------------
+entry delimiter		= newline (\n)
+structure delimiter	= :
+content delimiter	= '
+
+
+entry structure:
+----------------
+[ignored whitespace][optional content begin delimiter][content][optional structure delimiter][optional content end delimiter][entry delimiter]
+
+c				content = c
+c:				content = c , structured
+
+c:'				content = c:
+c::				content = c: , structured
+
+c''				content = c'
+c':				content = c' , structured
+
+Delimiters aren't part of the content.
+
+Content begins either with the first non-whitespace character or first of content delimiter.
+
+Content ends with either:
+entry delimiter.
+structure delimiter followed by entry delimiter.
+content delimiter followed by entry delimiter.
+
+Content end delimiter allows having the content end with structure delimiter character.
+
+Ignored whitespace can be used to indent/format the document.
+
+
+set structure
+-------------
+A set is a special type of entry used to group entries.
+Sets can be used to describe things like hierarchies, objects, arrays, multi-line strings, name value pairs, and so on.
+
+A set begins when an entry ends with a structure delimiter. The content of the set entry is its name.
+
+A set ends when an entry only contains a structure delimiter followed by entry delimiter. set ending entries are only used for set structuring and aren't part of the document's content.
+
+example of a set:
+c:				content = c , set begin
+	c			child entry
+	c:			child set entry
+		c		child entry
+	:			set end
+:				set end
+
+Anonymous sets, that is sets with no name, can be expressed by using content begin delimiter followed by structure delimiter.
+Since for an entry to be set end entry it must only contain a structure delimiter, such entry is a set begin.
+Since it has no content (between the content begin begin delimiter and structure delimiter), it has no name.
+For example:
+':				anonymous set begin
+:				set end
+
+
+document structure
+------------------
+If the document doesn't end with entry delimiter, implicitly end it with one.
+
+
+
+
+format design decisions
+=======================
+
+Data type information isn't part of the format
+----------------------------------------------
+Data types shouldn't be part of the format, since the application that uses the file already has to know the data types it's reading.
+That means that hard-coding data types into the format is redundant and undesirable because it increases complexity.
+The format should only describe structure.
+
+It's still desirable for a Deco implementation to provide ways to parse & interpret entries as common data structures. perhaps in a standardized way.
+such as:
+integer/float number, name value pair, array, multi-line string, and delimiter separated values.
+
+No indentation for structure
+----------------------------
+Not using indentation for structure, since it limits formatting flexibility, brittle when mixing tabs and spaces, and doesn't scale well with deep nesting since the required indentation characters grow linearly with nesting depth (can limit things like minifiers).
