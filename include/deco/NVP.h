@@ -21,9 +21,7 @@ namespace deco
 		The value's internal sub-string start isn't escaped when serialized, so it needs to be escaped manually.
 		The name's end doesn't need escaping.
 		*/
-		if constexpr (std::is_same_v<std::decay_t<T>, std::string>)
-			serialize(stream, name_str() += escape_content<true, false>(nvp.value));
-		else if constexpr (std::is_floating_point_v<T> || std::is_integral_v<T>)	// no need to escape
+		if constexpr (std::is_floating_point_v<T> || std::is_integral_v<T>)	// no need to escape
 			serialize(stream, name_str() += to_string(nvp.value));
 		else
 			serialize(stream, name_str() += escape_content<true, false>(to_string(nvp.value)));
