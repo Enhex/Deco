@@ -9,7 +9,7 @@ class DecoConan(ConanFile):
 	requires = (
 		"generic_serialization/master@enhex/stable",
 		"rang/master@enhex/stable",
-		"Boost/1.65.1@enhex/testing",
+		"Boost/1.66.0@enhex/testing",
 		"strong_type/master@enhex/stable"
 	)
 	default_options = "Boost:header_only=True"
