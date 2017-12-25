@@ -40,7 +40,7 @@ A set entry can contain child entries, including other set entries.
 A set entry is an entry that ends with the `structure delimiter` before the `entry delimiter`.
 A set entry's content is called the set's name.
 
-A set end entry is an entry that is solely composed, after skipping whitespace, by a of `structure delimiter` before the `entry delimiter`.
+A set end entry is an entry that only contains, after skipping whitespace, a `structure delimiter` before an `entry delimiter`.
 
 
 ```

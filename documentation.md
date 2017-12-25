@@ -1,4 +1,4 @@
-# Documentation
+# Deco Library Documentation
 
 ## Writing serialization functions for new types
 
