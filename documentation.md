@@ -150,7 +150,7 @@ You can serialize a name value pair which are separated by a `:` into a single l
 When using NVP:
 
 - The name must be not contain entry or structure delimiters.
-- The value is automatically escaped.
+- The value is automatically escaped, and is parsed as an entry.
 
 For example:
 ```C++
