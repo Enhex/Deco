@@ -28,7 +28,6 @@ namespace deco
 		write(Stream& stream, const T& value)
 	{
 		stream.entry(to_string(value));
-		//stream.entry(trim_float(std::to_string(value)));
 	}
 	
 	template<typename I, typename T> constexpr
@@ -39,8 +38,6 @@ namespace deco
 
 		using namespace boost::spirit::x3;
 		phrase_parse(content.begin(), content.end(), real_parser<T>(), ascii::space, value);
-
-		//value = stof(std::string(entry.content)); // no string_view/iterators support
 	}
 }
 

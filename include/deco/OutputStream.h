@@ -87,13 +87,6 @@ namespace deco
 		}
 	};
 
-	// utility function for trimming trailing zeros and decimal point after using std::to_string
-	auto& trim_float(std::string& str) {
-		const auto pos = str.find_last_not_of('0');
-		str.erase(pos + (str[pos] != '.'));	// if last character isn't a decimal point, don't delete it
-		return str;
-	}
-
 	// don't use scientific notation
 	template <typename T>
 	struct fixed_policy : boost::spirit::karma::real_policies<T> {
