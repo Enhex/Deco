@@ -8,7 +8,7 @@ To be able to serialize a new type, you need to provide a `serialize` function f
 For example:
 ```C++
 #include <deco/types/integral.h>	// for int serialization
-#include <gs/serializer.h>			// for gs::serializer
+#include <gs/serializer.h>		// for gs::serializer
 #include <fstream>
 
 struct A {
@@ -20,7 +20,7 @@ namespace deco
 	template<typename Stream> constexpr
 	void serialize(Stream& stream, A& value)
 	{
-    	deco::serialize(stream, value.x);			// serialize single variable
+		deco::serialize(stream, value.x);		// serialize single variable
 		gs::serializer(stream, value.y, value.z);	// variadic template to serialize multiple variables
 	}
 }
@@ -28,19 +28,19 @@ namespace deco
 int main()
 {
 	A a{1,2,3};
-    
+
 	// write
 	{
 		deco::OutputStream_indent stream;
-        
-        deco::serialize(stream, a);
+
+		deco::serialize(stream, a);
 
 		std::ofstream os("out.deco", std::ios::binary);
 		os << stream.str;
 	}
 
 	a = {0,0,0};	// change values
-    
+
 	// read
 	{
 		auto file = std::ifstream("out.deco", std::ios::binary);
@@ -49,8 +49,8 @@ int main()
 			std::istreambuf_iterator<char>() };
 
 		auto stream = deco::make_InputStream(file_str.cbegin());
-        
-        deco::serialize(stream, a);
+
+		deco::serialize(stream, a);
 	}
 }
 ```
@@ -75,7 +75,7 @@ For example:
 
 struct A {
 	int x, y, z;
-    std::string name = "y";
+	std::string name = "y";
 };
 
 namespace deco
@@ -86,7 +86,7 @@ namespace deco
 		gs::serializer(stream,
 			deco::make_set("x", value.x),	// write
 			deco::make_set(name, value.y),	// write and read
-			deco::make_set(value.z));		// anonymous set
+			deco::make_set(value.z));	// anonymous set
 	}
 }
 ```
@@ -111,8 +111,8 @@ namespace deco
 		gs::serializer(stream,
 			begin_set("A"),
 				value.x,
-                value.y,
-                value.z,
+				value.y,
+				value.z,
 			end_set);
 	}
 }
@@ -132,12 +132,12 @@ For example:
 int main()
 {
 	std::vector<int> vec;
-    
+
 	// ...
-    
-    deco::serialize(stream, deco::make_set("vector", vec));
-    
-    // ...
+
+	deco::serialize(stream, deco::make_set("vector", vec));
+
+	// ...
 }
 ```
 
@@ -187,9 +187,9 @@ Since newline is used as the entry delimiter there's no need to explicitly use i
 For example:
 ```
 string:
-    this is a
-    multi-line
-    string
+	this is a
+	multi-line
+	string
 :
 ```
 
