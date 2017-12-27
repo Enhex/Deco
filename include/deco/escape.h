@@ -4,7 +4,7 @@
 namespace deco
 {
 	// escape content delimiters
-	template<bool escape_begin = true, bool escape_end = true> constexpr
+	template<bool escape_begin = true, bool escape_end = true>
 	auto escape_content(const std::string_view content)
 	{
 		std::string str;
