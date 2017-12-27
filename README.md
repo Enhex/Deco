@@ -77,10 +77,10 @@ spouse: null
 </tr>
 </table>
 
-Since Deco is simple and doesn't have to deal with delimiter collisions it's also efficinet. In a benchmark against JSON (using RapidJSON via [Cereal](https://uscilab.github.io/cereal/)) that generates random content with up to 3 levels of indented nesting, Deco had:
+Since Deco is simple and doesn't have to deal with delimiter collisions it's also efficinet. In a [benchmark](https://github.com/Enhex/deco-benchmark) against JSON Deco had:
 - over 40% smaller file size
-- over 700% faster output serialization (exluding file I/O)
-- over 2000% faster input parsing (exluding file I/O)
+- over 700% faster output serialization
+- over 2000% faster input parsing
 
 
 To learn how to use the Deco format, see the [tutorial](deco_tutorial.md).
