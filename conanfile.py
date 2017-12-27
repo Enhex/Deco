@@ -1,10 +1,11 @@
-from conans import ConanFile, CMake, tools
+from conans import ConanFile, tools
 
 
 class DecoConan(ConanFile):
 	name = "Deco"
 	version = "master"
 	license = "MIT"
+	url = "https://github.com/Enhex/Deco"
 	description = "Delimiter Collision Free Format"
 	requires = (
 		"generic_serialization/master@enhex/stable",
