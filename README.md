@@ -77,7 +77,7 @@ spouse: null
 </tr>
 </table>
 
-Since Deco is simple and doesn't have to deal with delimiter collisions it's also efficinet. In a [benchmark](https://github.com/Enhex/deco-benchmark) against JSON Deco had:
+Since Deco is simple and doesn't have to deal with delimiter collisions it's also efficient. In a [benchmark](https://github.com/Enhex/deco-benchmark) against JSON Deco had:
 - over 40% smaller file size
 - over 700% faster output serialization
 - over 2000% faster input parsing
