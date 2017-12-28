@@ -29,11 +29,11 @@ namespace deco
 			return deco::parse_entry(position);
 		}
 
-		constexpr Entry peek_entry() const {
+		constexpr Entry peek_entry() {
 			return deco::peek_entry(position);
 		}
 
-		constexpr bool peek_set_end() const {
+		constexpr bool peek_set_end() {
 			return deco::peek_set_end(position);
 		}
 	};

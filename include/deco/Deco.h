@@ -64,10 +64,17 @@ namespace deco
 	template <typename Iterator>
 	constexpr Entry parse_entry(Iterator& current)
 	{
-		Entry entry;
-
 		// expecting tabs for indentation
 		skip_whitespace(current);
+
+		return parse_entry_core(current);
+	}
+
+	// the part of the parsing after whitespace is skipped
+	template <typename Iterator>
+	constexpr Entry parse_entry_core(Iterator& current)
+	{
+		Entry entry;
 
 		// skip content begin delimiter
 		const bool content_begin_delimiter_found = [&]() {
@@ -178,16 +185,26 @@ namespace deco
 
 
 	template <typename Iterator>
-	constexpr Entry peek_entry(Iterator current)
+	constexpr Entry peek_entry(Iterator& current)
 	{
-		return parse_entry(current);
+		// can keep whitespace skipping after peeking
+		skip_whitespace(current);
+
+		// can't advance over content while peeking
+		Iterator current_copy = current;
+
+		return parse_entry_core(current_copy);
 	}
 
 
 	template <typename Iterator>
-	constexpr bool peek_set_end(Iterator current)
+	constexpr bool peek_set_end(Iterator& current)
 	{
+		// can keep whitespace skipping after peeking
 		skip_whitespace(current);
+
+		// can't advance over content while peeking
+		auto ending = current;
 
 		// must be structure delimiter followed by entry delimiter
 		if (*current == structure_delimiter &&
