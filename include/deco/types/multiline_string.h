@@ -15,6 +15,12 @@ namespace deco
 	std::enable_if_t<std::is_base_of_v<OutputStream, std::decay_t<Stream>>>
 	write(Stream& stream, const multiline_string& value)
 	{
+		// in case of an empty string
+		if (value.empty()) {
+			stream.entry(value);
+			return;
+		}
+
 		auto line_start = value.cbegin();
 		auto iter = line_start;
 
@@ -38,13 +44,15 @@ namespace deco
 	template<typename I>
 	void read(InputStream<I>& stream, multiline_string& value)
 	{
-		std::string str;
+		value.clear();
 
 		//NOTE: set-entry content should've been read already, now reading children
 		if (!stream.peek_set_end()) {
-			serialize(stream, str);
-			value += str;
+			serialize(stream, static_cast<std::string&>(value));
 		}
+
+		std::string str;
+
 		while (!stream.peek_set_end()) {
 			serialize(stream, str);
 			(value += '\n') += str;
