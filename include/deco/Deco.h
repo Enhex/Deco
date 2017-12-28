@@ -88,6 +88,13 @@ namespace deco
 		// begin content
 		const auto content_begin = current;	// inclusive
 
+		// in case of empty entry
+		if (*current++ == entry_delimiter) {
+			// end content
+			entry.content = std::string_view(&*content_begin, 0);
+			return entry;
+		}
+
 		// skip content
 		while (*current != entry_delimiter)
 			++current;
