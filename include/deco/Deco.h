@@ -60,15 +60,6 @@ namespace deco
 		Type type = entry;
 	};
 
-	// parse next entry
-	template <typename Iterator>
-	constexpr Entry parse_entry(Iterator& current)
-	{
-		// expecting tabs for indentation
-		skip_whitespace(current);
-
-		return parse_entry_core(current);
-	}
 
 	// the part of the parsing after whitespace is skipped
 	template <typename Iterator>
@@ -144,6 +135,16 @@ namespace deco
 		end_entry();
 
 		return entry;
+	}
+
+	// parse next entry
+	template <typename Iterator>
+	constexpr Entry parse_entry(Iterator& current)
+	{
+		// expecting tabs for indentation
+		skip_whitespace(current);
+
+		return parse_entry_core(current);
 	}
 
 
