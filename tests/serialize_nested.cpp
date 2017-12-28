@@ -20,7 +20,6 @@ namespace deco
 	template<typename Stream> constexpr
 	void serialize(Stream& stream, A& value) // shouldn't be const to allow reading
 	{
-		using namespace deco;
 		gs::serializer(stream,
 			begin_set("a"),
 				make_NVP("i", value.i),
@@ -42,7 +41,6 @@ namespace deco
 	template<typename Stream> constexpr
 	void serialize(Stream& stream, B& value)
 	{
-		using namespace deco;
 		gs::serializer(stream,
 			value.a,
 			make_set("v", value.v),
