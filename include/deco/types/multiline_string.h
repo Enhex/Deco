@@ -23,11 +23,13 @@ namespace deco
 				escape_content(std::string_view(&*line_start, std::distance(line_start, iter))));
 		};
 
-		for (; iter != value.cend(); ++iter) {
+		while (iter != value.cend()) {
 			if (*iter == entry_delimiter) {
 				write_line();
-				line_start += std::distance(line_start, ++iter);
+				line_start += std::distance(line_start, ++iter);	// also skipping the entry delimiter
 			}
+			else // to avoid double advancing after skipping entry delimiter
+				++iter;
 		}
 
 		write_line();
