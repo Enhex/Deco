@@ -12,7 +12,7 @@ namespace deco
 	template<typename Stream, typename... Args> constexpr
 	void read_elements(Stream&& stream, std::deque<Args...>& value)
 	{
-		while (!stream.peek_set_end())
+		while (!stream.peek_list_end())
 			serialize(stream, value.emplace_back());
 	}
 }

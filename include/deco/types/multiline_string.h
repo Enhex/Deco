@@ -46,14 +46,14 @@ namespace deco
 	{
 		value.clear();
 
-		//NOTE: set-entry content should've been read already, now reading children
-		if (!stream.peek_set_end()) {
+		//NOTE: list-entry content should've been read already, now reading children
+		if (!stream.peek_list_end()) {
 			serialize(stream, static_cast<std::string&>(value));
 		}
 
 		std::string str;
 
-		while (!stream.peek_set_end()) {
+		while (!stream.peek_list_end()) {
 			serialize(stream, str);
 			(value += '\n') += str;
 		}

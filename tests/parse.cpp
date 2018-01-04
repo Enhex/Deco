@@ -57,7 +57,7 @@ int main()
 		": structure : delimiter : and ' content ' delimiter ' as : content ' without : escaping\n"
 		"':\n"
 		"	anonymous\n"
-		"	set\n"
+		"	list\n"
 		":\n"
 		"no:\n"
 		"need:\n"

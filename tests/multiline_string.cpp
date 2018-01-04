@@ -1,4 +1,4 @@
-#include <deco/set.h>
+#include <deco/list.h>
 #include <deco/types/multiline_string.h>
 
 #include <gs/serializer.h>
@@ -16,8 +16,8 @@ int main()
 	{
 		deco::OutputStream_indent stream;
 		
-		deco::serialize(stream, deco::make_set("multiline_string", ml_str_val));
-		deco::serialize(stream, deco::make_set("empty", ml_str_empty));
+		deco::serialize(stream, deco::make_list("multiline_string", ml_str_val));
+		deco::serialize(stream, deco::make_list("empty", ml_str_empty));
 
 		std::ofstream os("out.deco", std::ios::binary);
 		os << stream.str;
@@ -35,7 +35,7 @@ int main()
 		auto stream = deco::make_InputStream(file_str.cbegin());
 
 		deco::multiline_string ml_str;
-		deco::serialize(stream, deco::make_set("multiline_string", ml_str)); assert(ml_str == ml_str_val);
-		deco::serialize(stream, deco::make_set("empty", ml_str)); assert(ml_str == ml_str_empty);
+		deco::serialize(stream, deco::make_list("multiline_string", ml_str)); assert(ml_str == ml_str_val);
+		deco::serialize(stream, deco::make_list("empty", ml_str)); assert(ml_str == ml_str_empty);
 	}
 }

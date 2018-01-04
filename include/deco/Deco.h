@@ -51,9 +51,9 @@ namespace deco
 	struct Entry
 	{
 		enum Type : uint_fast8_t {
-			entry,	// non-set entry
-			set,	// set entry
-			set_end
+			entry,	// non-list entry
+			list,	// list entry
+			list_end
 		};
 
 		Content content;
@@ -108,15 +108,15 @@ namespace deco
 		{
 			content_end = current - 1;
 
-			// check if set end entry
+			// check if list end entry
 			if (!content_begin_delimiter_found &&
 				content_end == content_begin/*check if content is empty*/)
-				entry.type = Entry::set_end;
+				entry.type = Entry::list_end;
 
-			// begin set
+			// begin list
 			else
 			{
-				entry.type = Entry::set;
+				entry.type = Entry::list;
 				end_entry();
 				return entry;
 			}
@@ -162,18 +162,18 @@ namespace deco
 		case Entry::entry:
 			return { entry.content, {} };
 
-		case Entry::set:
+		case Entry::list:
 		{
 			auto object = EntryObject{ entry.content, {} };
 
-			// Keep consuming entries until reaching the set end. Child sets will consume their own ends, so current set won't run into their ends.
-			for(auto child_entry = parse_entry(current); child_entry.type != Entry::set_end; child_entry = parse_entry(current))
+			// Keep consuming entries until reaching the list end. Child lists will consume their own ends, so current list won't run into their ends.
+			for(auto child_entry = parse_entry(current); child_entry.type != Entry::list_end; child_entry = parse_entry(current))
 				object.entries.emplace_back(parse_object(current, child_entry));
 			
 			return object;
 		}
-		case Entry::set_end:
-			throw std::invalid_argument("Unexpected set end");
+		case Entry::list_end:
+			throw std::invalid_argument("Unexpected list end");
 		}
 
 		throw std::invalid_argument("Invalid entry type");
@@ -206,7 +206,7 @@ namespace deco
 
 
 	template <typename Iterator>
-	constexpr bool peek_set_end(Iterator& current)
+	constexpr bool peek_list_end(Iterator& current)
 	{
 		// can keep whitespace skipping after peeking
 		skip_whitespace(current);

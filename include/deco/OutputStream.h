@@ -27,21 +27,21 @@ namespace deco
 			(str += content) += '\n';
 		}
 
-		void begin_set(std::string&& content) {
+		void begin_list(std::string&& content) {
 			entry(content += ':');
 		}
-		void begin_set(const std::string_view& content) {
-			begin_set(std::string(content));
+		void begin_list(const std::string_view& content) {
+			begin_list(std::string(content));
 		}
-		void begin_set(const char* content) {
-			begin_set(std::string(content));
+		void begin_list(const char* content) {
+			begin_list(std::string(content));
 		}
 
-		void begin_anonymous_set() {
+		void begin_anonymous_list() {
 			entry("':");
 		}
 
-		void end_set() {
+		void end_list() {
 			entry(":");
 		}
 	};
@@ -57,23 +57,23 @@ namespace deco
 			OutputStream::entry(content);
 		}
 
-		void begin_set(std::string&& content) {
+		void begin_list(std::string&& content) {
 			entry(content += ':');
 			++indent_level;
 		}
-		void begin_set(const std::string_view& content) {
-			begin_set(std::string(content));	
+		void begin_list(const std::string_view& content) {
+			begin_list(std::string(content));	
 		}
-		void begin_set(const char* content) {
-			begin_set(std::string(content));
+		void begin_list(const char* content) {
+			begin_list(std::string(content));
 		}
 
-		void begin_anonymous_set() {
+		void begin_anonymous_list() {
 			entry("':");
 			++indent_level;
 		}
 
-		void end_set() {
+		void end_list() {
 			--indent_level;
 			entry(":");
 		}

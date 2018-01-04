@@ -20,7 +20,7 @@ namespace deco
 	{
 		typename std::array<T, N>::size_type index = 0;
 
-		while (!stream.peek_set_end())
+		while (!stream.peek_list_end())
 			serialize(stream, value[index++]);
 	}
 }

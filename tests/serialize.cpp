@@ -1,5 +1,5 @@
 #include <deco/NVP.h>
-#include <deco/set.h>
+#include <deco/list.h>
 #include <deco/types/arithmetic.h>
 #include <deco/types/array.h>
 #include <deco/types/deque.h>
@@ -106,13 +106,13 @@ int main()
 			str_structure,
 			str_structure_con_end);
 
-		serialize(deco::make_set("set", str_val));
+		serialize(deco::make_list("list", str_val));
 
 		serialize(deco::make_NVP("nvp", str_val));
 
-		serialize(deco::make_set("multiline_string", ml_str_val));
+		serialize(deco::make_list("multiline_string", ml_str_val));
 
-		stream.begin_set("integral");
+		stream.begin_list("integral");
 			write_type<char>(stream);
 			write_type<unsigned char>(stream);
 			write_type<short>(stream);
@@ -123,27 +123,27 @@ int main()
 			write_type<unsigned long>(stream);
 			write_type<long long>(stream);
 			write_type<unsigned long long>(stream);
-		stream.end_set();
+		stream.end_list();
 		
-		stream.begin_set("floating point");
+		stream.begin_list("floating point");
 			write_type<float>(stream);
 			write_type<double>(stream);
 			write_type<long double>(stream);
-		stream.end_set();
+		stream.end_list();
 
-		serialize(deco::make_set("std::array", arr_val));
-		serialize(deco::make_set("std::vector", v_val));
-		serialize(deco::make_set("std::set", set_val));
-		serialize(deco::make_set("std::deque", deq_val));
-		serialize(deco::make_set("std::forward_list", flist_val));
-		serialize(deco::make_set("std::list", list_val));
-		serialize(deco::make_set("std::unordered_set", uset_val));
-		serialize(deco::make_set("std::multiset", mset_val));
-		serialize(deco::make_set("std::unordered_multiset", umset_val));
-		serialize(deco::make_set("std::map", map_val));
-		serialize(deco::make_set("std::multimap", mmap_val));
-		serialize(deco::make_set("std::unordered_map", umap_val));
-		serialize(deco::make_set("std::unordered_multimap", ummap_val));
+		serialize(deco::make_list("std::array", arr_val));
+		serialize(deco::make_list("std::vector", v_val));
+		serialize(deco::make_list("std::set", set_val));
+		serialize(deco::make_list("std::deque", deq_val));
+		serialize(deco::make_list("std::forward_list", flist_val));
+		serialize(deco::make_list("std::list", list_val));
+		serialize(deco::make_list("std::unordered_set", uset_val));
+		serialize(deco::make_list("std::multiset", mset_val));
+		serialize(deco::make_list("std::unordered_multiset", umset_val));
+		serialize(deco::make_list("std::map", map_val));
+		serialize(deco::make_list("std::multimap", mmap_val));
+		serialize(deco::make_list("std::unordered_map", umap_val));
+		serialize(deco::make_list("std::unordered_multimap", ummap_val));
 
 		std::ofstream os("out.deco", std::ios::binary);
 		os << stream.str;
@@ -175,14 +175,14 @@ int main()
 		serialize(str); assert(str == str_structure);
 		serialize(str); assert(str == str_structure_con_end);
 
-		serialize(deco::make_set("set", str)); assert(str == str_val);
+		serialize(deco::make_list("list", str)); assert(str == str_val);
 		
 		serialize(deco::make_NVP("nvp", str)); assert(str == str_val);
 
 		deco::multiline_string ml_str; // dummy
-		serialize(deco::make_set("multiline_string", ml_str)); assert(ml_str == ml_str_val);
+		serialize(deco::make_list("multiline_string", ml_str)); assert(ml_str == ml_str_val);
 
-		serialize(str); assert(str == "integral");			// set name
+		serialize(str); assert(str == "integral");			// list name
 			read_type<char>(stream);
 			read_type<unsigned char>(stream);
 			read_type<short>(stream);
@@ -193,39 +193,39 @@ int main()
 			read_type<unsigned long>(stream);
 			read_type<long long>(stream);
 			read_type<unsigned long long>(stream);
-		stream.parse_entry();		// set end
+		stream.parse_entry();		// list end
 
-		serialize(str); assert(str == "floating point");	// set name
+		serialize(str); assert(str == "floating point");	// list name
 			read_type<float>(stream);
 			read_type<double>(stream);
 			read_type<long double>(stream);
-		stream.parse_entry();		// set end
+		stream.parse_entry();		// list end
 
 		std::array<int, 5> arr;
-		serialize(deco::make_set("std::array", arr)); assert(arr == arr_val);
+		serialize(deco::make_list("std::array", arr)); assert(arr == arr_val);
 		std::vector<int> v;
-		serialize(deco::make_set("std::vector", v)); assert(v == v_val);
+		serialize(deco::make_list("std::vector", v)); assert(v == v_val);
 		std::set<int> set;
-		serialize(deco::make_set("std::set", set)); assert(set == set_val);
+		serialize(deco::make_list("std::set", set)); assert(set == set_val);
 		std::deque<int> deq;
-		serialize(deco::make_set("std::deque", deq)); assert(deq == deq_val);
+		serialize(deco::make_list("std::deque", deq)); assert(deq == deq_val);
 		std::forward_list<int> flist;
-		serialize(deco::make_set("std::forward_list", flist)); assert(flist == flist_val);
+		serialize(deco::make_list("std::forward_list", flist)); assert(flist == flist_val);
 		std::list<int> li;
-		serialize(deco::make_set("std::list", li)); assert(li == list_val);
+		serialize(deco::make_list("std::list", li)); assert(li == list_val);
 		std::unordered_set<int> uset;
-		serialize(deco::make_set("std::unordered_set", uset)); assert(uset == uset_val);
+		serialize(deco::make_list("std::unordered_set", uset)); assert(uset == uset_val);
 		std::multiset<int> mset;
-		serialize(deco::make_set("std::multiset", mset)); assert(mset == mset_val);
+		serialize(deco::make_list("std::multiset", mset)); assert(mset == mset_val);
 		std::unordered_multiset<int> umset;
-		serialize(deco::make_set("std::unordered_multiset", umset)); assert(umset == umset_val);
+		serialize(deco::make_list("std::unordered_multiset", umset)); assert(umset == umset_val);
 		std::map<int, int> map_;
-		serialize(deco::make_set("std::map", map_)); assert(map_ == map_val);
+		serialize(deco::make_list("std::map", map_)); assert(map_ == map_val);
 		std::multimap<int, int> mmap;
-		serialize(deco::make_set("std::multimap", mmap)); assert(mmap == mmap_val);
+		serialize(deco::make_list("std::multimap", mmap)); assert(mmap == mmap_val);
 		std::unordered_map<int, int> umap;
-		serialize(deco::make_set("std::unordered_map", umap)); assert(umap == umap_val);
+		serialize(deco::make_list("std::unordered_map", umap)); assert(umap == umap_val);
 		std::unordered_multimap<int, int> ummap;
-		serialize(deco::make_set("std::unordered_multimap", ummap)); assert(ummap == ummap_val);
+		serialize(deco::make_list("std::unordered_multimap", ummap)); assert(ummap == ummap_val);
 	}
 }

@@ -14,7 +14,7 @@ namespace deco
 	{
 		typename std::multiset<Args...>::value_type input;
 
-		while (!stream.peek_set_end()) {
+		while (!stream.peek_list_end()) {
 			serialize(stream, input);
 			value.emplace(input);
 		}

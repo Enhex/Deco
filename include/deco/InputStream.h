@@ -33,8 +33,8 @@ namespace deco
 			return deco::peek_entry(position);
 		}
 
-		constexpr bool peek_set_end() {
-			return deco::peek_set_end(position);
+		constexpr bool peek_list_end() {
+			return deco::peek_list_end(position);
 		}
 	};
 

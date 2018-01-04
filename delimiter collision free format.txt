@@ -60,29 +60,29 @@ Content end delimiter allows having the content end with structure delimiter cha
 Ignored whitespace can be used to indent/format the document.
 
 
-set structure
+list structure
 -------------
-A set is a special type of entry used to group entries.
-Sets can be used to describe things like hierarchies, objects, arrays, multi-line strings, name value pairs, and so on.
+A list is a special type of entry used to group entries.
+Lists can be used to describe things like hierarchies, objects, arrays, multi-line strings, name value pairs, and so on.
 
-A set begins when an entry ends with a structure delimiter. The content of the set entry is its name.
+A list begins when an entry ends with a structure delimiter. The content of the list entry is its name.
 
-A set ends when an entry only contains a structure delimiter followed by entry delimiter. set ending entries are only used for set structuring and aren't part of the document's content.
+A list ends when an entry only contains a structure delimiter followed by entry delimiter. List ending entries are only used for list structuring and aren't part of the document's content.
 
-example of a set:
-c:				content = c , set begin
+example of a list:
+c:				content = c , list begin
 	c			child entry
-	c:			child set entry
+	c:			child list entry
 		c		child entry
-	:			set end
-:				set end
+	:			list end
+:				list end
 
-Anonymous sets, that is sets with no name, can be expressed by using content begin delimiter followed by structure delimiter.
-Since for an entry to be set end entry it must only contain a structure delimiter, such entry is a set begin.
+Anonymous lists, that is lists with no name, can be expressed by using content begin delimiter followed by structure delimiter.
+Since for an entry to be list end entry it must only contain a structure delimiter, such entry is a list begin.
 Since it has no content (between the content begin begin delimiter and structure delimiter), it has no name.
 For example:
-':				anonymous set begin
-:				set end
+':				anonymous list begin
+:				list end
 
 
 document structure

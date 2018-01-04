@@ -1,4 +1,4 @@
-#include <deco/set.h>
+#include <deco/list.h>
 #include <deco/types/map.h>
 #include <deco/types/singleline_string.h>
 
@@ -20,7 +20,7 @@ int main()
 	{
 		deco::OutputStream_indent stream;
 
-		deco::serialize(stream, deco::make_set("singleline_string", val));
+		deco::serialize(stream, deco::make_list("singleline_string", val));
 
 		std::ofstream os("out.deco", std::ios::binary);
 		os << stream.str;
@@ -38,6 +38,6 @@ int main()
 		auto stream = deco::make_InputStream(file_str.cbegin());
 
 		std::map<deco::singleline_string, deco::singleline_string> in_val;
-		deco::serialize(stream, deco::make_set(in_val)); assert(in_val == val);
+		deco::serialize(stream, deco::make_list(in_val)); assert(in_val == val);
 	}
 }

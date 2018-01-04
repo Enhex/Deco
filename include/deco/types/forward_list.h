@@ -18,7 +18,7 @@ namespace deco
 			++before_end;
 
 		// read elements into the back of the list
-		while (!stream.peek_set_end()) {
+		while (!stream.peek_list_end()) {
 			before_end = value.emplace_after(before_end);
 			serialize(stream, *before_end);
 		}

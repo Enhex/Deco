@@ -59,17 +59,17 @@ If you need different behavior on read and on write, you can instead provide `de
 See `deco/types/string.h` for example.
 
 
-## Set entry serialization
+## List entry serialization
 
-You can serialize a type inside a set by using `deco::make_set`.
+You can serialize a type inside a list by using `deco::make_list`.
 For its name parameter it can accept:
 - `std::string_view` or string literal, which it will only use to write.
 - reference to a `std::string` variable, which it will also read the name into.
-- no name argument at all, to create anonymous set.
+- no name argument at all, to create anonymous list.
 
 For example:
 ```C++
-#include <deco/set.h>
+#include <deco/list.h>
 #include <deco/types/integral.h>
 #include <gs/serializer.h>
 
@@ -84,18 +84,18 @@ namespace deco
 	void serialize(Stream& stream, A& value)
 	{
 		gs::serializer(stream,
-			deco::make_set("x", value.x),	// write
-			deco::make_set(name, value.y),	// write and read
-			deco::make_set(value.z));	// anonymous set
+			deco::make_list("x", value.x),	// write
+			deco::make_list(name, value.y),	// write and read
+			deco::make_list(value.z));	// anonymous list
 	}
 }
 ```
 
-If you want to serialize several variables into a set you can use the `deco::begin_set` and `deco::end_set` types.
-`deco::begin_set` accepts the same kind of name parameters as `deco::make_set`.
+If you want to serialize several variables into a list you can use the `deco::begin_list` and `deco::end_list` types.
+`deco::begin_list` accepts the same kind of name parameters as `deco::make_list`.
 
 ```C++
-#include <deco/set.h>
+#include <deco/list.h>
 #include <deco/types/integral.h>
 #include <gs/serializer.h>
 
@@ -109,11 +109,11 @@ namespace deco
 	void serialize(Stream& stream, A& value)
 	{
 		gs::serializer(stream,
-			begin_set("A"),
+			begin_list("A"),
 				value.x,
 				value.y,
 				value.z,
-			end_set);
+			end_list);
 	}
 }
 ```
@@ -122,11 +122,11 @@ namespace deco
 ## Containers
 
 Serialization for C++'s standard containers is provided with the library.
-Containers must be serialized as sets using `deco::make_set`, so they can know which entries are their elements.
+Containers must be serialized as lists using `deco::make_list`, so they can know which entries are their elements.
 
 For example:
 ```C++
-#include <deco/set.h>
+#include <deco/list.h>
 #include <deco/types/vector.h>
 
 int main()
@@ -135,7 +135,7 @@ int main()
 
 	// ...
 
-	deco::serialize(stream, deco::make_set("vector", vec));
+	deco::serialize(stream, deco::make_list("vector", vec));
 
 	// ...
 }
@@ -145,7 +145,7 @@ int main()
 ## Name Value Pair
 
 You can serialize a name value pair which are separated by a `:` into a single line using `deco::make_NVP`.
-`deco::make_NVP` accepts the same kind of name parameters as `deco::make_set`.
+`deco::make_NVP` accepts the same kind of name parameters as `deco::make_list`.
 
 When using NVP:
 
@@ -181,7 +181,7 @@ Header: `deco/types/unescaped_string.h`
 
 #### Multi-line string
 
-Multi-line string can simply be described as a set of entries where each entry is a single line.
+Multi-line string can simply be described as a list of entries where each entry is a single line.
 Since newline is used as the entry delimiter there's no need to explicitly use it since text editors will already display each entry in a new line.
 
 For example:
@@ -195,7 +195,7 @@ string:
 
 `deco::multiline_string`, strong type of `std::string`, is provided and it will automatically break down its content into seprate entries and put them back together into a single string when serialized.
 
-It needs to be serialized as a set to group its entries, using `deco::make_set`.
+It needs to be serialized as a list to group its entries, using `deco::make_list`.
 
 Header: `deco/types/multiline_string.h`
 
@@ -222,5 +222,5 @@ Keep in mind that the Deco parser already exclude delimiters from the entry's co
 `deco::is_single_entry` type trait is used for types that can be serialized as a single entry, that means their string value must not contain entry delimiter.
 It's defined in `deco/traits.h`.
 
-`deco::is_single_entry` is used by key value containers such as `std::map` to know if the key type can be serialized as a single entry, so the key can be a set entry and the value its child, instead of serializing each in a separate set (in case the type is serialized as several entries).
+`deco::is_single_entry` is used by key value containers such as `std::map` to know if the key type can be serialized as a single entry, so the key can be a list entry and the value its child, instead of serializing each in a separate list (in case the type is serialized as several entries).
 if you want to make a new type serializable as a single entry key you need to provide an overload for `deco::to_string`, which is used to convert the key into a string.

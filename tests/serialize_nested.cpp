@@ -1,5 +1,5 @@
 #include <deco/NVP.h>
-#include <deco/set.h>
+#include <deco/list.h>
 #include <deco/types/arithmetic.h>
 #include <deco/types/vector.h>
 
@@ -21,10 +21,10 @@ namespace deco
 	void serialize(Stream& stream, A& value) // shouldn't be const to allow reading
 	{
 		gs::serializer(stream,
-			begin_set("a"),
+			begin_list("a"),
 				make_NVP("i", value.i),
 				make_NVP("s", value.s),
-			end_set);
+			end_list);
 	}
 }
 
@@ -43,8 +43,8 @@ namespace deco
 	{
 		gs::serializer(stream,
 			value.a,
-			make_set("v", value.v),
-			make_set("va", value.va),
+			make_list("v", value.v),
+			make_list("va", value.va),
 			make_NVP("f", value.f));
 	}
 }

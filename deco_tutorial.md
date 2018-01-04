@@ -34,36 +34,36 @@ For example:
 The content of the entry is <code>&nbsp;&nbsp;&nbsp;&nbsp;a b c</code>.
 
 
-#### Set Entry
+#### List Entry
 
-A set entry can contain child entries, including other set entries.
-A set entry is an entry that ends with the `structure delimiter` before the `entry delimiter`.
-A set entry's content is called the set's name.
+A list entry can contain child entries, including other list entries.
+A list entry is an entry that ends with the `structure delimiter` before the `entry delimiter`.
+A list entry's content is called the list's name.
 
-A set end entry is an entry that only contains, after skipping whitespace, a `structure delimiter` before an `entry delimiter`.
+A list end entry is an entry that only contains, after skipping whitespace, a `structure delimiter` before an `entry delimiter`.
 
 
 ```
 name:
     child entry
-    child set entry:
+    child list entry:
         child entry
     :
 :
 ```
 
-The content of the root set entry is `name`.
+The content of the root list entry is `name`.
 
 To end a regular entry with a `structure delimiter` character, the `content delimiter` can be used:
 ```
-not a set:'
+not a list:'
 ```
-The content of the entry is `not a set:`.
+The content of the entry is `not a list:`.
 
-##### Anonymous Set Entry
+##### Anonymous List Entry
 
-A set entry can be created with empty content by using a `content delimiter` before the `structure delimiter`.
-The `content delimiter` isn't part of the content, and it prevents the entry from being interpreted as a set end.
+A list entry can be created with empty content by using a `content delimiter` before the `structure delimiter`.
+The `content delimiter` isn't part of the content, and it prevents the entry from being interpreted as a list end.
 
 ```
 ':

@@ -1,24 +1,24 @@
 #ifndef deco_std_map_h
 #define deco_std_map_h
 
-#include "../set_container.h"
+#include "../list_container.h"
 #include <map>
 
 namespace deco
 {
 	template<typename... Args>
-	struct is_set_container<std::map<Args...>> : std::true_type {};
+	struct is_list_container<std::map<Args...>> : std::true_type {};
 
 	template<typename Stream, typename... Args> constexpr
-	void write_element_sets(Stream& stream, const std::map<Args...>& value)
+	void write_element_lists(Stream& stream, const std::map<Args...>& value)
 	{
-		write_key_value_sets(stream, value);
+		write_key_value_lists(stream, value);
 	}
 
 	template<typename Stream, typename... Args> constexpr
-	void read_element_sets(Stream& stream, std::map<Args...>& value)
+	void read_element_lists(Stream& stream, std::map<Args...>& value)
 	{
-		read_key_value_sets(stream, value);
+		read_key_value_lists(stream, value);
 	}
 }
 

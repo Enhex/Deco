@@ -1,93 +1,93 @@
-#ifndef deco_set_container_h
-#define deco_set_container_h
+#ifndef deco_list_container_h
+#define deco_list_container_h
 
 #include "InputStream.h"
 #include "OutputStream.h"
 
 namespace deco
 {
-	/* set container:
-	each element is serialized as a set entry
+	/* list container:
+	each element is serialized as a list entry
 	*/
 
-	// set container trait
+	// list container trait
 	template<typename T>
-	struct is_set_container : std::false_type {};
+	struct is_list_container : std::false_type {};
 
 	template<typename T>
-	constexpr bool is_set_container_v = is_set_container<std::decay_t<T>>::value;
+	constexpr bool is_list_container_v = is_list_container<std::decay_t<T>>::value;
 
 	// template for serializing entry containers
 	template<typename Stream, typename T> constexpr
 	std::enable_if_t<
 		std::is_base_of_v<OutputStream, std::decay_t<Stream>> &&
-		is_set_container_v<T>
+		is_list_container_v<T>
 	>
 		write(Stream& stream, T& value)
 	{
-		write_element_sets(stream, value);
+		write_element_lists(stream, value);
 	}
 
 
 	template<typename I, typename T> constexpr
-	std::enable_if_t<is_set_container_v<T>>
+	std::enable_if_t<is_list_container_v<T>>
 	read(InputStream<I>& stream, T& value)
 	{
-		read_element_sets(stream, value);
+		read_element_lists(stream, value);
 	}
 
 
-	// write the elements of a map type as sets.
-	// If the key type can be serialized as a single entry, write it as a set-entry with the value serialized into it
+	// write the elements of a map type as lists.
+	// If the key type can be serialized as a single entry, write it as a list-entry with the value serialized into it
 	template<typename Stream, typename Map> constexpr
-	void write_key_value_sets(Stream& stream, const Map& value)
+	void write_key_value_lists(Stream& stream, const Map& value)
 	{
 		for (auto& e : value)
 		{
 			if constexpr(is_single_entry_v<typename Map::key_type>)
 			{
 				if constexpr(std::is_base_of_v<std::string, std::decay_t<decltype(e.first)>>)
-					stream.begin_set(e.first);
+					stream.begin_list(e.first);
 				else
-					stream.begin_set(to_string(e.first));
+					stream.begin_list(to_string(e.first));
 				serialize(stream, e.second);
-				stream.end_set();
+				stream.end_list();
 			}
 			else
 			{
 				// key may require more than a single entry to be serialized
-				stream.begin_set("key");
+				stream.begin_list("key");
 				serialize(stream, e.first);
-				stream.end_set();
-				stream.begin_set("value");
+				stream.end_list();
+				stream.begin_list("value");
 				serialize(stream, e.second);
-				stream.end_set();
+				stream.end_list();
 			}
 		}
 	}
 
 	template<typename Stream, typename Map> constexpr
-	void read_key_value_sets(Stream& stream, Map& value)
+	void read_key_value_lists(Stream& stream, Map& value)
 	{
 		typename Map::key_type key_input;
 		typename Map::mapped_type mapped_input;
 
-		while (!stream.peek_set_end()) {
+		while (!stream.peek_list_end()) {
 			if constexpr(is_single_entry_v<typename Map::key_type>)
 			{
-				serialize(stream, key_input);	// read set name
+				serialize(stream, key_input);	// read list name
 				serialize(stream, mapped_input);// read value
-				stream.parse_entry();			// skip set end
+				stream.parse_entry();			// skip list end
 			}
 			else
 			{
-				serialize(stream, skip);		// skip set name
+				serialize(stream, skip);		// skip list name
 				serialize(stream, key_input);	// read value
-				stream.parse_entry();			// skip set end
+				stream.parse_entry();			// skip list end
 
-				serialize(stream, skip);		// skip set name
+				serialize(stream, skip);		// skip list name
 				serialize(stream, mapped_input);// read value
-				stream.parse_entry();			// skip set end
+				stream.parse_entry();			// skip list end
 			}
 
 			value.emplace(std::make_pair(key_input, mapped_input));

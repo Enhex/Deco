@@ -1,4 +1,4 @@
-#include <deco/set.h>
+#include <deco/list.h>
 #include <deco/types/forward_list.h>
 
 #include <gs/serializer.h>
@@ -15,7 +15,7 @@ int main()
 	{
 		deco::OutputStream_indent stream;
 
-		deco::serialize(stream, deco::make_set("std::forward_list", val));
+		deco::serialize(stream, deco::make_list("std::forward_list", val));
 
 		std::ofstream os("out.deco", std::ios::binary);
 		os << stream.str;
@@ -33,6 +33,6 @@ int main()
 		auto stream = deco::make_InputStream(file_str.cbegin());
 
 		std::forward_list<std::string> in_val;
-		deco::serialize(stream, deco::make_set("std::forward_list", in_val)); assert(in_val == val);
+		deco::serialize(stream, deco::make_list("std::forward_list", in_val)); assert(in_val == val);
 	}
 }
