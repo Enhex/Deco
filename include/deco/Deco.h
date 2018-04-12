@@ -25,7 +25,7 @@ namespace deco
 
 	constexpr auto make_whitespace_jump_table() noexcept
 	{
-		std::array<unsigned char, std::numeric_limits<unsigned char>::max()> table{ 0 };
+		std::array<unsigned char, std::numeric_limits<unsigned char>::max() + 1> table{ 0 };
 		table['\t'] = 1;
 		table[' '] = 1;
 		return table;
