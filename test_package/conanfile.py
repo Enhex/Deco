@@ -1,5 +1,7 @@
-from conans import ConanFile, CMake
 import os
+
+from conans import ConanFile, CMake, tools
+
 
 class DecoTestConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
@@ -7,8 +9,9 @@ class DecoTestConan(ConanFile):
 
     def build(self):
         cmake = CMake(self)
-        # Current dir is "test_package/build/<build_id>" and CMakeLists.txt is in "test_package"
-        cmake.configure(source_dir=self.conanfile_directory, build_dir="./")
+        # Current dir is "test_package/build/<build_id>" and CMakeLists.txt is
+        # in "test_package"
+        cmake.configure()
         cmake.build()
 
     def imports(self):
@@ -17,5 +20,6 @@ class DecoTestConan(ConanFile):
         self.copy('*.so*', dst='bin', src='lib')
 
     def test(self):
-        os.chdir("bin")
-        self.run(".%sexample" % os.sep)
+        if not tools.cross_building(self.settings):
+            os.chdir("bin")
+            self.run(".%sexample" % os.sep)

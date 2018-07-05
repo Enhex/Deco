@@ -1,1 +1,1 @@
-conan create enhex/stable
+conan create . enhex/stable
