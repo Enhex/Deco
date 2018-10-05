@@ -2,7 +2,7 @@
 #define deco_std_unordered_map_h
 
 #include "../list_container.h"
-#include <map>
+#include <unordered_map>
 
 namespace deco
 {
