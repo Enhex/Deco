@@ -14,6 +14,13 @@ namespace deco
 		write_elements(stream, value);
 	}
 
+	template<typename Stream, typename T, std::size_t N> constexpr
+		std::enable_if_t< std::is_base_of_v<OutputStream, std::decay_t<Stream>> >
+		write(Stream& stream, std::array<T, N>& value)
+	{
+		write(stream, const_cast<std::array<T, N> const&>(value));
+	}
+
 
 	template<typename I, typename T, std::size_t N> constexpr
 	void read(InputStream<I>& stream, std::array<T, N>& value)

@@ -25,7 +25,7 @@ namespace deco
 	>
 		write(Stream& stream, T& value)
 	{
-		write_element_lists(stream, value);
+		write_element_lists(stream, const_cast<std::remove_const_t<T>&>(value));
 	}
 
 
@@ -40,7 +40,7 @@ namespace deco
 	// write the elements of a map type as lists.
 	// If the key type can be serialized as a single entry, write it as a list-entry with the value serialized into it
 	template<typename Stream, typename Map> constexpr
-	void write_key_value_lists(Stream& stream, const Map& value)
+	void write_key_value_lists(Stream& stream, Map& value)
 	{
 		for (auto& e : value)
 		{

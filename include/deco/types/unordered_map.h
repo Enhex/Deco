@@ -10,7 +10,7 @@ namespace deco
 	struct is_list_container<std::unordered_map<Args...>> : std::true_type {};
 
 	template<typename Stream, typename... Args> constexpr
-	void write_element_lists(Stream& stream, const std::unordered_map<Args...>& value)
+	void write_element_lists(Stream& stream, std::unordered_map<Args...>& value)
 	{
 		write_key_value_lists(stream, value);
 	}
