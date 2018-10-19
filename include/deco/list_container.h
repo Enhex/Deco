@@ -69,10 +69,11 @@ namespace deco
 	template<typename Stream, typename Map> constexpr
 	void read_key_value_lists(Stream& stream, Map& value)
 	{
-		typename Map::key_type key_input;
-		typename Map::mapped_type mapped_input;
+		while (!stream.peek_list_end())
+		{
+			typename Map::key_type key_input;
+			typename Map::mapped_type mapped_input;
 
-		while (!stream.peek_list_end()) {
 			if constexpr(is_single_entry_v<typename Map::key_type>)
 			{
 				serialize(stream, key_input);	// read list name
