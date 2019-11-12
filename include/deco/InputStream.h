@@ -3,12 +3,6 @@
 
 #pragma warning(push, 0) // disable external warnings
 #include <boost/spirit/home/x3.hpp>
-
-// used to fix boost spirit karma signbit error bug
-namespace boost::spirit::detail {
-	using boost::spirit::x3::signbit;
-}
-
 #include <boost/spirit/home/x3/numeric.hpp>
 #pragma warning(pop)
 
