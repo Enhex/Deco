@@ -1,4 +1,5 @@
 #include <deco/list.h>
+#include <deco/file.h>
 #include <deco/types/array.h>
 
 #include <gs/serializer.h>
@@ -13,24 +14,18 @@ int main()
 
 	// write
 	{
-		deco::OutputStream_indent stream;
-		
-		deco::serialize(stream, deco::make_list("std::array", val));
+		deco::write_file file("out.deco");
+		auto& stream = file.stream;
 
-		std::ofstream os("out.deco", std::ios::binary);
-		os << stream.str;
+		deco::serialize(stream, deco::make_list("std::array", val));
 	}
 
 	// read
 	{
-		auto file = std::ifstream("out.deco", std::ios::binary);
-		std::string file_str{
-			std::istreambuf_iterator<char>(file),
-			std::istreambuf_iterator<char>() };
+		auto file = deco::read_file("out.deco");
+		auto& stream = file.stream;
 
-		std::cout << file_str;
-
-		auto stream = deco::make_InputStream(file_str.cbegin());
+		std::cout << file.str;
 
 		std::array<std::string, 5> in_val;
 		deco::serialize(stream, deco::make_list("std::array", in_val)); assert(in_val == val);

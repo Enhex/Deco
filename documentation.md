@@ -31,26 +31,16 @@ int main()
 
 	// write
 	{
-		deco::OutputStream_indent stream;
-
-		deco::serialize(stream, a);
-
-		std::ofstream os("out.deco", std::ios::binary);
-		os << stream.str;
+		deco::write_file file("out.deco");
+		deco::serialize(file.stream, a);
 	}
 
 	a = {0,0,0};	// change values
 
 	// read
 	{
-		auto file = std::ifstream("out.deco", std::ios::binary);
-		std::string file_str{
-			std::istreambuf_iterator<char>(file),
-			std::istreambuf_iterator<char>() };
-
-		auto stream = deco::make_InputStream(file_str.cbegin());
-
-		deco::serialize(stream, a);
+		auto file = deco::read_file("out.deco");
+		deco::serialize(file.stream, a);
 	}
 }
 ```

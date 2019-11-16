@@ -17,6 +17,8 @@ namespace deco
 	{
 		InputStream(Iterator begin) noexcept : position(begin) {}
 
+		InputStream() = default;
+
 		Iterator position;
 
 		constexpr Entry parse_entry() {
