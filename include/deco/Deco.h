@@ -6,6 +6,7 @@
 #include <string_view>
 #include <strong_type.h>
 #include <vector>
+#include <stdexcept>
 
 namespace deco
 {
