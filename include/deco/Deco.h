@@ -216,9 +216,12 @@ namespace deco
 		auto ending = current;
 
 		// must be structure delimiter followed by entry delimiter
-		if (*current == structure_delimiter &&
-			*(++current) == entry_delimiter)
-			return true;
+		if (*current == structure_delimiter) {
+			if(*(++current) == entry_delimiter) {
+				current = ending; // restore original position
+				return true;
+			}
+		}
 
 		return false;
 	}
