@@ -2,4 +2,4 @@
 Deco/master@enhex/stable
 
 [generators]
-cmake
+premake
