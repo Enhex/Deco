@@ -29,7 +29,7 @@ namespace deco
 	{
 		stream.entry(to_string(value));
 	}
-	
+
 	template<typename I, typename T> constexpr
 	std::enable_if_t<std::is_floating_point_v<T>>
 		read(InputStream<I>& stream, T& value)

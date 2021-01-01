@@ -57,11 +57,11 @@ namespace deco
 	{
 		// skip whitespace
 		skip_whitespace(stream.position);
-		
+
 		// skip content begin delimiter
 		if (*stream.position == content_delimiter)
 			++stream.position;
-				
+
 		// read name
 		const auto name_begin = stream.position;
 

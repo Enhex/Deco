@@ -16,7 +16,7 @@ int main()
 	// write
 	{
 		deco::OutputStream_indent stream;
-		
+
 		gs::serializer(stream,
 			str_val,
 			str_space,

@@ -57,7 +57,7 @@ namespace deco
 			++indent_level;
 		}
 		void begin_list(const std::string_view& content) {
-			begin_list(std::string(content));	
+			begin_list(std::string(content));
 		}
 		void begin_list(const char* content) {
 			begin_list(std::string(content));

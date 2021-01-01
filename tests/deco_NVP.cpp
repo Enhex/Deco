@@ -25,12 +25,12 @@ int main()
 	// write file
 	{
 		deco::OutputStream_indent stream;
-		
+
 		gs::serializer(stream, deco::make_NVP("ignored name", i));
 		gs::serializer(stream, deco::make_NVP(str_val, i));
 
 		deco::serialize(stream, deco::make_NVP("ignored name", "value"));
-		
+
 		deco::serialize(stream, deco::make_NVP(str_val, str_val));
 		deco::serialize(stream, deco::make_NVP(str_empty, str_empty));
 		deco::serialize(stream, deco::make_NVP(str_space, str_space));
@@ -42,7 +42,7 @@ int main()
 		// name can't contain structure delimiter
 		deco::serialize(stream, deco::make_NVP(str_val, str_structure));
 		deco::serialize(stream, deco::make_NVP(str_val, str_structure_con_end));
-		
+
 		std::ofstream os("out.deco", std::ios::binary);
 		os << stream.str;
 	}

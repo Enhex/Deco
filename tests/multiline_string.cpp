@@ -15,7 +15,7 @@ int main()
 	// write
 	{
 		deco::OutputStream_indent stream;
-		
+
 		deco::serialize(stream, deco::make_list("multiline_string", ml_str_val));
 		deco::serialize(stream, deco::make_list("empty", ml_str_empty));
 

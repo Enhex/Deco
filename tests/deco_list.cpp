@@ -18,7 +18,7 @@ int main()
 	{
 		deco::OutputStream_indent stream;
 
-		deco::serialize(stream, deco::make_list(i));		
+		deco::serialize(stream, deco::make_list(i));
 		deco::serialize(stream, deco::make_list("ignore name", i));
 		deco::serialize(stream, deco::make_list(name, i));
 

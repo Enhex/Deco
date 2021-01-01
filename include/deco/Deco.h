@@ -17,7 +17,7 @@ namespace deco
 
 	// Helps with Argument Dependent Lookup by being in deco namespace
 	STRONG_TYPE(Content, std::string_view);
-	
+
 	struct EntryObject {
 		Content content;
 		std::vector<EntryObject> entries;
@@ -170,7 +170,7 @@ namespace deco
 			// Keep consuming entries until reaching the list end. Child lists will consume their own ends, so current list won't run into their ends.
 			for(auto child_entry = parse_entry(current); child_entry.type != Entry::list_end; child_entry = parse_entry(current))
 				object.entries.emplace_back(parse_object(current, child_entry));
-			
+
 			return object;
 		}
 		case Entry::list_end:

@@ -96,7 +96,7 @@ int main()
 		};
 
 		serialize(unesc_str_val);
-		
+
 		gs::serializer(stream,
 			str_space,
 			str_tab,
@@ -124,7 +124,7 @@ int main()
 			write_type<long long>(stream);
 			write_type<unsigned long long>(stream);
 		stream.end_list();
-		
+
 		stream.begin_list("floating point");
 			write_type<float>(stream);
 			write_type<double>(stream);
@@ -165,7 +165,7 @@ int main()
 
 		deco::unescaped_string unesc_str; // dummy
 		gs::serializer(stream, unesc_str); assert(unesc_str == unesc_str_val);
-		
+
 		std::string str; // dummy
 		serialize(str); assert(str == str_space);
 		serialize(str); assert(str == str_tab);
@@ -176,7 +176,7 @@ int main()
 		serialize(str); assert(str == str_structure_con_end);
 
 		serialize(deco::make_list("list", str)); assert(str == str_val);
-		
+
 		serialize(deco::make_NVP("nvp", str)); assert(str == str_val);
 
 		deco::multiline_string ml_str; // dummy

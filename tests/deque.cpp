@@ -14,7 +14,7 @@ int main()
 	// write
 	{
 		deco::OutputStream_indent stream;
-		
+
 		deco::serialize(stream, deco::make_list("std::deque", val));
 
 		std::ofstream os("out.deco", std::ios::binary);

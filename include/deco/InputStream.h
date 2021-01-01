@@ -78,7 +78,7 @@ namespace deco
 	{
 		read(stream, std::forward<T>(value));
 	}
-	
+
 	// skip entry without parsing
 	template<typename Stream> constexpr
 		std::enable_if_t<gs::is_deco_input_v<Stream>>
