@@ -131,6 +131,8 @@ int main()
 }
 ```
 
+## Escaping
+To escape the content means adding a content delimiter at its start if it starts with whitespace or a content delimiter, and at the end if it ends with content or structure delimiter, so the content will be parsed "as is".
 
 ## Name Value Pair
 
