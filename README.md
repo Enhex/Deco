@@ -112,3 +112,11 @@ To learn how to use the Deco library see the [documentation](documentation.md), 
 ### License
 
 Deco is licensed under a modified version of Apache 2.0 license, that removes some of the conditions, including the requirement to give a copy of the license in Object form distribution.
+
+
+### Note
+
+while Deco is not absolutely "collision free",
+it's only potentially needs escaping once at the start/end of an entry,
+compared to other formats that need delimiters to be escaped N times.
+so it's O(1) vs O(N) in a sense, which makes Deco fundamentally better.

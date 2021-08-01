@@ -61,7 +61,7 @@ Ignored whitespace can be used to indent/format the document.
 
 
 list structure
--------------
+--------------
 A list is a special type of entry used to group entries.
 Lists can be used to describe things like hierarchies, objects, arrays, multi-line strings, name value pairs, and so on.
 
