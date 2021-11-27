@@ -93,15 +93,13 @@ The Deco library is header-only and uses C++17.
 
 ### Building
 
-The library uses [CMake](cmake.org) with [Conan](www.conan.io) package manager to manage dependencies.
-For Conan to be able to automatically find the dependency packages use the following command:
-```
-conan remote add enhex https://api.bintray.com/conan/enhex/enhex
-```
-
-Using Conan you can consume the library as the package `Deco/master@enhex/stable` from the `enhex` remote.
-
-If you're not using Conan to generate your project you can use conan with generators like [visual_studio](http://docs.conan.io/en/latest/reference/generators/visualstudio.html) to generate a `.props` file that you can add to your VS project, or use the [txt](http://docs.conan.io/en/latest/reference/generators/text.html) generator to get a list of the include directories you need to use.
+The library uses [Premake](https://premake.github.io/) with [Conan](https://conan.io/) package manager to manage dependencies.
+you need to add the following Conan packages manually using the command `conan create . enhex/stable --build=outdated` from their root directory (where the conanfile.py is located):  
+https://github.com/Enhex/generic_serialization  
+https://github.com/Enhex/strong_typea  
+  
+Then use the same command to create a package for Deco.  
+Using Conan you can consume the library as the package `Deco/master@enhex/stable`.
 
 
 ### Using
