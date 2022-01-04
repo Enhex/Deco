@@ -10,7 +10,7 @@ class DecoConan(ConanFile):
 	requires = (
 		"generic_serialization/master@enhex/stable",
 		"rang/3.2",
-		"boost/1.77.0",
+		"boost/1.78.0",
 		"strong_type/master@enhex/stable"
 	)
 	# No settings/options are necessary, this is header only
