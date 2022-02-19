@@ -114,7 +114,7 @@ Deco is licensed under a modified version of Apache 2.0 license, that removes so
 
 ### Note
 
-while Deco is not absolutely "collision free",
+While Deco is not absolutely "collision free",
 it's only potentially needs escaping once at the start/end of an entry,
 compared to other formats that need delimiters to be escaped N times.
-so it's O(1) vs O(N) in a sense, which makes Deco fundamentally better.
+So it's O(1) vs O(N) in a sense, which makes Deco fundamentally better.
