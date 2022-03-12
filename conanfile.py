@@ -7,6 +7,7 @@ class DecoConan(ConanFile):
 	license = "MIT"
 	url = "https://github.com/Enhex/Deco"
 	description = "Delimiter Collision Free Format"
+    homepage = "https://github.com/Enhex/Deco"
 	requires = (
 		"generic_serialization/master@enhex/stable",
 		"rang/3.2",
@@ -18,3 +19,6 @@ class DecoConan(ConanFile):
 
 	def package(self):
 		self.copy("*.h")
+
+    def package_id(self):
+        self.info.header_only()
