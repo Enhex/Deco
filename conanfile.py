@@ -2,12 +2,12 @@ from conans import ConanFile, tools
 
 
 class DecoConan(ConanFile):
-	name = "Deco"
+	name = "deco"
 	version = "master"
 	license = "MIT"
 	url = "https://github.com/Enhex/Deco"
 	description = "Delimiter Collision Free Format"
-    homepage = "https://github.com/Enhex/Deco"
+	homepage = "https://github.com/Enhex/Deco"
 	requires = (
 		"generic_serialization/master@enhex/stable",
 		"rang/3.2",
@@ -20,5 +20,5 @@ class DecoConan(ConanFile):
 	def package(self):
 		self.copy("*.h")
 
-    def package_id(self):
-        self.info.header_only()
+	def package_id(self):
+		self.info.header_only()
