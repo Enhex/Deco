@@ -4,7 +4,7 @@ from conans import ConanFile, tools
 class DecoConan(ConanFile):
 	name = "deco"
 	version = "master"
-	license = "MIT"
+	license = "Apache 2.0 with LLVM exceptions"
 	url = "https://github.com/Enhex/Deco"
 	description = "Delimiter Collision Free Format"
 	homepage = "https://github.com/Enhex/Deco"

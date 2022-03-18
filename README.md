@@ -107,11 +107,6 @@ Using Conan you can consume the library as the package `Deco/master@enhex/stable
 To learn how to use the Deco library see the [documentation](documentation.md), and the [tests](tests) for examples.
 
 
-### License
-
-Deco is licensed under a modified version of Apache 2.0 license, that removes some of the conditions, including the requirement to give a copy of the license in Object form distribution.
-
-
 ### Note
 
 While Deco is not absolutely "collision free",
