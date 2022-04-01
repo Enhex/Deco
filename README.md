@@ -91,7 +91,15 @@ To learn how the Deco format works, see the [specification](delimiter%20collisio
 
 The Deco library is header-only and uses C++17.
 
-### Building
+A Conan package is available: https://conan.io/center/deco
+
+
+### Using
+
+To learn how to use the Deco library see the [documentation](documentation.md), and the [tests](tests) for examples.
+
+
+### Manual Packaging
 
 The library uses [Premake](https://premake.github.io/) with [Conan](https://conan.io/) package manager to manage dependencies.
 you need to add the following Conan packages manually using the command `conan create . enhex/stable --build=outdated` from their root directory (where the conanfile.py is located):  
@@ -100,11 +108,6 @@ https://github.com/Enhex/strong_type
   
 Then use the same command to create a package for Deco.  
 Using Conan you can consume the library as the package `Deco/master@enhex/stable`.
-
-
-### Using
-
-To learn how to use the Deco library see the [documentation](documentation.md), and the [tests](tests) for examples.
 
 
 ### Note
