@@ -4,6 +4,8 @@
 #include "../InputStream.h"
 #include "../OutputStream.h"
 
+#include <fmt/format.h>
+
 namespace deco
 {
 	template<typename T>
@@ -14,10 +16,7 @@ namespace deco
 	, std::string>
 	to_string(const T& value)
 	{
-		std::string s;
-		std::back_insert_iterator<std::string> sink(s);
-		boost::spirit::karma::generate(sink, float_fixed<T>(), value);
-		return s;
+		return fmt::to_string(value);
 	}
 
 	template<typename Stream, typename T> constexpr

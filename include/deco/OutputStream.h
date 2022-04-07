@@ -2,9 +2,6 @@
 #define deco_OutputStream_h
 
 #pragma warning(push, 0) // disable external warnings
-#include <boost/spirit/include/karma_generate.hpp>
-#include <boost/spirit/include/karma_real.hpp>
-
 #include <boost/spirit/home/x3.hpp>
 #pragma warning(pop)
 
@@ -81,18 +78,6 @@ namespace deco
 				str += '\t';
 		}
 	};
-
-	// don't use scientific notation
-	template <typename T>
-	struct fixed_policy : boost::spirit::karma::real_policies<T> {
-		typedef boost::spirit::karma::real_policies<T> base_type;
-		static int floatfield(T) { return base_type::fmtflags::fixed; }
-		static unsigned int precision(T) { return 10; }
-	};
-
-	template<typename T>
-	using float_fixed = boost::spirit::karma::real_generator<T, fixed_policy<T>>;
-
 
 	template<typename Stream, typename T> constexpr
 		void write_elements(Stream&& stream, T& value)
