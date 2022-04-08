@@ -107,7 +107,7 @@ https://github.com/Enhex/generic_serialization
 https://github.com/Enhex/strong_type  
   
 Then use the same command to create a package for Deco.  
-Using Conan you can consume the library as the package `Deco/master@enhex/stable`.
+Using Conan you can consume the library as the package `deco/master@enhex/stable`.
 
 
 ### Note
