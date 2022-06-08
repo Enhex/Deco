@@ -99,7 +99,7 @@ namespace deco
 		// structure
 		if (one_before_last == structure_delimiter)
 		{
-			content_end = current - 1;
+			content_end = current - 1; // exclude the structure delimiter
 
 			// check if list end entry
 			if (!content_begin_delimiter_found &&
@@ -115,7 +115,7 @@ namespace deco
 		// content end delimiter
 		else if (one_before_last == content_delimiter) {
 			// type = entry by default
-			content_end = current - 1;
+			content_end = current - 1; // exclude the content delimiter
 		}
 		// only entry delimiter
 		else {
