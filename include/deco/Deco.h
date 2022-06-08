@@ -93,14 +93,6 @@ namespace deco
 
 		Iterator content_end; // exclusive
 
-		auto end_entry = [&]()
-		{
-			// end content
-			entry.content = std::string_view(&*content_begin, std::distance(content_begin, content_end));
-			// advance to the next entry
-			++current;
-		};
-
 		// the character before the entry delimiter
 		const auto& one_before_last = *(current - 1);
 
@@ -112,14 +104,12 @@ namespace deco
 			// check if list end entry
 			if (!content_begin_delimiter_found &&
 				content_end == content_begin/*check if content is empty*/)
-				entry.type = Entry::list_end;
-
-			// begin list
-			else
 			{
+				entry.type = Entry::list_end;
+			}
+			// begin list
+			else {
 				entry.type = Entry::list;
-				end_entry();
-				return entry;
 			}
 		}
 		// content end delimiter
@@ -133,7 +123,10 @@ namespace deco
 			content_end = current;
 		}
 
-		end_entry();
+		// end content
+		entry.content = std::string_view(&*content_begin, std::distance(content_begin, content_end));
+		// advance to the next entry
+		++current;
 
 		return entry;
 	}
