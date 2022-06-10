@@ -1,5 +1,0 @@
-[requires]
-deco/master@enhex/stable
-
-[generators]
-premake

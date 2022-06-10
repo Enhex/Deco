@@ -18,16 +18,18 @@ workspace("Deco")
 
 -- tests
 
-function add_test(file_name)
-	project("test-" .. file_name)
+function add_test(name)
+	project(name)
 		files{
-			file_name
+			name .. ".cpp"
 		}
 
 		kind "ConsoleApp"
 		language "C++"
 		cppdialect "C++17"
 		targetdir = location_dir .. "bin/%{cfg.buildcfg}"
+
+		includedirs{"../include"}
 
 		flags{"MultiProcessorCompile"}
 
@@ -43,5 +45,5 @@ end
 test_files = os.matchfiles("./*.cpp")
 
 for k,v in pairs(test_files) do
-	add_test(v)
+	add_test( string.sub(v, 0, string.len(v) - string.len(".cpp")) )
 end
