@@ -2,8 +2,11 @@
 #define deco_InputStream_h
 
 #pragma warning(push, 0) // disable external warnings
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
 #include <boost/spirit/home/x3.hpp>
 #include <boost/spirit/home/x3/numeric.hpp>
+#pragma clang diagnostic pop
 #pragma warning(pop)
 
 #include "Deco.h"
