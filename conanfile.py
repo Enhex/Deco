@@ -12,7 +12,7 @@ class DecoConan(ConanFile):
 		"generic_serialization/master@enhex/stable",
 		"rang/3.2",
 		"boost/1.81.0",
-		"fmt/9.1.0",
+		"fmt/10.0.0",
 		"strong_type/master@enhex/stable"
 	)
 	# No settings/options are necessary, this is header only
