@@ -44,7 +44,7 @@ def build(source, build_type, symlinks = [], symlink_pairs = []):
         os.system('premake5 ' + generator + ' --location=../"' + build_dir + '"')
 
     if platform == 'win32':
-        premake_generate('vs2019')
+        premake_generate('vs2022')
     else:
         premake_generate('gmake2')
         premake_generate('vscode')
