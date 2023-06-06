@@ -1,9 +1,7 @@
 #ifndef deco_OutputStream_h
 #define deco_OutputStream_h
 
-#pragma warning(push, 0) // disable external warnings
 #include <boost/spirit/home/x3.hpp>
-#pragma warning(pop)
 
 #include "Deco.h"
 #include "traits.h"
