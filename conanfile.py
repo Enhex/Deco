@@ -1,4 +1,5 @@
-from conans import ConanFile, tools
+from conan import ConanFile, tools
+from conan.tools.files import copy
 
 
 class DecoConan(ConanFile):
@@ -9,17 +10,17 @@ class DecoConan(ConanFile):
 	description = "Delimiter Collision Free Format"
 	homepage = "https://github.com/Enhex/Deco"
 	requires = (
-		"generic_serialization/master@enhex/stable",
+		"generic_serialization/master",
 		"rang/3.2",
 		"boost/1.82.0",
 		"fmt/10.0.0",
-		"strong_type/master@enhex/stable"
+		"strong_type/master"
 	)
 	# No settings/options are necessary, this is header only
 	exports_sources = "include/*"
 
 	def package(self):
-		self.copy("*.h")
+		copy(self, "*.h", self.source_folder, self.package_folder)
 
 	def package_id(self):
-		self.info.header_only()
+		self.info.clear()
