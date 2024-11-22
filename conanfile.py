@@ -12,8 +12,8 @@ class DecoConan(ConanFile):
 	requires = (
 		"generic_serialization/master",
 		"rang/3.2",
-		"boost/1.82.0",
-		"fmt/10.0.0",
+		"boost/1.86.0",
+		"fmt/11.0.2",
 		"strong_type/master"
 	)
 	# No settings/options are necessary, this is header only
