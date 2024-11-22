@@ -10,11 +10,11 @@ end
 
 location_dir = _OPTIONS["location"]
 
-include(location_dir .. "conanbuildinfo.premake.lua")
+include(location_dir .. "conandeps.premake5.lua")
 
 workspace("Deco")
 	location(location_dir)
-	conan_basic_setup()
+	conan_setup()
 
 -- tests
 

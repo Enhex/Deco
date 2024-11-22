@@ -35,11 +35,10 @@ def build(source, build_type, symlinks = [], symlink_pairs = []):
         create_symlink(source + '/' + src_path, './' + dst_path)
 
     # conan
-    os.system('conan install "' + source + '/" --build=outdated -s arch=x86_64 -s build_type=' + build_type)
+    os.chdir(source)
+    os.system('conan install . --output-folder="../' + build_dir + '" --build=missing -s arch=x86_64 -s build_type=' + build_type)
 
     # choose premake generator based on OS
-    os.chdir(source)
-
     def premake_generate(generator):
         os.system('premake5 ' + generator + ' --location=../"' + build_dir + '"')
 
