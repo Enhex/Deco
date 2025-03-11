@@ -4,6 +4,8 @@
 #include "../InputStream.h"
 #include "../OutputStream.h"
 
+#include <fast_float/fast_float.h>
+
 namespace deco
 {
 	template<typename T>
@@ -34,11 +36,7 @@ namespace deco
 		read(InputStream<I>& stream, T& value)
 	{
 		const auto content = stream.parse_entry().content;
-
-		using namespace boost::spirit::x3;
-		phrase_parse(content.begin(), content.end(), get_integral_parser<T>(), ascii::space, value);
-
-		//value = stoi(std::string(entry.content)); // no string_view/iterators support
+		fast_float::from_chars(content.data(), content.data() + content.size(), value);
 	}
 }
 

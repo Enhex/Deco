@@ -1,8 +1,6 @@
 #ifndef deco_OutputStream_h
 #define deco_OutputStream_h
 
-#include <boost/spirit/home/x3.hpp>
-
 #include "Deco.h"
 #include "traits.h"
 #include <gs/traits.h>

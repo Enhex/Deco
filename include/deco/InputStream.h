@@ -1,9 +1,6 @@
 #ifndef deco_InputStream_h
 #define deco_InputStream_h
 
-#include <boost/spirit/home/x3.hpp>
-#include <boost/spirit/home/x3/numeric.hpp>
-
 #include "Deco.h"
 #include "traits.h"
 #include <gs/traits.h>
@@ -41,18 +38,6 @@ namespace deco
 	// used to skip an entry without parsing it into a type
 	struct skip_t {};
 	constexpr skip_t skip;
-
-
-	template<typename T>
-	constexpr auto get_integral_parser()
-	{
-		using namespace boost::spirit::x3;
-
-		if constexpr(std::is_signed_v<T>)
-			return int_parser<T>();
-		else
-			return uint_parser<T>();
-	}
 }
 
 namespace gs

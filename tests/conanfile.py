@@ -5,8 +5,11 @@ class install(ConanFile):
 	requires = (
 		"generic_serialization/master",
 		"rang/3.2",
-		"boost/1.86.0",
-		"fmt/11.0.2",
+		"fmt/11.1.4",
 		"strong_type/master"
 	)
+
+	def requirements(self):
+		self.requires("fast_float/8.0.0", transitive_headers=True)
+
 	generators = "PremakeDeps"

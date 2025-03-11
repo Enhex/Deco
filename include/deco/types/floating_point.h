@@ -5,6 +5,7 @@
 #include "../OutputStream.h"
 
 #include <fmt/format.h>
+#include <fast_float/fast_float.h>
 
 namespace deco
 {
@@ -34,9 +35,7 @@ namespace deco
 		read(InputStream<I>& stream, T& value)
 	{
 		const auto content = stream.parse_entry().content;
-
-		using namespace boost::spirit::x3;
-		phrase_parse(content.begin(), content.end(), real_parser<T>(), ascii::space, value);
+		fast_float::from_chars(content.data(), content.data() + content.size(), value);
 	}
 }
 
