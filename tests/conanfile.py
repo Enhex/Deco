@@ -10,6 +10,6 @@ class install(ConanFile):
 	)
 
 	def requirements(self):
-		self.requires("fast_float/8.0.0", transitive_headers=True)
+		self.requires("fast_float/8.2.10", transitive_headers=True)
 
 	generators = "PremakeDeps"

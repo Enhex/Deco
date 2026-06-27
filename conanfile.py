@@ -20,7 +20,7 @@ class DecoConan(ConanFile):
 	)
 
 	def requirements(self):
-		self.requires("fast_float/8.0.0", transitive_headers=True)
+		self.requires("fast_float/8.2.10", transitive_headers=True)
 
 	def package(self):
 		copy(self, "*.h", self.source_folder, self.package_folder)
