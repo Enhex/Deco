@@ -36,7 +36,7 @@ def build(source, build_type, symlinks = [], symlink_pairs = []):
 
     # conan
     os.chdir(source)
-    os.system('conan install . --output-folder="../' + build_dir + '" --build=missing -s arch=x86_64 -s build_type=' + build_type)
+    os.system('conan install . --output-folder="../' + build_dir + '" --build=missing -s build_type=' + build_type)
 
     # choose premake generator based on OS
     def premake_generate(generator):
