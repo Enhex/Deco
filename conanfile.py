@@ -15,7 +15,7 @@ class DecoConan(ConanFile):
 	requires = (
 		"generic_serialization/master",
 		"rang/3.2",
-		"fmt/11.2.0",
+		"fmt/12.1.0",
 		"strong_type/master"
 	)
 
