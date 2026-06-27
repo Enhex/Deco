@@ -5,7 +5,7 @@
 #include "../OutputStream.h"
 
 #include <fmt/format.h>
-#include <fast_float/fast_float.h>
+#include <charconv>
 
 namespace deco
 {
@@ -35,7 +35,8 @@ namespace deco
 		read(InputStream<I>& stream, T& value)
 	{
 		const auto content = stream.parse_entry().content;
-		fast_float::from_chars(content.data(), content.data() + content.size(), value);
+		//NOTE: fast_float::from_chars doesn't work with long double
+		std::from_chars(content.data(), content.data() + content.size(), value);
 	}
 }
 
